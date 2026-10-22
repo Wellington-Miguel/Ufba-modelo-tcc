@@ -1,0 +1,335 @@
+\documentclass[oneside, a4paper, 12pt, chapter=TITLE]{abntex2} 	% fleqn - alinha equações à esquerda
+\usepackage{UFBA}												% Edição de alguns quesitos no estilo do manual da UFBA
+\usepackage[T1]{fontenc}										% Seleção de códigos de fonte.
+\usepackage[utf8]{inputenc}										% Codificação do documento (conversão automática dos acentos)
+\usepackage{lmodern}											% Usa a fonte Latin Modern
+																% Para utilizar a fonte Times New Roman, inclua uma % no início do comando acima  
+																% Abaixo, tire a % antes do comando  \usepackage{times}
+%\usepackage{times}		    									% Usa a fonte Times New Roman				
+\usepackage{lastpage}											% Usado pela Ficha catalográfica
+\usepackage{indentfirst}										% Indenta o primeiro parágrafo de cada seção.
+\usepackage{color}												% Controle das cores
+\usepackage{graphicx}											% Inclusão de gráficos
+\usepackage{float} 												% Fixa tabelas e figuras no local exato
+\usepackage{subfig}												% para inserir mais figuras
+\usepackage{microtype} 											% para melhorias de justificação
+\usepackage{makeidx}           									% para gerar índice remissimo
+\usepackage{hyperref}											% para configurações do pdf
+\usepackage{amsmath}											% para alguns formatos de equações
+\usepackage{amssymb}											% para mais símbolos
+\usepackage[portuguese,			
+			linesnumbered, 										% linhas numeradas
+			commentsnumbered,									% comentários numerados
+			boxed												% com caixa ao redor
+			]{algorithm2e}  									% para escrever os algoritmos
+\usepackage{listings}											% para colocar códigos de programas		
+\usepackage{scrextend}
+\usepackage{pdfpages}											% Para incluir páginas em pdf
+\usepackage{multicol}											% Suporte a mesclagens em colunas
+\usepackage{multirow}											% Suporte a mesclagens em linhas
+\usepackage{longtable}											% Tabelas com várias páginas
+\usepackage{threeparttablex}    								% notas no longtable
+\usepackage{array}
+% ---
+% ---
+% ----------------------------------------------------------
+% PACOTES DE CITAÇÕES
+% ----------------------------------------------------------
+% ---
+% Citações padrão ABNT
+% ---
+% Sistemas de chamada: autor-data ou numérico.
+% Sistema autor-data
+\usepackage[alf,abnt-emphasize=bf, abnt-thesis-year=both, abnt-repeated-author-omit=yes, abnt-last-names=abnt, abnt-etal-cite,abnt-etal-list=3, abnt-etal-text=default, abnt-and-type=e, abnt-doi=doi, abnt-url-package=none, abnt-verbatim-entry=no,bibjustif]{abntex2cite}
+
+% Os autores nas referências, incluir % no início do comando acima e retirar a % do comando abaixo 
+
+%\usepackage[alf,abnt-emphasize=bf, abnt-thesis-year=both, abnt-repeated-author-omit=yes, abnt-last-names=abnt, abnt-etal-cite,abnt-etal-list=0, abnt-etal-text=default, abnt-and-type=e,bibjustif]{abntex2cite}
+% ---
+% Sistema Numérico
+% ---
+% Para citações numéricas, incluir % no início do comando acima e retirar a % do comando abaixo 
+%\usepackage[num,overcite,abnt-emphasize=bf, abnt-thesis-year=both, abnt-repeated-author-omit=yes, abnt-last-names=abnt, abnt-etal-cite,abnt-etal-list=0, abnt-etal-text=default, abnt-and-type=e]{abntex2cite}
+
+% Complementarmente, verifique as instruções abaixo sobre os Pacotes de Nota de rodapé
+% ---
+% ---
+% ----------------------------------------------------------
+% PACOTES DE NOTAS DE RODAPÉ
+% ----------------------------------------------------------
+% Configurações de nota de rodapé
+
+% O presente modelo adota o formato numérico para as notas de rodapés quando utiliza o sistema de chamada autor-data para citações e referências. Para utilizar o sistema de chamada numérico para citações e referências, habilitar um dos comandos abaixo.
+% Há diversas opções para nota de rodapé no Sistema Numérico.  
+
+%\renewcommand{\thefootnote}{\fnsymbol{footnote}}  %Comando para inserção de símbolos em nota de rodapé
+
+% Outras opções para nota de rodapé no Sistema Numérico:
+%\renewcommand{\thefootnote}{\alph{footnote}}      %Comando para inserção de letras minúscula em nota de rodapé
+%\renewcommand{\thefootnote}{\Alph{footnote}}      %Comando para inserção de letras maiúscula em nota de rodapé
+%\renewcommand{\thefootnote}{\roman{footnote}}     %Comando para inserção de números romanos minúsculos  em nota de rodapé
+%\renewcommand{\thefootnote}{\Roman{footnote}}     %Comando para inserção de números romanos minúsculos  em nota de rodapé
+
+\renewcommand{\footnotesize}{\small} 			   %Comando para diminuir a fonte das notas de rodapé
+% ---
+% Pacote para agrupar a citação numérica consecutiva
+% Quando for adotado o Sistema Numérico, habilite-o
+%\usepackage[superscript]{cite}	
+% ---
+% --- 
+% ----------------------------------------------------------
+% INFORMAÇÕES DO TRABALHO
+% ----------------------------------------------------------
+\autor{Nome do autor} 
+\titulo{Título do trabalho} 
+\data{data} 
+\local{Cidade} 
+\preambulo{Trabalho de conclusão de curso de ***, como pré-requisito para obtenção do grau de Bacharel em ***, pela \imprimirfaculdade{} da \imprimirinstituicao. } 
+\instituicao {Universidade Federal da Bahia}
+\faculdade {Ex: Escola Politécnica}
+\programa {Ex: Departamento de Construção e Estruturas}
+% Use \professor para Definir como professor e \orientadora para definir orientadora
+\orientador{Ex: Prof. Dr. Não Orienta em Nada e Cobra} 
+\tipotrabalho{Ex: Trabalho de Conclusão de Curso}
+% ---
+% ---
+% compila o sumário e índice
+\makeindex
+% ---
+% ---
+% ----------------------------------------------------------
+% INFORMAÇÕES DO PDF
+% ----------------------------------------------------------
+% alterando o aspecto da cor azul e vermelho
+\definecolor{blue}{RGB}{25,25,112}
+\definecolor{red}{RGB}{128,0,0}
+\makeatletter
+% Configurações de aparência do PDF final (MUDE DE RED E BLUE PARA BLACK NA IMPRESSÃO FINAL)
+\hypersetup{
+	%pagebackref=true,
+	pdftitle={\@title}, 
+	pdfauthor={\@author},
+	pdfsubject={\imprimirpreambulo},
+	pdfcreator={LaTeX with abnTeX2},
+	pdfkeywords={abnt}{latex}{abntex}{UFBA}{trabalho acadêmico}, 
+	colorlinks=true,       	    % false: boxed links; true: colored links
+	linkcolor=blue,          	% color of internal links
+	citecolor=red,        		% color of links to bibliography
+	filecolor=magenta,      	% color of file links
+	urlcolor=black,
+	bookmarksdepth=4
+}
+\makeatother
+% ---
+% ---
+% ----------------------------------------------------------
+% OUTRAS CONFIGURAÇÕES DO DOCUMENTO
+% ----------------------------------------------------------
+% --- 
+% Espaçamentos entre linhas e parágrafos 
+% --- 
+% Simbolo -1 inverso
+\newcommand{\inv}{^{\raisebox{.2ex}{$\scriptscriptstyle-1$}}}
+% O tamanho do parágrafo é dado por:
+%\setlength{\parindent}{1.0 cm}
+\OnehalfSpacing
+
+% Controle do espaçamento entre um parágrafo e outro:
+\setlength{\parskip}{6pt} 
+% ---
+% ---
+% Renomear Figuras, Algoritmos e Equações no autoref
+% ---
+\renewcommand{\algorithmautorefname}{Algoritmo}
+\renewcommand{\equationautorefname}{Equação}
+\renewcommand{\figureautorefname}{Figura}
+\renewcommand{\tableautorefname}{Tabela}
+\renewcommand{\chapterautorefname}{Capítulo}
+\newcommand{\subfigureautorefname}{\figureautorefname}
+
+%\renewcommand{\sfdefault}{\rmdefault} %Para definir a fonte latex como padrão definida em escopo o documento
+
+% ---
+% ---
+% ----------------------------------------------------------
+% INÍCIO DO DOCUMENTO
+% ----------------------------------------------------------
+\begin{document}
+
+	% Seleciona o idioma do documento (conforme pacotes do babel)
+	\selectlanguage{brazil}
+	% Se o idioma do texto for inglês, inclua uma % antes do 
+	%      comando \selectlanguage{brazil} e 
+	%      retire a % antes do comando abaixo
+	%\selectlanguage{english}
+	
+	% Retira espaço extra obsoleto entre as frases.
+	\frenchspacing 
+	
+	% --- Formatação dos Títulos
+	\renewcommand{\ABNTEXchapterfontsize}{\fontsize{12}{12}\bfseries}
+	\renewcommand{\ABNTEXsectionfontsize}{\fontsize{12}{12}}
+	\renewcommand{\ABNTEXsubsectionfontsize}{\fontsize{12}{12}\normalfont\bfseries}
+	\renewcommand{\ABNTEXsubsubsectionfontsize}{\fontsize{12}{12}\normalfont}
+	\renewcommand{\ABNTEXsubsubsubsectionfontsize}{\fontsize{12}{12}\normalfont}
+	
+	% --- Formatação da fonte do Sumário
+	\renewcommand{\cftsectionfont}{\normalsize}
+	\renewcommand{\cftsectionpagefont}{\cftsectionfont}
+	% 
+	\renewcommand{\cftsubsectionfont}{\bfseries}
+	\renewcommand{\cftsubsectionpagefont}{\cftsubsectionfont}
+% ----------------------------------------------------------
+% ELEMENTOS PRÉ-TEXTUAIS
+% ----------------------------------------------------------
+% ---
+% Capa
+% ---
+\imprimircapa
+% ---
+%Folha de Rosto
+% ---
+\imprimirfolhaderosto
+% ---
+% Folha de aprovação
+% --- NÂO RETIRAR ESPAÇO ABAIXO
+
+\input{folhaaprovacao}
+% ---
+%Ficha catalográfica. gerar ficha no site: https://sibi.ufba.br/modelo-de-ficha-catalografica-geracao-automatica
+% ---
+\includepdf{ficha.pdf}
+% ---
+% Dedicatória e agradeciemento
+% ---
+\input{Dedicatorias.tex}
+% ---
+% Epígrafe
+% ---
+\begin{epigrafe}
+	\vspace*{\fill} 
+\begin{flushright}
+Inserir aqui epígrafe caso queira\\
+\vspace*{1cm}
+Nome do Autor (Ano, p.39)
+\end{flushright}
+\end{epigrafe}
+% ---
+% Resumo (Português)
+% ---
+\input{Resumo.tex}
+% ---
+% Resumo (inglês e outras línguas a desejar)
+% ---
+%\begin{resumo}[Abstract] 
+%\begin{otherlanguage*}{english}		
+%\end{otherlanguage*}
+%\end{resumo}
+% ---
+% inserir lista de figuras
+% ---
+\pdfbookmark[0]{\listfigurename}{lof}
+\listoffigures*
+\cleardoublepage
+% ---
+% ---
+% inserir lista de tabelas
+% ---
+\pdfbookmark[0]{\listtablename}{lot}
+\listoftables*
+\cleardoublepage
+% ---
+% ---
+% inserir lista de Algoritmos
+% ---
+\pdfbookmark[0]{Lista de algoritmos}{loa}
+\listofalgorithms
+\cleardoublepage
+% ---
+% ---
+% inserir lista de abreviaturas e siglas (Caso Haja)
+% ---
+%\begin{siglas}
+%	\item[ABNT] Associação Brasileira de Normas Técnicas
+%	\item[abnTeX] Normas para TeX
+%\end{siglas}
+% ---
+% ---
+% inserir lista de símbolos
+% ---
+%Pode-se alterar para uma forma automática de simbologia. Exemplos(não auromáticos):
+\begin{simbolos}
+		\item[$\boldsymbol f_i$, $f_i$]\quad Vetor das forças internas, força interna
+		\item[$\boldsymbol f_e$, $f_e$]\quad Vetor das forças externas, força externa
+		\item[$\boldsymbol u$, $u$]\quad Vetor dos deslocamentos nodais, deslocamento nodal
+		\item [$\varepsilon$]\quad Deformação longitudinal
+		\item [$L_i$]\quad Comprimento referência, inicial
+		\item [$L_f$]\quad Comprimento atual
+		\item [$\lambda$]\quad Alongamento linear ou estiramento
+		\item[$\boldsymbol f_e(t)$]\quad Vetor das forças externas variantes no tempo
+		\item[$\omega$]\quad Frequência
+		\item[$\omega_{n}$]\quad Frequência natural
+		\item [$\boldsymbol K $, $ k $]\quad Matriz de rigidez, rigidez
+	\end{simbolos}
+% ---
+% ---
+% inserir lista de siglas
+% ---
+%Pode-se alterar para uma forma automática de simbologia. Exemplos (não automáticos):
+\begin{siglas}
+		\item[MEF]\quad Método dos elementos finitos
+		\item[PTV]\quad Princípio dos trabalhos virtuais
+		\item [Ansys]\quad Swanson Analysis Systems, Inc.
+		\item[DTruss]\quad Programa desenvolvido
+\end{siglas}
+% ---
+% ---
+% inserir o sumario
+% ---
+\pdfbookmark[0]{\contentsname}{toc}
+\tableofcontents*
+\cleardoublepage
+% ---
+% ---
+% Numeração nas páginas:
+\textual
+% ---
+% ---
+% Espaçamentos definidos para o texto
+% ---
+%\setlength{\absparsep}{1.5cm} % ajusta o espaçamento do texto seguinte	
+\OnehalfSpacing
+\setlength{\parindent}{1.0cm} % espaçamento dos parágrafos	
+% ----------------------------------------------------------
+% INTRODUÇÃO, DESENVOLVIMENTO E CONCLUSÕES
+% ----------------------------------------------------------
+\input{Introducao}
+% ---
+\input{Teorica1}
+% ---
+\input{Teorica2}
+% ---
+\input{Teorica3}
+% ---
+\input{Teorica4}
+% ---
+\input{Conclusao}
+%\input{Código}
+% ----------------------------------------------------------
+% ELEMENTOS PÓS-TEXTUAIS
+% ----------------------------------------------------------
+% -----------------------------------------------------------
+% Referências bibliográficas
+% ----------------------------------------------------------
+% Exemplo de Referências sem citá-las no texto
+\nocite{GID2017}
+\nocite{Bandeira2001}
+\nocite{Dominicio1977}
+\nocite{Abrate1983}
+\nocite{Martinelli2017}
+% ----------------------------------------------------------
+% ARQUIVO DE FONTE BIBLIOGRÁFICA (VER O JABREF OU MENDELEY)
+% ----------------------------------------------------------
+\bibliography{TCC_refs}
+
+\end{document}

@@ -1,0 +1,525 @@
+\documentclass[
+	oneside,
+	a4paper,
+	12pt,
+	chapter=TITLE,
+	section=TITLE
+]{abntex2}
+
+% --- PACOTES BÁSICOS ---
+\usepackage{UFBA}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{lastpage}
+\usepackage{indentfirst}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{microtype}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{listings}
+\usepackage{pdfpages}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{hyperref}
+
+% --- SISTEMA DE CITAÇÕES ABNT (NBR 6023:2018 / NBR 10520) ---
+\usepackage[
+	alf,
+	abnt-emphasize=bf,
+	abnt-thesis-year=both,
+	abnt-repeated-author-omit=yes,
+	abnt-last-names=abnt,
+	abnt-etal-cite,
+	abnt-etal-list=3,
+	abnt-etal-text=default,
+	abnt-and-type=e,
+	abnt-doi=doi,
+	abnt-url-package=none,
+	bibjustif
+]{abntex2cite}
+
+% --- CONFIGURAÇÕES DE CÓDIGO (Listings) ---
+\lstset{
+	basicstyle=\ttfamily\footnotesize,
+	breaklines=true,
+	frame=single,
+	tabsize=2,
+	showstringspaces=false
+}
+
+% --- MARGENS DO MANUAL EDUFBA (Quadro 5, p. 85: Sup. 3cm, Esq. 3cm, Inf. 2cm, Dir. 2cm) ---
+\setlrmarginsandblock{3cm}{2cm}{*}
+\setulmarginsandblock{3cm}{2cm}{*}
+\checkandfixthelayout
+
+% --- ESPAÇAMENTOS DO MANUAL EDUFBA ---
+\OnehalfSpacing
+\setlength{\parindent}{1.0cm}
+\setlength{\parskip}{6pt}
+
+% --- NOMES DE ITENS ---
+\renewcommand{\figureautorefname}{Figura}
+\renewcommand{\tableautorefname}{Tabela}
+\renewcommand{\chapterautorefname}{Capítulo}
+\renewcommand{\sectionautorefname}{Seção}
+
+% --- DADOS INSTITUCIONAIS ---
+
+\titulo{Desenvolvimento de Aplicações Inteligentes com Modelos de Linguagem}
+\subtitulo{Um Framework Modular Baseado em Markdown e Normas ABNT UFBA}
+\autor{Nome Completo do Aluno}
+\local{Salvador}
+\data{2026}
+\instituicao{Universidade Federal da Bahia}
+\faculdade{Instituto de Computação}
+\programa{Colegiado do Curso de Ciência da Computação}
+\tipotrabalho{Trabalho de Conclusão de Curso}
+\preambulo{Trabalho de Conclusão de Curso apresentado ao Colegiado do Curso de Ciência da Computação da Universidade Federal da Bahia, como requisito para obtenção do grau de Bacharel em Ciência da Computação.}
+\orientador{Prof. Dr. Nome do Orientador}
+
+% --- CONFIGURAÇÃO DO PDF ---
+\hypersetup{
+	colorlinks=true,
+	linkcolor=black,
+	citecolor=black,
+	filecolor=black,
+	urlcolor=black,
+	pdfauthor={Nome Completo do Aluno},
+	pdftitle={Desenvolvimento de Aplicações Inteligentes com Modelos de Linguagem},
+	pdfsubject={Trabalho de Conclusão de Curso},
+	pdfcreator={Python TCC-UFBA Markdown Builder}
+}
+
+% --- INÍCIO DO DOCUMENTO ---
+\begin{document}
+\frenchspacing
+\selectlanguage{brazil}
+
+% ==============================================================================
+% ELEMENTOS PRÉ-TEXTUAIS
+% ==============================================================================
+
+\imprimircapa
+\imprimirfolhaderosto
+
+
+% --- FOLHA DE APROVAÇÃO (Manual EDUFBA p. 49, 52) ---
+\begin{folhadeaprovacao}
+  \begin{center}
+    {\fontsize{14}{16}\selectfont\bfseries\MakeUppercase{\imprimirautor}\par}
+    \vspace{1.5cm}
+    {\fontsize{16}{18}\selectfont\bfseries\MakeUppercase{\imprimirtitulo}\par}
+  \end{center}
+  \vspace{1cm}
+  \begin{flushright}
+    \begin{minipage}{0.55\textwidth}
+      \SingleSpacing\fontsize{11}{13}\selectfont
+      \imprimirpreambulo
+    \end{minipage}
+  \end{flushright}
+  \vspace{1cm}
+  \noindent Trabalho aprovado. Salvador, 20 de Novembro de 2026.
+  \vspace{0.8cm}
+  \begin{center}
+    \bfseries Banca Examinadora
+  \end{center}
+
+  \assinatura{\textbf{Prof. Dr. Nome do Orientador} \\ Orientador -- Universidade Federal da Bahia}
+  \assinatura{\textbf{Prof. Dr. Primeiro Membro da Banca} \\ Examinador Convidado -- Universidade Federal da Bahia}
+  \assinatura{\textbf{Prof. Dr. Segundo Membro da Banca} \\ Examinador Convidado -- Universidade Federal da Bahia}
+\end{folhadeaprovacao}
+
+
+% --- DEDICATÓRIA ---
+\begin{dedicatoria}
+  \vspace*{\fill}
+  \begin{flushright}
+    \noindent\textit{Aos meus pais e familiares, pelo incentivo contínuo, amor incondicional\\
+e por acreditarem no poder da educação ao longo de toda a minha formação.}
+  \end{flushright}
+  \vspace*{2cm}
+\end{dedicatoria}
+
+
+% --- AGRADECIMENTOS ---
+\begin{agradecimentos}
+À Universidade Federal da Bahia e ao corpo docente, por proporcionarem um ambiente de excelência e aprendizado constante.
+
+Ao meu orientador, pela dedicação, conselhos preciosos e paciência durante a condução deste projeto.
+
+Aos colegas e amigos, pelo companheirismo e discussões enriquecedoras durante os anos de graduação.
+\end{agradecimentos}
+
+
+% --- EPÍGRAFE ---
+\begin{epigrafe}
+  \vspace*{\fill}
+  \begin{flushright}
+    \textit{``O verdadeiro sinal de inteligência não é o conhecimento, mas a imaginação.''}\\
+    \vspace{0.5cm}
+    Albert Einstein
+  \end{flushright}
+  \vspace*{2cm}
+\end{epigrafe}
+
+
+% --- RESUMO (Manual EDUFBA p. 56 e 64: antecedido da referência do trabalho) ---
+\setlength{\absparsep}{0pt}
+\begin{resumo}
+  \SingleSpacing
+  \noindent ALUNO, N. C. do. \textbf{Desenvolvimento de Aplicações Inteligentes com Modelos de Linguagem: Um Framework Modular Baseado em Markdown e Normas ABNT UFBA}. 2026. \pageref{LastPage} f. Trabalho de Conclusão de Curso (Bacharel em Ciência da Computação) -- Instituto de Computação, Universidade Federal da Bahia, Salvador, 2026.
+  \vspace{0.6cm}
+
+  \noindent Este trabalho apresenta uma proposta metodológica e prática para a escrita estruturada de Trabalhos de Conclusão de Curso (TCC) na Universidade Federal da Bahia (UFBA), aliando o potencial de Modelos de Linguagem de Grande Porte (LLMs) à conformidade das normas técnicas da ABNT. A divisão do texto em blocos modulares em formato Markdown soluciona limitações de contexto e coesão das inteligências artificiais, permitindo refinamentos incrementais sem desconfigurar o documento final. Um pipeline em Python traduz automaticamente esses blocos para o abnTeX2, garantindo precisão em margens, paginação, citações, numeração progressiva e elementos pré e pós-textuais. Os resultados demonstram agilidade na escrita, facilidade de versionamento e aderência integral às diretrizes acadêmicas da UFBA.
+
+  \vspace{0.5cm}
+  \noindent\textbf{Palavras-chave}: Trabalho de Conclusão de Curso. Modelos de Linguagem. ABNT UFBA. abnTeX2. Escrita Científica.
+\end{resumo}
+
+
+% --- ABSTRACT ---
+\begin{resumo}[Abstract]
+  \SingleSpacing
+  \noindent ALUNO, N. C. do. \textbf{Desenvolvimento de Aplicações Inteligentes com Modelos de Linguagem: Um Framework Modular Baseado em Markdown e Normas ABNT UFBA}. 2026. \pageref{LastPage} p. Final Graduation Project (Bacharel em Ciência da Computação) -- Instituto de Computação, Universidade Federal da Bahia, Salvador, 2026.
+  \vspace{0.6cm}
+
+  \noindent This work presents a methodological and practical proposal for structured writing of Undergraduate Final Projects (TCC) at the Federal University of Bahia (UFBA), combining the potential of Large Language Models (LLMs) with compliance to ABNT technical standards. Dividing the manuscript into modular Markdown blocks overcomes AI context and cohesion limitations, enabling incremental refinement without compromising document structure. A Python pipeline automatically translates these blocks into abnTeX2, ensuring accuracy in margins, pagination, citations, section numbering, and pre/post-textual elements. The results demonstrate increased writing agility, simplified version control, and full adherence to UFBA academic publishing standards.
+
+  \vspace{0.5cm}
+  \noindent\textbf{Keywords}: Undergraduate Thesis. Large Language Models. ABNT Standards. abnTeX2. Scientific Writing.
+\end{resumo}
+
+
+\pdfbookmark[0]{\listfigurename}{lof}
+\listoffigures*
+\cleardoublepage
+
+
+\pdfbookmark[0]{\listtablename}{lot}
+\listoftables*
+\cleardoublepage
+
+
+% --- LISTA DE ABREVIATURAS E SIGLAS ---
+\begin{siglas}
+
+  \item[ABNT]\quad Associação Brasileira de Normas Técnicas
+  \item[EDUFBA]\quad Editora da Universidade Federal da Bahia
+  \item[IA]\quad Inteligência Artificial
+  \item[LLM]\quad Large Language Model (Modelo de Linguagem de Grande Porte)
+  \item[NBR]\quad Norma Brasileira Regulamentadora
+  \item[PDF]\quad Portable Document Format
+  \item[SIBI]\quad Sistema de Bibliotecas da UFBA
+  \item[TCC]\quad Trabalho de Conclusão de Curso
+  \item[UFBA]\quad Universidade Federal da Bahia
+\end{siglas}
+\cleardoublepage
+
+
+% --- SUMÁRIO (Manual EDUFBA p. 57, 69) ---
+\pdfbookmark[0]{\contentsname}{toc}
+\tableofcontents*
+\cleardoublepage
+
+% ==============================================================================
+% ELEMENTOS TEXTUAIS
+% ==============================================================================
+\textual
+
+
+% --- 01_introducao.md ---
+\chapter{Introdução}\label{sec:introducao}
+
+
+A produção de um Trabalho de Conclusão de Curso (TCC) representa uma etapa determinante na formação acadêmica do estudante de graduação, congregando competências de investigação, síntese bibliográfica e aplicação prática do método científico. No âmbito da Universidade Federal da Bahia (UFBA), os trabalhos acadêmicos devem atender aos critérios estabelecidos no Manual de Estilo Acadêmico da EDUFBA \cite{EDUFBA2019}, o qual harmoniza as diretrizes da Associação Brasileira de Normas Técnicas, em especial as normas ABNT NBR 14724 \cite{NBR14724:2011} e ABNT NBR 6023 \cite{NBR6023:2018}.
+
+Nos últimos anos, a emergência de modelos avançados de inteligência artificial generativa, especialmente os Modelos de Linguagem de Grande Porte (LLMs), inaugurou novas formas de cocriação e assistência à redação científica \cite{Brown2020}. Não obstante, a utilização dessas tecnologias apresenta desafios quanto à manutenção da coerência global em textos extensos e à formatação automatizada segundo padrões institucionais específicos.
+
+\section{Contextualização e Motivação}\label{sec:contextualizacao_e_motivacao}
+
+
+Quando se redige um trabalho acadêmico de grande porte com auxílio de uma LLM, um problema recorrente decorre do tamanho da janela de contexto e da tendência do modelo em dispersar argumentos ou truncar respostas longas. Para contornar essa restrição, a estratégia recomendada consiste em trabalhar em blocos modulares independentes, submetendo e refinando capítulos e seções sequencialmente.
+
+Contudo, a conversão manual desses blocos em Markdown para a sintaxe do LaTeX ou do abnTeX2 costuma ser laboriosa e propensa a erros de formatação. Como destacam Lubisco e Vieira \cite[p. 29]{EDUFBA2019}, o rigor formal não deve ser um obstáculo à produção intelectual, mas um facilitador da comunicação científica:
+
+\begin{citacao}
+A urgência na mudança desse estado de coisas se faz sentir, já que o uso de metodologias mais dinâmicas de ensino sugere a necessidade de que o estudante – quer de graduação, quer de pós-graduação – seja capacitado a transitar de forma autônoma no universo informacional, buscando, selecionando e sistematizando as informações de sua área de interesse. \cite[p. 29]{EDUFBA2019}
+\end{citacao}
+
+
+Dessa forma, surge a oportunidade de conceber um ecossistema no qual o pesquisador escreva em Markdown de forma modular e um compilador cuide de toda a conformidade formal da UFBA.
+
+\section{Problema de Pesquisa}\label{sec:problema_de_pesquisa}
+
+
+Diante do cenário exposto, formula-se a seguinte questão norteadora: \textit{Como viabilizar um fluxo de escrita acadêmica modular assistido por inteligência artificial que mantenha a coerência temática e garanta automaticamente a conformidade com as normas ABNT adotadas pela UFBA?}
+
+\section{Objetivos}\label{sec:objetivos}
+
+
+\subsection{Objetivo Geral}\label{sec:objetivo_geral}
+
+
+Desenvolver e estruturar uma base de projeto reprodutível para trabalhos de conclusão de curso na UFBA, baseada em escrita modular em Markdown e compilação automatizada para abnTeX2.
+
+\subsection{Objetivos Específicos}\label{sec:objetivos_especificos}
+
+
+\begin{itemize}
+  \item Mapear os requisitos de apresentação gráfica, numeração progressiva e elementos pré-textuais da 6ª edição do Manual da EDUFBA \cite{EDUFBA2019};
+  \item Projetar uma estrutura de pastas e metadados (\texttt{metadata.yaml}) que centralize as informações institucionais do trabalho;
+  \item Desenvolver um pipeline de compilação em Python capaz de converter blocos em Markdown, tabelas, figuras e citações para código LaTeX padronizado;
+  \item Validar o fluxo de trabalho simulando a integração com saídas fornecidas por LLMs.
+\end{itemize}
+
+
+\section{Organização do Trabalho}\label{sec:organizacao_do_trabalho}
+
+
+O presente documento encontra-se estruturado em cinco capítulos principais. Este primeiro capítulo contextualizou a problemática e delimitou os objetivos da pesquisa. O \autoref{sec:revisao_de_literatura} aborda a fundamentação teórica, discutindo a arquitetura de modelos de linguagem e os requisitos normativos da ABNT/UFBA. O \autoref{sec:metodologia} descreve a metodologia e a arquitetura do compilador desenvolvido. O \autoref{sec:resultados_e_discussao} apresenta os resultados obtidos e a validação do pipeline. Por fim, o \autoref{sec:conclusao} sintetiza as conclusões e aponta direções para trabalhos futuros.
+
+% --- 02_revisao.md ---
+\chapter{Revisão de Literatura}\label{sec:revisao_de_literatura}
+
+
+A fundamentação teórica deste trabalho apoia-se em dois eixos complementares: a normalização documentária aplicada ao ambiente universitário da Universidade Federal da Bahia e os princípios de interação com Modelos de Linguagem de Grande Porte voltados à redação acadêmica modular.
+
+\section{As Normas ABNT e o Manual de Estilo Acadêmico da EDUFBA}\label{sec:as_normas_abnt_e_o_manual_de_estilo_acad}
+
+
+A padronização dos trabalhos acadêmicos no Brasil é regida por um conjunto de normas emitidas pela Associação Brasileira de Normas Técnicas. Conforme exposto por Severino \cite{Severino2016}, a normalização não se limita a exigências burocráticas, mas constitui elemento essencial para a circulação pública e indexação de resultados científicos.
+
+Na UFBA, a referência oficial para formatação é o Manual de Estilo Acadêmico da EDUFBA \cite{EDUFBA2019}, atualmente em sua 6ª edição revista e ampliada. Esse manual compila e exemplifica a aplicação de normas cruciais:
+
+\begin{enumerate}
+  \item \textbf{ABNT NBR 14724:2011}: Estrutura geral dos trabalhos acadêmicos (elementos pré-textuais, textuais e pós-textuais);
+  \item \textbf{ABNT NBR 6023:2018}: Regras para elaboração de referências bibliográficas;
+  \item \textbf{ABNT NBR 10520:2002}: Apresentação de citações diretas, indiretas e notas de rodapé;
+  \item \textbf{ABNT NBR 6028:2003}: Requisitos para resumos e palavras-chave (150 a 500 palavras);
+  \item \textbf{ABNT NBR 6024:2012}: Numeração progressiva das seções de um documento escrito.
+\end{enumerate}
+
+
+\subsection{Requisitos Gráficos e Tipográficos}\label{sec:requisitos_graficos_e_tipograficos}
+
+
+O Manual da EDUFBA estabelece diretrizes rigorosas para a apresentação gráfica, sintetizadas na Tabela 1.
+
+\begin{table}[htb]
+  \caption{Tabela descritiva 1}
+  \label{tab:tabela_1}
+  \begin{center}
+  \begin{tabular}{|l|l|l|}
+    \hline
+    \textbf{Elemento Gráfico} & \textbf{Dimensão / Configuração Normativa} & \textbf{Observações UFBA (EDUFBA 2019)} \\ \hline
+    Margem Superior & 3,0 cm & Aplicável ao anverso da folha \\ \hline
+    Margem Esquerda & 3,0 cm & Espaço destinado à encadernação \\ \hline
+    Margem Inferior & 2,0 cm & Padrão ABNT \\ \hline
+    Margem Direita & 2,0 cm & Padrão ABNT \\ \hline
+    Recuo de Parágrafo & 1,0 cm & Primeira linha do parágrafo \\ \hline
+    Citação Longa (> 3 linhas) & Recuo de 4,0 cm & Fonte menor (10 ou 11pt), espaço simples \\ \hline
+    Espaçamento Entrelinhas & 1,5 linha & Corpo do texto principal \\ \hline
+    Fonte Tipográfica & Tamanho 12 & Latin Modern, Times New Roman ou Arial \\ \hline
+  \end{tabular}
+  \end{center}
+  \legend{Fonte: Adaptado de Lubisco e Vieira [@EDUFBA2019, p. 85-86].}
+\end{table}
+
+
+Segundo orienta a norma, as ilustrações (figuras, gráficos, fotografias) e tabelas devem conter identificação na parte superior e a respectiva fonte na parte inferior, ambas em corpo menor (10 ou 11 pt) e espaçamento simples.
+
+\section{Modelos de Linguagem e Escrita Modular}\label{sec:modelos_de_linguagem_e_escrita_modular}
+
+
+A arquitetura \textit{Transformer}, introduzida por Vaswani et al. \cite{Vaswani2017}, viabilizou saltos qualitativos no processamento de linguagem natural, culminando em modelos densos como o GPT-3 \cite{Brown2020} e seus sucessores contemporâneos. Esses modelos exibem alta capacidade de síntese e estruturação argumentativa.
+
+Entretanto, ao redigir monografias completas, surgem problemas conhecidos como perda de coerência em contextos longos (\textit{lost-in-the-middle}) e limites estritos de geração por resposta. Por esse motivo, Gil \cite{Gil2019} salienta que qualquer produção científica requer um delineamento prévio em tópicos bem delimitados.
+
+A abordagem modular resolve esse gargalo ao decompor a monografia em blocos temáticos autônomos expressos em Markdown, permitindo:
+
+\begin{itemize}
+  \item Redação iterativa e assistida seção por seção;
+  \item Validação contínua do conteúdo pelo autor e orientador;
+  \item Armazenamento em arquivos de texto simples, compatíveis com sistemas de controle de versão como o Git.
+\end{itemize}
+
+
+% --- 03_metodologia.md ---
+\chapter{Metodologia}\label{sec:metodologia}
+
+
+Este capítulo descreve os procedimentos metodológicos empregados para construir a arquitetura do repositório, o esquema de dados para metadados e o mecanismo de compilação automatizada.
+
+\section{Arquitetura do Repositório e Fluxo de Trabalho}\label{sec:arquitetura_do_repositorio_e_fluxo_de_tr}
+
+
+A estrutura proposta organiza os artefatos do projeto em pastas com responsabilidades bem definidas, eliminando a poluição do diretório raiz e facilitando a manutenção contínua pelo estudante.
+
+A Figura 1 ilustra o fluxo de dados entre o autor, a inteligência artificial generativa (LLM), os arquivos em Markdown e o pipeline de compilação.
+
+\begin{figure}[htb]
+  \caption{Fluxo de trabalho modular para elaboração de TCC com LLM e abnTeX2}
+  \label{fig:fluxo_tcc}
+  \begin{center}
+    \includegraphics[width=0.85\textwidth]{images/figura1.png}
+  \end{center}
+  \legend{Fonte: Elaborado pelo autor (2026).}
+\end{figure}
+
+
+O fluxo operacional obedece às seguintes etapas:
+
+\begin{enumerate}
+  \item \textbf{Definição de Escopo}: O autor estrutura o sumário provisório do trabalho com base no Quadro Metodológico da UFBA \cite[p. 37]{EDUFBA2019};
+  \item \textbf{Geração e Refinamento por LLM}: Para cada seção, solicita-se à LLM o desenvolvimento conceitual, recebendo a saída em formato Markdown com marcadores de citação;
+  \item \textbf{Depósito Modular}: Os arquivos são salvos na pasta \texttt{content/}, nomeados sequencialmente (ex: \texttt{01_introducao.md}, \texttt{02_revisao.md});
+  \item \textbf{Alocação de Mídias e Referências}: Figuras são armazenadas em \texttt{images/} e entradas bibliográficas são registradas em \texttt{references.bib};
+  \item \textbf{Compilação}: O script \texttt{build.py} converte os arquivos para LaTeX e compila o PDF final ou gera o pacote para envio ao Overleaf.
+\end{enumerate}
+
+
+\section{Esquema de Metadados (`metadata.yaml`)}\label{sec:esquema_de_metadados_metadata_yaml}
+
+
+Para desacoplar as informações institucionais do código tipográfico, todos os dados de autoria, banca examinadora, resumos e siglas residem no arquivo \texttt{metadata.yaml}.
+
+A parametrização dos elementos pré-textuais permite a geração automática da referência bibliográfica no topo do resumo, conforme exigência do Manual EDUFBA \cite[p. 56]{EDUFBA2019}:
+
+\begin{equation}
+R_{tcc} = \text{SOBRENOME}, \text{ P. } \text{Título do Trabalho}. \text{ Ano. f. Grau -- Unidade, UFBA, Cidade, Ano.}
+\end{equation}
+
+
+\section{Tratamento de Citações e Equações}\label{sec:tratamento_de_citacoes_e_equacoes}
+
+
+O pipeline de conversão oferece suporte a dois modos complementares de citação:
+
+\begin{itemize}
+  \item \textbf{Sistema Autor-Data em Parênteses}: A marcação \texttt{\cite[p. 41]{EDUFBA2019}} é mapeada para \texttt{\cite[p.~41]{EDUFBA2019}}, resultando em "(LUBISCO; VIEIRA, 2019, p. 41)";
+  \item \textbf{Sistema Autor-Data no Fluxo da Sentença}: A marcação \texttt{\citeonline{EDUFBA2019}} é mapeada para \texttt{\citeonline{EDUFBA2019}}, produzindo "Lubisco e Vieira (2019)".
+\end{itemize}
+
+
+Equações matemáticas podem ser inseridas no formato inline utilizando cifrões simples \texttt{$f(x) = \sum_{i=1}^n x_i$} ou em blocos destacados com cifrões duplos:
+
+\begin{equation}
+f(x) = \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(x - \mu)^2}{2\sigma^2}\right)
+\end{equation}
+
+
+O compilador atribui automaticamente a numeração arábica alinhada à direita, em estrita conformidade com a ABNT.
+
+% --- 04_resultados.md ---
+\chapter{Resultados e Discussão}\label{sec:resultados_e_discussao}
+
+
+Este capítulo apresenta a validação do pipeline proposto, analisando a conformidade tipográfica perante o Manual de Estilo Acadêmico da EDUFBA \cite{EDUFBA2019} e o ganho de produtividade obtido na redação assistida por modelos de linguagem.
+
+\section{Conformidade com as Diretrizes da EDUFBA}\label{sec:conformidade_com_as_diretrizes_da_edufba}
+
+
+A análise do documento compilado atesta o atendimento integral a todos os quesitos avaliados pelas bancas examinadoras e bibliotecas da UFBA:
+
+\begin{enumerate}
+  \item \textbf{Capa e Folha de Rosto}: Exibem o brasão oficial da UFBA, hierarquia tipográfica correta (16pt para instituição/título, 14pt para unidade/autor, 12pt para programa) e alinhamento do preâmbulo à direita;
+  \item \textbf{Resumo e Abstract}: Incluem no topo a referência catalográfica padronizada da própria monografia, diferencial exigido pela UFBA que frequentemente é omitido em modelos genéricos;
+  \item \textbf{Seções Progressivas}: Aplicação exata da NBR 6024:2012, com capítulos primários em maiúsculas negrito, secundários em maiúsculas redondo, e terciários em minúsculas com inicial maiúscula e negrito;
+  \item \textbf{Figuras e Tabelas}: Inclusão automática de legendas superiores e fontes inferiores em corpo 10/11 pt com entrelinha simples;
+  \item \textbf{Citações e Referências}: Mapeamento transparente para o pacote \texttt{abntex2cite} em modo autor-data com alinhamento à margem esquerda.
+\end{enumerate}
+
+
+A Tabela 2 apresenta uma análise comparativa entre os métodos tradicionais de escrita em LaTeX e o presente framework baseado em Markdown.
+
+\begin{table}[htb]
+  \caption{Tabela descritiva 2}
+  \label{tab:tabela_2}
+  \begin{center}
+  \begin{tabular}{|l|l|l|}
+    \hline
+    \textbf{Critério de Avaliação} & \textbf{Escrita Direta em LaTeX} & \textbf{Framework Markdown + abnTeX2} \\ \hline
+    Curva de Aprendizado & Elevada (comandos complexos) & Baixa (sintaxe amigável) \\ \hline
+    Compatibilidade com LLMs & Média (LLM erra comandos TeX) & Nativa (Markdown é o padrão de LLMs) \\ \hline
+    Modulariedade do Texto & Exige manipulação de \texttt{\input} & Automática por arquivos numerados \\ \hline
+    Inserção de Figuras/Fontes & Bloco manual de 8 linhas TeX & 2 linhas em Markdown \\ \hline
+    Risco de Quebra de Sintaxe & Frequente em tabelas e equações & Mitigado pelo parser automatizado \\ \hline
+  \end{tabular}
+  \end{center}
+  \legend{Fonte: Elaborado pelo autor (2026).}
+\end{table}
+
+
+\section{Guia Prático de Prompts para Interação com LLM}\label{sec:guia_pratico_de_prompts_para_interacao_c}
+
+
+Para assegurar que as respostas geradas pela LLM se integrem perfeitamente ao projeto sem necessidade de ajustes manuais, recomenda-se fornecer um prompt de sistema contendo as seguintes diretrizes:
+
+\begin{lstlisting}[language=text]
+Você é um assistente acadêmico auxiliando na redação do meu TCC para a UFBA.
+Ao redigir as seções:
+1. Responda em Markdown padrão com títulos iniciando em nível 2 (##) ou 3 (###);
+2. Não inclua números manuais nos títulos (ex: use '## Contextualização' e não '## 1.1 Contextualização');
+3. Utilize citações no formato BibTeX: [@AutorAno] ou 'Segundo @AutorAno';
+4. Para citações diretas longas com mais de 3 linhas, use o bloco de citação '> texto da citação';
+5. Para figuras, utilize '![Legenda da figura](images/nome.png)' seguido de '*Fonte: Autor (2026).*';
+6. Mantenha tom acadêmico formal, impessoal e fundamentado na literatura científica.
+\end{lstlisting}
+
+
+Essa padronização simplifica o processo de cópia e colagem, permitindo que cada resposta da IA seja salva diretamente no respectivo arquivo \texttt{.md}.
+
+% --- 05_conclusao.md ---
+\chapter{Conclusão}\label{sec:conclusao}
+
+
+A elaboração de um trabalho científico de fôlego como um TCC, dissertação ou tese impõe ao pesquisador uma dupla responsabilidade: a solidez do conteúdo investigado e o atendimento irrestrito às normas técnicas de formatação e normalização. No âmbito da Universidade Federal da Bahia, essas exigências encontram respaldo nas diretrizes consolidadas pelo Manual da EDUFBA \cite{EDUFBA2019}.
+
+O presente projeto demonstrou que a divisão do trabalho acadêmico em blocos modulares escritos em Markdown resolve com eficácia a principal dificuldade enfrentada por estudantes ao utilizarem modelos de linguagem de grande porte (LLMs): a fragmentação de respostas e a inconsistência de contexto em textos extensos.
+
+A implementação de uma esteira automatizada em Python permitiu unir a agilidade da escrita em Markdown à precisão gráfica da classe abnTeX2, assegurando que:
+
+\begin{itemize}
+  \item Metadados institucionais fiquem centralizados em um único arquivo de fácil edição (\texttt{metadata.yaml});
+  \item As referências bibliográficas sejam validadas e formatadas no padrão ABNT NBR 6023:2018;
+  \item As ilustrações e tabelas recebam automaticamente títulos superiores e legendas de fonte inferiores, em cumprimento às recomendações da UFBA;
+  \item O projeto possa ser compilado localmente em sistemas Windows, Linux e macOS ou exportado em um único arquivo ZIP pronto para o Overleaf.
+\end{itemize}
+
+
+\section{Contribuições do Trabalho}\label{sec:contribuicoes_do_trabalho}
+
+
+As principais contribuições deste modelo incluem:
+
+\begin{enumerate}
+  \item \textbf{Reprodutibilidade e Modularidade}: O estudante pode editar ou adicionar novos capítulos sem risco de desconfigurar cabeçalhos, preâmbulos ou numeração de páginas;
+  \item \textbf{Integração Fluida com IA}: Elimina a necessidade de pedir à LLM que gere códigos complexos em LaTeX, reduzindo significativamente alucinações e erros de sintaxe;
+  \item \textbf{Conformidade Institucional}: Garante aderência estrita às especificidades da UFBA, tais como a referência no cabeçalho do resumo e dimensões de margem e recuo.
+\end{enumerate}
+
+
+\section{Trabalhos Futuros}\label{sec:trabalhos_futuros}
+
+
+Como desdobramentos futuros para a evolução desta ferramenta, recomenda-se:
+
+\begin{itemize}
+  \item A disponibilização de um plugin ou extensão para o Visual Studio Code com pré-visualização em tempo real das páginas diagramadas;
+  \item A integração com ferramentas de gerenciamento de bibliografia em nuvem (como Zotero e Mendeley) para sincronização automática de referências em BibTeX;
+  \item A inclusão de scripts de verificação de plágio e conferência automática de citações órfãs antes da compilação final.
+\end{itemize}
+
+
+% ==============================================================================
+% ELEMENTOS PÓS-TEXTUAIS
+% ==============================================================================
+\postextual
+
+% --- REFERÊNCIAS BIBLIOGRÁFICAS (NBR 6023:2018) ---
+\bibliography{references}
+
+\end{document}

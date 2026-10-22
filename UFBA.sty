@@ -1,0 +1,179 @@
+%%
+%% Customizações do abnTeX2 para a Universidade Federal da Bahia (UFBA)
+%% Em conformidade com o Manual de Estilo Acadêmico da EDUFBA (6ª edição, 2019)
+%%
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{UFBA}[2026/10/22 v2.0 Customizacao abnTeX2 para UFBA]
+
+\RequirePackage{graphicx}
+
+% ---
+% DADOS INSTITUCIONAIS E ACADÊMICOS
+% ---
+
+% Subtítulo
+\providecommand{\imprimirsubtitulo}{}
+\newcommand{\subtitulo}[1]{\renewcommand{\imprimirsubtitulo}{#1}}
+
+% Unidade de Ensino (Faculdade, Instituto, Escola)
+\providecommand{\imprimirfaculdade}{}
+\newcommand{\faculdade}[1]{\renewcommand{\imprimirfaculdade}{#1}}
+
+% Programa / Colegiado / Departamento
+\providecommand{\imprimirprograma}{}
+\newcommand{\programa}[1]{\renewcommand{\imprimirprograma}{#1}}
+
+% Curso
+\providecommand{\imprimircurso}{}
+\newcommand{\curso}[1]{\renewcommand{\imprimircurso}{#1}}
+
+% Orientadora e Coorientadora
+\newcommand{\orientadoraname}{Orientadora:}
+\newcommand{\coorientadoraname}{Coorientadora:}
+\newcommand{\professorname}{Professor:}
+
+\providecommand{\imprimirorientadoraRotulo}{}
+\providecommand{\imprimirorientadora}{}
+\newcommand{\orientadora}[2][\orientadoraname]%
+  {\renewcommand{\imprimirorientadoraRotulo}{#1}%
+   \renewcommand{\imprimirorientadora}{#2}}
+
+\providecommand{\imprimircoorientadoraRotulo}{}
+\providecommand{\imprimircoorientadora}{}
+\newcommand{\coorientadora}[2][\coorientadoraname]%
+  {\renewcommand{\imprimircoorientadoraRotulo}{#1}%
+   \renewcommand{\imprimircoorientadora}{#2}}
+
+\providecommand{\imprimirprofessorRotulo}{}
+\providecommand{\imprimirprofessor}{}
+\newcommand{\professor}[2][\professorname]%
+  {\renewcommand{\imprimirprofessorRotulo}{#1}%
+   \renewcommand{\imprimirprofessor}{#2}}
+
+% ---
+% CAPA (Manual EDUFBA 6ª ed., p. 41 e Figura 1, p. 44)
+% ---
+\renewcommand{\imprimircapa}{%
+  \begin{capa}%
+    \begin{center}
+      \vspace*{0.5cm}
+      % Brasão da UFBA (procura logo_ufba sem extensão fixa: png, pdf ou eps)
+      \includegraphics[width=1.6cm]{logo_ufba}
+      \vspace{0.4cm}
+
+      % Nome da Instituição (corpo 16, negrito, maiúscula)
+      {\fontsize{16}{18}\selectfont\bfseries\MakeUppercase{\imprimirinstituicao}\par}
+      \vspace{0.2cm}
+
+      % Nome da Unidade de Ensino (corpo 14, negrito, maiúscula)
+      \abntex@ifnotempty{\imprimirfaculdade}{%
+        {\fontsize{14}{16}\selectfont\bfseries\MakeUppercase{\imprimirfaculdade}\par}%
+        \vspace{0.2cm}%
+      }
+
+      % Nome do Programa / Departamento / Colegiado (corpo 12, negrito, maiúscula)
+      \abntex@ifnotempty{\imprimirprograma}{%
+        {\fontsize{12}{14}\selectfont\bfseries\MakeUppercase{\imprimirprograma}\par}%
+      }
+
+      \vspace{\fill}
+
+      % Nome do autor (corpo 14, negrito, maiúscula)
+      {\fontsize{14}{16}\selectfont\bfseries\MakeUppercase{\imprimirautor}\par}
+
+      \vspace{\fill}
+
+      % Título (corpo 16, negrito, maiúscula) e Subtítulo (corpo 14)
+      {\fontsize{16}{19}\selectfont\bfseries\MakeUppercase{\imprimirtitulo}%
+      \abntex@ifnotempty{\imprimirsubtitulo}{%
+        {\MakeUppercase{: \fontsize{14}{17}\selectfont\imprimirsubtitulo}}%
+      }\par}
+
+      \vspace{\fill}
+
+      % Cidade (corpo 14, sem negrito)
+      {\fontsize{14}{16}\selectfont\imprimirlocal\par}
+      \vspace{0.1cm}
+      % Ano de depósito (corpo 14, sem negrito)
+      {\fontsize{14}{16}\selectfont\imprimirdata\par}
+      \vspace*{0.5cm}
+    \end{center}
+  \end{capa}
+}
+
+% ---
+% FOLHA DE ROSTO (Manual EDUFBA 6ª ed., p. 42-43 e Figuras 3-5)
+% ---
+\makeatletter
+\renewcommand{\folhaderostocontent}{%
+  \begin{center}
+    \vspace*{0.5cm}
+    % Nome do autor (corpo 14, negrito, maiúscula)
+    {\fontsize{14}{16}\selectfont\bfseries\MakeUppercase{\imprimirautor}\par}
+
+    \vspace{8.5cm}
+
+    % Título a ~9cm da margem superior
+    {\fontsize{16}{19}\selectfont\bfseries\MakeUppercase{\imprimirtitulo}%
+    \abntex@ifnotempty{\imprimirsubtitulo}{%
+      {\MakeUppercase{: \fontsize{14}{17}\selectfont\imprimirsubtitulo}}%
+    }\par}
+
+    \vspace{\fill}
+
+    % Preâmbulo com recuo à direita (espaço simples, corpo menor/12)
+    \abntex@ifnotempty{\imprimirpreambulo}{%
+      \begin{flushright}
+        \begin{minipage}{0.55\textwidth}
+          \SingleSpacing
+          \fontsize{11}{13}\selectfont
+          \imprimirpreambulo\par
+          \vspace{0.5cm}
+
+          \abntex@ifnotempty{\imprimirprofessor}{%
+            {\imprimirprofessorRotulo~\imprimirprofessor\par}%
+          }
+          \abntex@ifnotempty{\imprimirorientador}{%
+            {\imprimirorientadorRotulo~\imprimirorientador\par}%
+          }
+          \abntex@ifnotempty{\imprimirorientadora}{%
+            {\imprimirorientadoraRotulo~\imprimirorientadora\par}%
+          }
+          \abntex@ifnotempty{\imprimircoorientador}{%
+            {\imprimircoorientadorRotulo~\imprimircoorientador\par}%
+          }
+          \abntex@ifnotempty{\imprimircoorientadora}{%
+            {\imprimircoorientadoraRotulo~\imprimircoorientadora\par}%
+          }
+        \end{minipage}
+      \end{flushright}
+    }
+
+    \vspace{\fill}
+
+    % Cidade e Ano
+    {\fontsize{14}{16}\selectfont\imprimirlocal\par}
+    \vspace{0.1cm}
+    {\fontsize{14}{16}\selectfont\imprimirdata\par}
+    \vspace*{0.5cm}
+  \end{center}
+}
+\makeatother
+
+% ---
+% FORMATAÇÃO DE TÍTULOS DE SEÇÕES (Manual EDUFBA 6ª ed., p. 89-90)
+% Seção Primária: Maiúsculas, Negrito
+% Seção Secundária: Maiúsculas, Redondo (Normal)
+% Seção Terciária: Minúsculas com inicial maiúscula, Negrito
+% Seção Quaternária: Minúsculas com inicial maiúscula, Redondo
+% Seção Quinária: Minúsculas com inicial maiúscula, Itálico
+% ---
+\renewcommand{\ABNTEXchapterfontsize}{\fontsize{12}{14}\selectfont\bfseries}
+\renewcommand{\ABNTEXsectionfontsize}{\fontsize{12}{14}\selectfont\normalfont}
+\renewcommand{\ABNTEXsubsectionfontsize}{\fontsize{12}{14}\selectfont\bfseries}
+\renewcommand{\ABNTEXsubsubsectionfontsize}{\fontsize{12}{14}\selectfont\normalfont}
+\renewcommand{\ABNTEXsubsubsubsectionfontsize}{\fontsize{12}{14}\selectfont\itshape}
+
+% ---
+% FIM DO PACOTE UFBA
+% ---
