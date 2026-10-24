@@ -57,8 +57,8 @@
   \begin{capa}%
     \begin{center}
       \vspace*{0.5cm}
-      % Brasão da UFBA (procura logo_ufba sem extensão fixa: png, pdf ou eps)
-      \includegraphics[width=1.6cm]{logo_ufba}
+      % Brasão da UFBA
+      \includegraphics[width=1.6cm]{logo_ufba.png}
       \vspace{0.4cm}
 
       % Nome da Instituição (corpo 16, negrito, maiúscula)
@@ -86,7 +86,7 @@
       % Título (corpo 16, negrito, maiúscula) e Subtítulo (corpo 14)
       {\fontsize{16}{19}\selectfont\bfseries\MakeUppercase{\imprimirtitulo}%
       \abntex@ifnotempty{\imprimirsubtitulo}{%
-        {\MakeUppercase{: \fontsize{14}{17}\selectfont\imprimirsubtitulo}}%
+        {: \fontsize{14}{17}\selectfont\MakeUppercase{\imprimirsubtitulo}}%
       }\par}
 
       \vspace{\fill}
@@ -116,7 +116,7 @@
     % Título a ~9cm da margem superior
     {\fontsize{16}{19}\selectfont\bfseries\MakeUppercase{\imprimirtitulo}%
     \abntex@ifnotempty{\imprimirsubtitulo}{%
-      {\MakeUppercase{: \fontsize{14}{17}\selectfont\imprimirsubtitulo}}%
+      {: \fontsize{14}{17}\selectfont\MakeUppercase{\imprimirsubtitulo}}%
     }\par}
 
     \vspace{\fill}
@@ -173,6 +173,16 @@
 \renewcommand{\ABNTEXsubsectionfontsize}{\fontsize{12}{14}\selectfont\bfseries}
 \renewcommand{\ABNTEXsubsubsectionfontsize}{\fontsize{12}{14}\selectfont\normalfont}
 \renewcommand{\ABNTEXsubsubsubsectionfontsize}{\fontsize{12}{14}\selectfont\itshape}
+
+% ---
+% DESATIVAÇÃO DAS ASPAS ATIVAS DO BABEL (Evita erro de Argument of \language@active@arg")
+% ---
+\AtBeginDocument{%
+  \addto\extrasbrazilian{\shorthandoff{"}}%
+  \addto\extrasbrazil{\shorthandoff{"}}%
+  \addto\extrasportuges{\shorthandoff{"}}%
+  \shorthandoff{"}%
+}
 
 % ---
 % FIM DO PACOTE UFBA

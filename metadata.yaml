@@ -4,108 +4,120 @@
 # ==============================================================================
 
 # --- Identificação do Trabalho ---
-titulo: "Desenvolvimento de Aplicações Inteligentes com Modelos de Linguagem"
-subtitulo: "Um Framework Modular Baseado em Markdown e Normas ABNT UFBA" # Deixe vazio "" se não houver
-autor: "Nome Completo do Aluno"
+titulo: "Assistente de Observabilidade Sociotécnica"
+subtitulo: "Apoio ao diagnóstico da importação de corpora no CorText Manager com RAG e Análise de Logs" 
+autor: "Wellington Miguel de Jesus Silva"
 ano: 2026
-data: "2026" # Ou mês/ano, ex: "Novembro de 2026"
+data: "Outubro de 2026"
 local: "Salvador"
 
 # --- Dados Institucionais ---
 instituicao: "Universidade Federal da Bahia"
-faculdade: "Instituto de Computação"            # Ex: Escola Politécnica, Instituto de Computação, Faculdade de Educação
-programa: "Colegiado do Curso de Ciência da Computação" # Ou Departamento / Programa de Pós-Graduação
-curso: "Ciência da Computação"
-grau: "Bacharel em Ciência da Computação"       # Ex: Bacharel em ..., Engenheiro ..., Mestre em ..., Doutor em ...
-tipotrabalho: "Trabalho de Conclusão de Curso"  # Ex: Trabalho de Conclusão de Curso, Dissertação, Tese
+faculdade: "Instituto de Computação"            
+programa: "Colegiado do Curso de Sistemas de Informação" 
+curso: "Sistemas de Informação"
+grau: "Bacharel em Sistemas de Informação"       
+tipotrabalho: "Trabalho de Conclusão de Curso"  
 
 # --- Orientação ---
 orientador:
-  nome: "Prof. Dr. Nome do Orientador"
-  genero: "M"                                  # "M" para Orientador ou "F" para Orientadora
+  nome: "Profa. Dra. Claudia Gama"
+  genero: "F"                                  
   instituicao: "Universidade Federal da Bahia"
 
 # Coorientador (opcional, deixe vazio se não houver)
 coorientador:
-  nome: ""                                     # Ex: "Prof. Me. Nome do Coorientador"
-  genero: "M"                                  # "M" para Coorientador ou "F" para Coorientadora
-  instituicao: "Universidade Federal da Bahia"
+  nome: ""                                     
+  genero: "M"                                  
+  instituicao: ""
 
 # Preâmbulo para Folha de Rosto e Aprovação:
-# Se preambulo_customizado estiver vazio (""), o sistema gera automaticamente o texto oficial:
-# "Trabalho de Conclusão de Curso apresentado ao [programa] da [instituicao], como requisito para obtenção do grau de [grau]."
 preambulo_customizado: ""
 
 # --- Elementos Pré-Textuais Opcionais ---
 ficha_catalografica:
-  inserir: false                               # Mude para true quando tiver o PDF emitido pelo SIBI/UFBA
+  inserir: false                               
   arquivo: "ficha.pdf"
 
 folha_aprovacao:
   inserir: true
-  data_aprovacao: "20 de Novembro de 2026"
+  data_aprovacao: "A definir"
   banca:
-    - nome: "Prof. Dr. Nome do Orientador"
-      papel: "Orientador"
+    - nome: "Profa. Dra. Claudia Gama"
+      papel: "Orientadora"
       instituicao: "Universidade Federal da Bahia"
-    - nome: "Prof. Dr. Primeiro Membro da Banca"
+    - nome: "Prof. Dr. [Nome do Convidado 1]"
       papel: "Examinador Convidado"
       instituicao: "Universidade Federal da Bahia"
-    - nome: "Prof. Dr. Segundo Membro da Banca"
+    - nome: "Prof. Dr. [Nome do Convidado 2]"
       papel: "Examinador Convidado"
       instituicao: "Universidade Federal da Bahia"
 
 dedicatoria: |
-  Aos meus pais e familiares, pelo incentivo contínuo, amor incondicional
-  e por acreditarem no poder da educação ao longo de toda a minha formação.
-
+  Aos meus pais, que abdicaram dos seus próprios sonhos para que eu pudesse realizar os meus. Eu sou a continuação de um sonho. Dedico também à minha própria jornada. Aos dias em que pensei em desistir e à resiliência que me fez continuar.
 agradecimentos: |
-  À Universidade Federal da Bahia e ao corpo docente, por proporcionarem um ambiente de excelência e aprendizado constante.
+  À Universidade Federal da Bahia e ao corpo docente do Instituto de Computação, por proporcionarem um ambiente de excelência e aprendizado.
   
-  Ao meu orientador, pela dedicação, conselhos preciosos e paciência durante a condução deste projeto.
+  À minha orientadora, Profa. Dra. Claudia Gama, pelas direções preciosas e paciência durante a condução deste projeto.
   
-  Aos colegas e amigos, pelo companheirismo e discussões enriquecedoras durante os anos de graduação.
+  À equipe e comunidade do CorText Manager, cujo trabalho colaborativo inspirou esta pesquisa.
 
 epigrafe:
-  texto: "O verdadeiro sinal de inteligência não é o conhecimento, mas a imaginação."
-  autor: "Albert Einstein"
+  texto: |
+    Irmão, você não percebeu que você é o único representante do seu sonho na face da Terra?
+    Se isso não fizer você correr, chapa, eu não sei o que vai.
+  autor: "Leandro Roque de Oliveira (Emicida)"
 
 # --- Resumo em Língua Vernácula (Português) ---
-# Conforme recomendação do Manual EDUFBA (6ª ed., p. 56 e 64), a referência bibliográfica
-# do próprio trabalho é incluída automaticamente no cabeçalho do Resumo pelo compilador.
 resumo: |
-  Este trabalho apresenta uma proposta metodológica e prática para a escrita estruturada de Trabalhos de Conclusão de Curso (TCC) na Universidade Federal da Bahia (UFBA), aliando o potencial de Modelos de Linguagem de Grande Porte (LLMs) à conformidade das normas técnicas da ABNT. A divisão do texto em blocos modulares em formato Markdown soluciona limitações de contexto e coesão das inteligências artificiais, permitindo refinamentos incrementais sem desconfigurar o documento final. Um pipeline em Python traduz automaticamente esses blocos para o abnTeX2, garantindo precisão em margens, paginação, citações, numeração progressiva e elementos pré e pós-textuais. Os resultados demonstram agilidade na escrita, facilidade de versionamento e aderência integral às diretrizes acadêmicas da UFBA.
+  Este trabalho propõe o desenvolvimento de um Assistente de Observabilidade Sociotécnica para o CorText Manager, uma plataforma de análise de dados para ciências sociais. A etapa inicial de importação de dados (Data Parsing) frequentemente atua como uma "caixa preta" latouriana: suas heurísticas de correção e truncamento silencioso de dados, necessárias para a estabilidade do servidor, tornam-se opacas ao pesquisador, escondendo vieses metodológicos e perdas de informações críticas. Para mitigar essa fricção técnica sem alterar a arquitetura nativa da plataforma, propõe-se uma solução baseada em Qualidade de Dados (Data Profiling) e Recuperação Aumentada por Geração (RAG). O sistema atua de forma preventiva e reativa, auditando anomalias de formatação antes da submissão e traduzindo logs de erro opacos em diagnósticos acionáveis, ancorados na base de conhecimento oficial. Resultados da auditoria do fórum de suporte evidenciam que problemas de infraestrutura de dados afetam 66,4% dos chamados. O assistente promove a abertura seletiva dessa infraestrutura invisível, devolvendo a agência metodológica ao usuário e preservando o rigor epistêmico das pesquisas.
 palavras_chave:
-  - Trabalho de Conclusão de Curso
-  - Modelos de Linguagem
-  - ABNT UFBA
-  - abnTeX2
-  - Escrita Científica
+  - CorText Manager
+  - Observabilidade Sociotécnica
+  - Qualidade de Dados
+  - Recuperação Aumentada por Geração
+  - Estudos de Ciência e Tecnologia
 
 # --- Resumo em Língua Estrangeira (Inglês) ---
 abstract: |
-  This work presents a methodological and practical proposal for structured writing of Undergraduate Final Projects (TCC) at the Federal University of Bahia (UFBA), combining the potential of Large Language Models (LLMs) with compliance to ABNT technical standards. Dividing the manuscript into modular Markdown blocks overcomes AI context and cohesion limitations, enabling incremental refinement without compromising document structure. A Python pipeline automatically translates these blocks into abnTeX2, ensuring accuracy in margins, pagination, citations, section numbering, and pre/post-textual elements. The results demonstrate increased writing agility, simplified version control, and full adherence to UFBA academic publishing standards.
+  This work proposes the development of a Sociotechnical Observability Assistant for CorText Manager, a data analysis platform for social sciences. The initial data importation stage (Data Parsing) frequently acts as a Latourian "black box": its heuristics for correction and silent data truncation, necessary for server stability, become opaque to the researcher, hiding methodological biases and critical information losses. To mitigate this technical friction without altering the platform's native architecture, a solution based on Data Quality (Data Profiling) and Retrieval-Augmented Generation (RAG) is proposed. The system acts preventively and reactively, auditing formatting anomalies before submission and translating opaque error logs into actionable diagnoses, anchored in the official knowledge base. Results from the support forum audit show that data infrastructure problems affect 66.4% of tickets. The assistant promotes the selective opening of this invisible infrastructure, returning methodological agency to the user and preserving the epistemic rigor of the research.
 keywords:
-  - Undergraduate Thesis
-  - Large Language Models
-  - ABNT Standards
-  - abnTeX2
-  - Scientific Writing
+  - CorText Manager
+  - Sociotechnical Observability
+  - Data Quality
+  - Retrieval-Augmented Generation
+  - Science and Technology Studies
 
 # --- Listas Pré-Textuais ---
 listas:
-  figuras: true                                # Gera Lista de Figuras automaticamente
-  tabelas: true                                # Gera Lista de Tabelas automaticamente
-  siglas: true                                 # Gera Lista de Abreviaturas e Siglas
+  figuras: true                                
+  tabelas: true                                
+  siglas: true                                 
 
-# Lista de Siglas e Abreviaturas (será organizada em ordem alfabética automaticamente conforme a ABNT)
+# Lista de Siglas e Abreviaturas (ordenada alfabeticamente pelo compilador)
 siglas:
   ABNT: "Associação Brasileira de Normas Técnicas"
+  API: "Application Programming Interface (Interface de Programação de Aplicações)"
+  CSV: "Comma-Separated Values (Valores Separados por Vírgula)"
   EDUFBA: "Editora da Universidade Federal da Bahia"
+  ETL: "Extract, Transform, Load (Extração, Transformação e Carga)"
+  GIGO: "Garbage In, Garbage Out"
+  HTML: "HyperText Markup Language (Linguagem de Marcação de Hipertexto)"
   IA: "Inteligência Artificial"
-  LLM: "Large Language Model (Modelo de Linguagem de Grande Porte)"
+  IHC: "Interação Humano-Computador"
+  ISI: "Institute for Scientific Information"
+  JSON: "JavaScript Object Notation"
+  LLM: "Large Language Model (Modelo de Linguagem de Grande Escala)"
   NBR: "Norma Brasileira Regulamentadora"
   PDF: "Portable Document Format"
-  SIBI: "Sistema de Bibliotecas da UFBA"
+  RAG: "Retrieval-Augmented Generation (Recuperação Aumentada por Geração)"
+  RF: "Requisito Funcional"
+  RIS: "Research Information Systems"
+  RNF: "Requisito Não Funcional"
+  SQL: "Structured Query Language (Linguagem de Consulta Estruturada)"
+  STS: "Science and Technology Studies (Estudos de Ciência e Tecnologia)"
   TCC: "Trabalho de Conclusão de Curso"
   UFBA: "Universidade Federal da Bahia"
+  UTF-8: "8-bit Unicode Transformation Format"
+  WOS: "Web of Science"
+  XML: "eXtensible Markup Language"

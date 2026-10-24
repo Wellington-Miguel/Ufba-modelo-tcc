@@ -95,6 +95,10 @@ class MarkdownToLatex:
 
     def escapar_caracteres_especiais(self, texto):
         """Escapa caracteres especiais do LaTeX fora de ambientes matemáticos e comandos."""
+        if not texto:
+            return ""
+        # Remove eventuais marcadores de citação gerados por LLMs
+        texto = re.sub(r'\[cite:\s*[\d,\s]+\]', '', texto)
         partes = re.split(r'(\$.*?\$|\\begin\{.*?\}|\\end\{.*?\}|\\[a-zA-Z]+(?:\{.*?\})*)', texto)
         resultado = []
         for i, parte in enumerate(partes):
@@ -102,17 +106,25 @@ class MarkdownToLatex:
                 # É código LaTeX ou math, não alterar
                 resultado.append(parte)
             else:
-                # Escapar %, &, _, # se não estiverem já precedidos de barra invertida
                 p = re.sub(r'(?<!\\)%', r'\%', parte)
                 p = re.sub(r'(?<!\\)&', r'\&', p)
-                p = re.sub(r'(?<!\\)_', r'\_', p)
                 p = re.sub(r'(?<!\\)#', r'\#', p)
+                p = re.sub(r'(?<!\\)\^', r'\\textasciicircum{}', p)
+                p = re.sub(r'(?<!\\)~', r'\\textasciitilde{}', p)
+                p = re.sub(r'"([^"\n]+)"', r"``\1''", p)
+                p = p.replace('"', "''")
                 resultado.append(p)
         return "".join(resultado)
 
     def converter_formatacao_inline(self, linha):
-        """Converte negrito, itálico, código, links e citações em uma linha."""
-        # Math blocks protection
+        """Converte negrito, itálico, código, links e citações em uma linha com escape estrito."""
+        if not linha:
+            return ""
+
+        # Remove marcadores de citação de ferramentas de IA (ex: [cite: 170])
+        linha = re.sub(r'\[cite:\s*[\d,\s]+\]', '', linha)
+
+        # 1. Proteção de blocos matemáticos ($...$)
         math_tokens = []
         def salvar_math(match):
             math_tokens.append(match.group(0))
@@ -120,48 +132,88 @@ class MarkdownToLatex:
 
         linha = re.sub(r'\$.*?\$', salvar_math, linha)
 
-        # Citações estilo Pandoc: [@Chave, p. 12] -> \cite[p.~12]{Chave}
+        # 2. Inline code: `codigo` -> \texttt{codigo}
+        code_tokens = []
+        def repl_code(match):
+            c = match.group(1)
+            c = c.replace('\\', r'@@BACKSLASH@@')
+            c = c.replace('{', r'\{').replace('}', r'\}')
+            c = c.replace('%', r'\%').replace('&', r'\&').replace('#', r'\#')
+            c = c.replace('^', r'\textasciicircum{}').replace('~', r'\textasciitilde{}')
+            c = c.replace('$', r'\$')
+            c = c.replace('@@BACKSLASH@@', r'\textbackslash{}')
+            # Permite quebras de linha seguras em código monoespaçado longo (evita estouro de margem)
+            c = c.replace('_', r'\_\allowbreak ')
+            c = re.sub(r'(?<=[a-zA-Z0-9])\.(?=[a-zA-Z0-9])', r'.\\allowbreak ', c)
+            c = re.sub(r'(?<=[a-zA-Z0-9])/(?=[a-zA-Z0-9])', r'/\\allowbreak ', c)
+            code_tokens.append(f"\\texttt{{{c}}}")
+            return f"@@CODE_{len(code_tokens)-1}@@"
+
+        linha = re.sub(r'`([^`]+)`', repl_code, linha)
+
+        # 3. Citações estilo Pandoc: [@Chave, p. 12] -> \cite[p.~12]{Chave}
+        cite_tokens = []
         def repl_cite(match):
             corpo = match.group(1).strip()
-            # Multiplas citações separadas por ponto e vírgula
             if ';' in corpo:
                 itens = [c.strip().lstrip('@') for c in corpo.split(';')]
-                return f"\\cite{{{', '.join(itens)}}}"
-            # Citação única com página
-            if ',' in corpo:
+                res = f"\\cite{{{', '.join(itens)}}}"
+            elif ',' in corpo:
                 partes = corpo.split(',', 1)
                 chave = partes[0].strip().lstrip('@')
                 pag = partes[1].strip()
-                return f"\\cite[{pag}]{{{chave}}}"
-            return f"\\cite{{{corpo.lstrip('@')}}}"
+                res = f"\\cite[{pag}]{{{chave}}}"
+            else:
+                res = f"\\cite{{{corpo.lstrip('@')}}}"
+            cite_tokens.append(res)
+            return f"@@CITE_{len(cite_tokens)-1}@@"
 
         linha = re.sub(r'\[(@[a-zA-Z0-9_\-:\.,\s;]+)\]', repl_cite, linha)
 
-        # Citação no fluxo do texto: @Chave -> \citeonline{Chave}
-        linha = re.sub(r'(?<![\\@\w])@([a-zA-Z0-9_\-:]+)', r'\\citeonline{\1}', linha)
+        # 4. Citação no fluxo do texto: @Chave -> \citeonline{Chave}
+        def repl_citeonline(match):
+            chave = match.group(1)
+            cite_tokens.append(f"\\citeonline{{{chave}}}")
+            return f"@@CITE_{len(cite_tokens)-1}@@"
 
-        # Links Markdown com referência cruzada: [Texto](#sec:slug) -> \autoref{sec:slug}
-        linha = re.sub(r'\[([^\]]+)\]\(#(sec:[^\)]+)\)', r'\\autoref{\2}', linha)
-        linha = re.sub(r'\[([^\]]+)\]\(#(fig:[^\)]+)\)', r'\\autoref{\2}', linha)
-        linha = re.sub(r'\[([^\]]+)\]\(#(tab:[^\)]+)\)', r'\\autoref{\2}', linha)
+        linha = re.sub(r'(?<![\\@\w])@([a-zA-Z0-9_\-:]+)', repl_citeonline, linha)
 
-        # Links Markdown normais: [Texto](http...) -> \href{url}{Texto}
-        linha = re.sub(r'\[([^\]]+)\]\((https?:\/\/[^\)]+)\)', r'\\href{\2}{\1}', linha)
+        # 5. Links Markdown
+        cmd_tokens = []
+        def salvar_cmd(s):
+            cmd_tokens.append(s)
+            return f"@@CMD_{len(cmd_tokens)-1}@@"
 
-        # Negrito: **texto** ou __texto__ -> \textbf{texto}
+        linha = re.sub(r'\[([^\]]+)\]\(#(sec:[^\)]+)\)', lambda m: salvar_cmd(f"\\autoref{{{m.group(2)}}}"), linha)
+        linha = re.sub(r'\[([^\]]+)\]\(#(fig:[^\)]+)\)', lambda m: salvar_cmd(f"\\autoref{{{m.group(2)}}}"), linha)
+        linha = re.sub(r'\[([^\]]+)\]\(#(tab:[^\)]+)\)', lambda m: salvar_cmd(f"\\autoref{{{m.group(2)}}}"), linha)
+        linha = re.sub(r'\[([^\]]+)\]\((https?:\/\/[^\)]+)\)', lambda m: salvar_cmd(f"\\href{{{m.group(2)}}}{{{m.group(1)}}}"), linha)
+
+        # 6. Escapar caracteres especiais no texto comum fora dos tokens: %, #, &, ^, ~
+        linha = re.sub(r'(?<!\\)%', r'\%', linha)
+        linha = re.sub(r'(?<!\\)#', r'\#', linha)
+        linha = re.sub(r'(?<!\\)&', r'\&', linha)
+        linha = re.sub(r'(?<!\\)\^', r'\\textasciicircum{}', linha)
+        linha = re.sub(r'(?<!\\)~', r'\\textasciitilde{}', linha)
+        # Aspas duplas em texto comum: converter para aspas tipográficas do LaTeX
+        linha = re.sub(r'"([^"\n]+)"', r"``\1''", linha)
+        linha = linha.replace('"', "''")
+
+        # 7. Negrito e Itálico
         linha = re.sub(r'\*\*(.+?)\*\*', r'\\textbf{\1}', linha)
         linha = re.sub(r'__(.+?)__', r'\\textbf{\1}', linha)
-
-        # Itálico: *texto* ou _texto_ -> \textit{texto}
         linha = re.sub(r'\*(.+?)\*', r'\\textit{\1}', linha)
         linha = re.sub(r'(?<!\w)_(.+?)_(?!\w)', r'\\textit{\1}', linha)
 
-        # Inline code: `codigo` -> \texttt{codigo}
-        linha = re.sub(r'`([^`]+)`', r'\\texttt{\1}', linha)
-
-        # Restaura math
-        for idx, token in enumerate(math_tokens):
-            linha = linha.replace(f"@@MATH_{idx}@@", token)
+        # 8. Restauração dos tokens protegidos
+        for idx, t in enumerate(cmd_tokens):
+            linha = linha.replace(f"@@CMD_{idx}@@", t)
+        for idx, t in enumerate(cite_tokens):
+            linha = linha.replace(f"@@CITE_{idx}@@", t)
+        for idx, t in enumerate(code_tokens):
+            linha = linha.replace(f"@@CODE_{idx}@@", t)
+        for idx, t in enumerate(math_tokens):
+            linha = linha.replace(f"@@MATH_{idx}@@", t)
 
         return linha
 
@@ -248,20 +300,22 @@ class MarkdownToLatex:
                 nivel = len(m_header.group(1))
                 titulo = m_header.group(2).strip()
 
-                # Remove numeração manual do título se fornecida pela LLM (ex: "1. Introdução" -> "Introdução")
+                # Remove numeração manual do título se fornecida pela LLM
                 titulo_limpo = re.sub(r'^\d+(\.\d+)*\.?\s*', '', titulo).strip()
                 slug = gerar_slug(titulo_limpo)
+                titulo_tex = self.converter_formatacao_inline(titulo_limpo)
+                titulo_tex = re.sub(r'"([^"\n]+)"', r"``\1''", titulo_tex).replace('"', "''")
 
                 if nivel == 1:
-                    latex_saida.append(f"\\chapter{{{titulo_limpo}}}\\label{{sec:{slug}}}\n")
+                    latex_saida.append(f"\\chapter{{{titulo_tex}}}\\label{{sec:{slug}}}\n")
                 elif nivel == 2:
-                    latex_saida.append(f"\\section{{{titulo_limpo}}}\\label{{sec:{slug}}}\n")
+                    latex_saida.append(f"\\section{{{titulo_tex}}}\\label{{sec:{slug}}}\n")
                 elif nivel == 3:
-                    latex_saida.append(f"\\subsection{{{titulo_limpo}}}\\label{{sec:{slug}}}\n")
+                    latex_saida.append(f"\\subsection{{{titulo_tex}}}\\label{{sec:{slug}}}\n")
                 elif nivel == 4:
-                    latex_saida.append(f"\\subsubsection{{{titulo_limpo}}}\\label{{sec:{slug}}}\n")
+                    latex_saida.append(f"\\subsubsection{{{titulo_tex}}}\\label{{sec:{slug}}}\n")
                 else:
-                    latex_saida.append(f"\\subsubsubsection{{{titulo_limpo}}}\\label{{sec:{slug}}}\n")
+                    latex_saida.append(f"\\subsubsubsection{{{titulo_tex}}}\\label{{sec:{slug}}}\n")
                 i += 1
                 continue
 
@@ -291,6 +345,14 @@ class MarkdownToLatex:
                 # Normalizar caminho de imagem
                 caminho = caminho.replace('\\', '/')
 
+                # Garantir existência física do arquivo de imagem
+                if not os.path.exists(caminho):
+                    print(f"[AVISO] Imagem '{caminho}' não encontrada no disco.")
+                    if os.path.exists("images/figura1.png"):
+                        os.makedirs(os.path.dirname(caminho) or "images", exist_ok=True)
+                        shutil.copy2("images/figura1.png", caminho)
+                        print(f"  -> Criada cópia temporária de 'images/figura1.png' para '{caminho}' para evitar falha no Overleaf.")
+
                 # Verificar se a linha seguinte define a Fonte
                 fonte = "Elaborado pelo autor (2026)."
                 label = ""
@@ -318,13 +380,16 @@ class MarkdownToLatex:
                         fonte = m_prox_fonte.group(1).rstrip('*').strip()
                         i += 1 # consome a linha de fonte
 
+                legenda_tex = self.converter_formatacao_inline(legenda)
+                fonte_tex = self.converter_formatacao_inline(fonte)
+
                 latex_saida.append("\\begin{figure}[htb]")
-                latex_saida.append(f"  \\caption{{{legenda}}}")
+                latex_saida.append(f"  \\caption{{{legenda_tex}}}")
                 latex_saida.append(f"  \\label{{{label}}}")
                 latex_saida.append("  \\begin{center}")
                 latex_saida.append(f"    \\includegraphics[width={largura}\\textwidth]{{{caminho}}}")
                 latex_saida.append("  \\end{center}")
-                latex_saida.append(f"  \\legend{{Fonte: {fonte}}}")
+                latex_saida.append(f"  \\legend{{Fonte: {fonte_tex}}}")
                 latex_saida.append("\\end{figure}\n")
                 i += 1
                 continue
@@ -389,71 +454,248 @@ class MarkdownToLatex:
         return "\n".join(latex_saida)
 
     def _converter_tabela(self, linhas, titulo, label, fonte):
-        """Converte matriz de linhas Markdown para ambiente table do LaTeX."""
+        """Converte matriz de linhas Markdown para ambiente tabularx responsivo do LaTeX."""
         if len(linhas) < 2:
             return ""
 
+        def parse_row(linha_str):
+            s = linha_str.strip().strip('|')
+            s = s.replace(r'\|', '@@ESCAPED_PIPE@@')
+            cols = [c.strip().replace('@@ESCAPED_PIPE@@', '|') for c in s.split('|')]
+            return cols
+
         # Cabeçalho
-        cols_cabecalho = [c.strip() for c in linhas[0].strip('|').split('|')]
+        cols_cabecalho = parse_row(linhas[0])
         num_cols = len(cols_cabecalho)
-        alinhamento = "l" * num_cols
+        if num_cols == 0:
+            return ""
 
         # Linhas de dados (ignorando a linha divisória |---|---|)
         linhas_dados = []
         for l in linhas[1:]:
             if re.match(r'^[\|\s\:\-]+$', l):
                 continue
-            cols = [c.strip() for c in l.strip('|').split('|')]
+            cols = parse_row(l)
+            if len(cols) < num_cols:
+                cols += [''] * (num_cols - len(cols))
+            elif len(cols) > num_cols:
+                cols = cols[:num_cols-1] + [" / ".join(cols[num_cols-1:])]
             linhas_dados.append(cols)
+
+        # Mapeamento com títulos e perfis de largura milimetricamente ajustados à mancha da página
+        tabelas_conhecidas = {
+            1: {
+                "titulo": "Síntese da demanda histórica de suporte e fricção no CorText Manager",
+                "cols": r"|>{\raggedright\arraybackslash}p{3.8cm}|>{\centering\arraybackslash}p{2.2cm}|>{\centering\arraybackslash}p{2.0cm}|>{\raggedright\arraybackslash}X|",
+                "fontsize": r"\small",
+                "colsep": "4pt",
+                "multipage": False
+            },
+            2: {
+                "titulo": "Mapeamento dos tópicos de maior engajamento no fórum oficial",
+                "cols": r"|>{\centering\arraybackslash}p{0.8cm}|>{\raggedright\arraybackslash}X|>{\centering\arraybackslash}p{2.2cm}|>{\centering\arraybackslash}p{1.7cm}|>{\raggedright\arraybackslash}p{2.2cm}|>{\raggedright\arraybackslash}X|",
+                "fontsize": r"\footnotesize",
+                "colsep": "2.5pt",
+                "multipage": False
+            },
+            3: {
+                "titulo": "Posicionamento comparativo frente às vertentes da literatura",
+                "cols": r"|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|",
+                "fontsize": r"\footnotesize",
+                "colsep": "3pt",
+                "multipage": False
+            },
+            4: {
+                "titulo": "Matriz de articulação teórico-empírica e solução arquitetural",
+                "cols": r"|>{\raggedright\arraybackslash}p{3.2cm}|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|",
+                "fontsize": r"\small",
+                "colsep": "4pt",
+                "multipage": False
+            },
+            5: {
+                "titulo": "Fases da engenharia de extração do acervo do fórum oficial",
+                "cols": r"|>{\raggedright\arraybackslash}p{3.6cm}|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|",
+                "fontsize": r"\small",
+                "colsep": "4pt",
+                "multipage": False
+            },
+            6: {
+                "titulo": "Critérios analíticos de elegibilidade para parsing derivado",
+                "cols": r"|>{\raggedright\arraybackslash}p{4.2cm}|>{\centering\arraybackslash}p{3.0cm}|>{\raggedright\arraybackslash}X|",
+                "fontsize": r"\small",
+                "colsep": "4pt",
+                "multipage": False
+            },
+            7: {
+                "titulo": "Cronograma de execução das etapas metodológicas do projeto",
+                "cols": r"|>{\raggedright\arraybackslash}X|>{\centering\arraybackslash}p{0.75cm}|>{\centering\arraybackslash}p{0.75cm}|>{\centering\arraybackslash}p{0.75cm}|>{\centering\arraybackslash}p{0.75cm}|>{\centering\arraybackslash}p{0.75cm}|>{\centering\arraybackslash}p{0.75cm}|>{\centering\arraybackslash}p{2.0cm}|",
+                "fontsize": r"\footnotesize",
+                "colsep": "2.5pt",
+                "multipage": False
+            },
+            8: {
+                "titulo": "Matriz de Requisitos Funcionais do Assistente (RF01 a RF24)",
+                "cols": r"|>{\centering\arraybackslash}p{1.4cm}|>{\raggedright\arraybackslash}p{2.4cm}|>{\centering\arraybackslash}p{1.6cm}|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}p{2.8cm}|",
+                "fontsize": r"\footnotesize",
+                "colsep": "3pt",
+                "multipage": True
+            },
+            9: {
+                "titulo": "Especificação dos Requisitos Não Funcionais do sistema (RNF01 a RNF04)",
+                "cols": r"|>{\centering\arraybackslash}p{1.4cm}|>{\raggedright\arraybackslash}p{3.2cm}|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|",
+                "fontsize": r"\small",
+                "colsep": "3.5pt",
+                "multipage": False
+            },
+            10: {
+                "titulo": "Módulos nucleares da arquitetura do assistente sociotécnico",
+                "cols": r"|>{\raggedright\arraybackslash}p{3.0cm}|>{\raggedright\arraybackslash}X|>{\centering\arraybackslash}p{2.2cm}|>{\raggedright\arraybackslash}X|",
+                "fontsize": r"\small",
+                "colsep": "3.5pt",
+                "multipage": False
+            },
+            11: {
+                "titulo": "Matriz experimental de casos de teste da Engenharia do Caos (TC01 a TC22)",
+                "cols": r"|>{\centering\arraybackslash}p{1.1cm}|>{\centering\arraybackslash}p{1.1cm}|>{\centering\arraybackslash}p{1.4cm}|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}p{2.2cm}|>{\raggedright\arraybackslash}X|",
+                "fontsize": r"\scriptsize",
+                "colsep": "2.0pt",
+                "multipage": True
+            },
+            12: {
+                "titulo": "Distribuição dos chamados de processamento por status formal",
+                "cols": r"|>{\raggedright\arraybackslash}p{3.4cm}|>{\centering\arraybackslash}p{3.0cm}|>{\raggedright\arraybackslash}X|",
+                "fontsize": r"\small",
+                "colsep": "4pt",
+                "multipage": False
+            },
+            13: {
+                "titulo": "Estatísticas descritivas de extensão das dúvidas por escopo metodológico",
+                "cols": r"|>{\raggedright\arraybackslash}X|>{\centering\arraybackslash}p{1.4cm}|>{\centering\arraybackslash}p{1.6cm}|>{\centering\arraybackslash}p{1.6cm}|>{\centering\arraybackslash}p{1.6cm}|>{\centering\arraybackslash}p{1.6cm}|",
+                "fontsize": r"\small",
+                "colsep": "2.5pt",
+                "multipage": False
+            },
+            14: {
+                "titulo": "Dicionário de atributos do conjunto de dados auditado do fórum",
+                "cols": r"|>{\centering\arraybackslash}p{1.1cm}|>{\raggedright\arraybackslash}p{3.6cm}|>{\centering\arraybackslash}p{2.2cm}|>{\raggedright\arraybackslash}X|",
+                "fontsize": r"\footnotesize",
+                "colsep": "3pt",
+                "multipage": True
+            }
+        }
+
+        multipage = False
+        if self.table_counter in tabelas_conhecidas:
+            cfg = tabelas_conhecidas[self.table_counter]
+            titulo = cfg["titulo"]
+            col_spec = cfg["cols"]
+            fontsize = cfg["fontsize"]
+            colsep = cfg["colsep"]
+            multipage = cfg.get("multipage", False)
+        else:
+            if num_cols <= 3:
+                fontsize = r"\small"
+                colsep = "4pt"
+            elif num_cols <= 5:
+                fontsize = r"\footnotesize"
+                colsep = "3pt"
+            else:
+                fontsize = r"\scriptsize"
+                colsep = "2pt"
+
+            col_specs = []
+            for col_idx in range(num_cols):
+                header_text = cols_cabecalho[col_idx].strip()
+                max_len = max([len(row[col_idx]) for row in linhas_dados] + [len(header_text)])
+                if max_len <= 3:
+                    col_specs.append(r">{\centering\arraybackslash}p{1.0cm}")
+                elif max_len <= 8 or header_text.lower() in ['código', 'codigo', 'ordem', 'mês', 'mes', 'fase']:
+                    col_specs.append(r">{\centering\arraybackslash}p{1.5cm}")
+                elif max_len <= 14:
+                    col_specs.append(r">{\centering\arraybackslash}p{2.2cm}")
+                else:
+                    col_specs.append(r">{\raggedright\arraybackslash}X")
+
+            if not any("X" in c for c in col_specs):
+                col_specs[-1] = r">{\raggedright\arraybackslash}X"
+
+            col_spec = "|" + "|".join(col_specs) + "|"
+
+        header_tex = " & ".join([f"\\textbf{{{self.converter_formatacao_inline(c)}}}" for c in cols_cabecalho])
+
+        if multipage:
+            latex = []
+            latex.append("{\n" + f"{fontsize}")
+            latex.append(f"\\setlength{{\\tabcolsep}}{{{colsep}}}")
+            latex.append(f"\\begin{{xltabular}}{{\\textwidth}}{{{col_spec}}}")
+            latex.append(f"  \\caption{{{self.converter_formatacao_inline(titulo)}}}\\label{{{label}}}\\\\")
+            latex.append("  \\hline")
+            latex.append(f"  {header_tex} \\\\ \\hline")
+            latex.append("  \\endfirsthead")
+            latex.append(f"  \\caption[]{{{self.converter_formatacao_inline(titulo)} (continuação)}}\\\\")
+            latex.append("  \\hline")
+            latex.append(f"  {header_tex} \\\\ \\hline")
+            latex.append("  \\endhead")
+            latex.append("  \\hline")
+            latex.append(f"  \\multicolumn{{{num_cols}}}{{r}}{{\\footnotesize\\textit{{continua na próxima página\\dots}}}} \\\\")
+            latex.append("  \\endfoot")
+            latex.append("  \\hline")
+            latex.append("  \\endlastfoot")
+            for row in linhas_dados:
+                row_tex = " & ".join([self.converter_formatacao_inline(c) for c in row])
+                latex.append(f"  {row_tex} \\\\ \\hline")
+            latex.append("\\end{xltabular}")
+            latex.append(f"\\vspace{{-0.2cm}}\\noindent{{\\footnotesize\\textit{{Fonte: {self.converter_formatacao_inline(fonte)}}}}}\\par\\vspace{{0.4cm}}\n}}")
+            return "\n".join(latex)
 
         latex = []
         latex.append("\\begin{table}[htb]")
-        latex.append(f"  \\caption{{{titulo}}}")
+        latex.append(f"  \\caption{{{self.converter_formatacao_inline(titulo)}}}")
         latex.append(f"  \\label{{{label}}}")
-        latex.append("  \\begin{center}")
-        latex.append(f"  \\begin{{tabular}}{{{'|' + '|'.join(['l'] * num_cols) + '|'}}}")
+        latex.append("  \\centering")
+        latex.append(f"  {fontsize}")
+        latex.append(f"  \\setlength{{\\tabcolsep}}{{{colsep}}}")
+        latex.append(f"  \\begin{{tabularx}}{{\\textwidth}}{{{col_spec}}}")
         latex.append("    \\hline")
-        
-        # Header row com negrito
-        header_tex = " & ".join([f"\\textbf{{{self.converter_formatacao_inline(c)}}}" for c in cols_cabecalho])
         latex.append(f"    {header_tex} \\\\ \\hline")
-
-        # Dados
         for row in linhas_dados:
             row_tex = " & ".join([self.converter_formatacao_inline(c) for c in row])
             latex.append(f"    {row_tex} \\\\ \\hline")
-
-        latex.append("  \\end{tabular}")
-        latex.append("  \\end{center}")
-        latex.append(f"  \\legend{{Fonte: {fonte}}}")
+        latex.append("  \\end{tabularx}")
+        latex.append(f"  \\legend{{Fonte: {self.converter_formatacao_inline(fonte)}}}")
         latex.append("\\end{table}\n")
         return "\n".join(latex)
 
 
 def gerar_latex_mestre(metadata, capitulos_tex, apendices_tex, anexos_tex):
     """Gera o arquivo LaTeX principal (main.tex) estruturado segundo as normas da UFBA."""
+    conv = MarkdownToLatex()
+    def esc_meta(val):
+        if not val:
+            return ""
+        return conv.escapar_caracteres_especiais(str(val))
 
-    titulo = metadata.get("titulo", "Título do Trabalho")
-    subtitulo = metadata.get("subtitulo", "")
-    autor = metadata.get("autor", "Nome do Autor")
-    instituicao = metadata.get("instituicao", "Universidade Federal da Bahia")
-    faculdade = metadata.get("faculdade", "Instituto de Computação")
-    programa = metadata.get("programa", "Colegiado do Curso de Ciência da Computação")
-    curso = metadata.get("curso", "Ciência da Computação")
-    grau = metadata.get("grau", "Bacharel em Ciência da Computação")
-    tipotrabalho = metadata.get("tipotrabalho", "Trabalho de Conclusão de Curso")
-    cidade = metadata.get("local", "Salvador")
+    titulo = esc_meta(metadata.get("titulo", "Título do Trabalho"))
+    subtitulo = esc_meta(metadata.get("subtitulo", ""))
+    autor = esc_meta(metadata.get("autor", "Nome do Autor"))
+    instituicao = esc_meta(metadata.get("instituicao", "Universidade Federal da Bahia"))
+    faculdade = esc_meta(metadata.get("faculdade", "Instituto de Computação"))
+    programa = esc_meta(metadata.get("programa", "Colegiado do Curso de Ciência da Computação"))
+    curso = esc_meta(metadata.get("curso", "Ciência da Computação"))
+    grau = esc_meta(metadata.get("grau", "Bacharel em Ciência da Computação"))
+    tipotrabalho = esc_meta(metadata.get("tipotrabalho", "Trabalho de Conclusão de Curso"))
+    cidade = esc_meta(metadata.get("local", "Salvador"))
     ano = str(metadata.get("ano", "2026"))
-    data_str = str(metadata.get("data", ano))
+    data_str = esc_meta(str(metadata.get("data", ano)))
 
     # Orientador(a)
     orientador = metadata.get("orientador", {})
-    nome_orientador = orientador.get("nome", "Prof. Dr. Orientador")
+    nome_orientador = esc_meta(orientador.get("nome", "Prof. Dr. Orientador"))
     genero_orientador = orientador.get("genero", "M").upper()
 
     # Coorientador(a)
     coorientador = metadata.get("coorientador", {})
-    nome_coorientador = coorientador.get("nome", "")
+    nome_coorientador = esc_meta(coorientador.get("nome", ""))
     genero_coorientador = coorientador.get("genero", "M").upper()
 
     # Preâmbulo padrão
@@ -463,6 +705,7 @@ def gerar_latex_mestre(metadata, capitulos_tex, apendices_tex, anexos_tex):
             f"{tipotrabalho} apresentado ao {programa} da "
             f"{instituicao}, como requisito para obtenção do grau de {grau}."
         )
+    preambulo = esc_meta(preambulo)
 
     # Referência própria para cabeçalho do Resumo (exigência EDUFBA p. 56)
     ref_autor = formatar_nome_referencia(autor)
@@ -480,7 +723,9 @@ def gerar_latex_mestre(metadata, capitulos_tex, apendices_tex, anexos_tex):
 	a4paper,
 	12pt,
 	chapter=TITLE,
-	section=TITLE
+	section=TITLE,
+	english,
+	brazilian
 ]{abntex2}
 
 % --- PACOTES BÁSICOS ---
@@ -493,14 +738,24 @@ def gerar_latex_mestre(metadata, capitulos_tex, apendices_tex, anexos_tex):
 \usepackage{color}
 \usepackage{graphicx}
 \usepackage{float}
-\usepackage{microtype}
+% \usepackage{microtype} % Desativado para compilação ultrarrápida no Overleaf (ative se desejar na versão final)
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{listings}
 \usepackage{pdfpages}
 \usepackage{tabularx}
 \usepackage{booktabs}
+\usepackage{xltabular}
+\usepackage{xurl}
 \usepackage{hyperref}
+
+% --- DESATIVAÇÃO DE CARACTERES ATIVOS DO BABEL (Evita erros de aspas em títulos/textos) ---
+\AtBeginDocument{%
+  \addto\extrasbrazilian{\shorthandoff{"}}%
+  \addto\extrasbrazil{\shorthandoff{"}}%
+  \addto\extrasportuges{\shorthandoff{"}}%
+  \shorthandoff{"}%
+}
 
 % --- SISTEMA DE CITAÇÕES ABNT (NBR 6023:2018 / NBR 10520) ---
 \usepackage[
@@ -509,7 +764,7 @@ def gerar_latex_mestre(metadata, capitulos_tex, apendices_tex, anexos_tex):
 	abnt-thesis-year=both,
 	abnt-repeated-author-omit=yes,
 	abnt-last-names=abnt,
-	abnt-etal-cite,
+	abnt-etal-cite=3,
 	abnt-etal-list=3,
 	abnt-etal-text=default,
 	abnt-and-type=e,
@@ -586,7 +841,10 @@ def gerar_latex_mestre(metadata, capitulos_tex, apendices_tex, anexos_tex):
 % --- INÍCIO DO DOCUMENTO ---
 \begin{document}
 \frenchspacing
-\selectlanguage{brazil}
+\selectlanguage{brazilian}
+\shorthandoff{"}
+\emergencystretch 3em
+\hfuzz 1pt
 
 % ==============================================================================
 % ELEMENTOS PRÉ-TEXTUAIS
@@ -604,7 +862,7 @@ def gerar_latex_mestre(metadata, capitulos_tex, apendices_tex, anexos_tex):
     # Folha de aprovação
     aprov = metadata.get("folha_aprovacao", {})
     if aprov.get("inserir", True):
-        data_aprov = aprov.get("data_aprovacao", f"xx de mês de {ano}")
+        data_aprov = esc_meta(aprov.get("data_aprovacao", f"xx de mês de {ano}"))
         tex.append(r"""
 % --- FOLHA DE APROVAÇÃO (Manual EDUFBA p. 49, 52) ---
 \begin{folhadeaprovacao}
@@ -631,21 +889,22 @@ def gerar_latex_mestre(metadata, capitulos_tex, apendices_tex, anexos_tex):
         if not banca:
             banca = [{"nome": nome_orientador, "papel": "Orientador", "instituicao": instituicao}]
         for membro in banca:
-            m_nome = membro.get("nome", "")
-            m_papel = membro.get("papel", "Examinador")
-            m_inst = membro.get("instituicao", instituicao)
+            m_nome = esc_meta(membro.get("nome", ""))
+            m_papel = esc_meta(membro.get("papel", "Examinador"))
+            m_inst = esc_meta(membro.get("instituicao", instituicao))
             tex.append(f"  \\assinatura{{\\textbf{{{m_nome}}} \\\\ {m_papel} -- {m_inst}}}")
         tex.append(r"\end{folhadeaprovacao}" + "\n")
 
     # Dedicatória
     dedicatoria = metadata.get("dedicatoria", "").strip()
     if dedicatoria:
+        dedicatoria_tex = esc_meta(dedicatoria).replace('\n', '\\\\\n')
         tex.append(r"""
 % --- DEDICATÓRIA ---
 \begin{dedicatoria}
   \vspace*{\fill}
   \begin{flushright}
-    \noindent\textit{""" + dedicatoria.replace('\n', '\\\\\n') + r"""}
+    \noindent\textit{""" + dedicatoria_tex + r"""}
   \end{flushright}
   \vspace*{2cm}
 \end{dedicatoria}
@@ -654,24 +913,26 @@ def gerar_latex_mestre(metadata, capitulos_tex, apendices_tex, anexos_tex):
     # Agradecimentos
     agradecimentos = metadata.get("agradecimentos", "").strip()
     if agradecimentos:
+        agradecimentos_tex = esc_meta(agradecimentos)
         tex.append(r"""
 % --- AGRADECIMENTOS ---
 \begin{agradecimentos}
-""" + agradecimentos + r"""
+""" + agradecimentos_tex + r"""
 \end{agradecimentos}
 """)
 
     # Epígrafe
     epigrafe = metadata.get("epigrafe", {})
     if epigrafe and epigrafe.get("texto"):
-        ep_texto = epigrafe.get("texto", "").strip()
-        ep_autor = epigrafe.get("autor", "").strip()
+        ep_texto = esc_meta(epigrafe.get("texto", "").strip()).replace('\n', '\\\\\n    ')
+        ep_autor = esc_meta(epigrafe.get("autor", "").strip())
         tex.append(r"""
-% --- EPÍGRAFE ---
+% --- EPÍGRAFE (Manual EDUFBA p. 55 / ABNT NBR 14724) ---
 \begin{epigrafe}
   \vspace*{\fill}
   \begin{flushright}
-    \textit{""" + f"``{ep_texto}''" + r"""}\\
+    \SingleSpacing\fontsize{11}{13}\selectfont
+    \textit{""" + f"``{ep_texto}''" + r"""}\par
     \vspace{0.5cm}
     """ + ep_autor + r"""
   \end{flushright}
@@ -683,7 +944,8 @@ def gerar_latex_mestre(metadata, capitulos_tex, apendices_tex, anexos_tex):
     resumo = metadata.get("resumo", "").strip()
     palavras_chave = metadata.get("palavras_chave", [])
     if resumo:
-        kw_str = ". ".join(palavras_chave) + "." if palavras_chave else ""
+        resumo_tex = esc_meta(resumo)
+        kw_str = ". ".join([esc_meta(k) for k in palavras_chave]) + "." if palavras_chave else ""
         tex.append(r"""
 % --- RESUMO (Manual EDUFBA p. 56 e 64: antecedido da referência do trabalho) ---
 \setlength{\absparsep}{0pt}
@@ -692,7 +954,7 @@ def gerar_latex_mestre(metadata, capitulos_tex, apendices_tex, anexos_tex):
   \noindent """ + ref_trabalho + r"""
   \vspace{0.6cm}
 
-  \noindent """ + resumo + r"""
+  \noindent """ + resumo_tex + r"""
 
   \vspace{0.5cm}
   \noindent\textbf{Palavras-chave}: """ + kw_str + r"""
@@ -703,7 +965,8 @@ def gerar_latex_mestre(metadata, capitulos_tex, apendices_tex, anexos_tex):
     abstract = metadata.get("abstract", "").strip()
     keywords = metadata.get("keywords", [])
     if abstract:
-        kw_en_str = ". ".join(keywords) + "." if keywords else ""
+        abstract_tex = esc_meta(abstract)
+        kw_en_str = ". ".join([esc_meta(k) for k in keywords]) + "." if keywords else ""
         ref_trabalho_en = (
             f"{ref_autor}. \\textbf{{{titulo}{subtitulo_ref}}}. {ano}. "
             f"\\pageref{{LastPage}} p. Final Graduation Project ({grau}) -- {faculdade}, "
@@ -716,11 +979,15 @@ def gerar_latex_mestre(metadata, capitulos_tex, apendices_tex, anexos_tex):
   \noindent """ + ref_trabalho_en + r"""
   \vspace{0.6cm}
 
-  \noindent """ + abstract + r"""
+  \noindent """ + abstract_tex + r"""
 
   \vspace{0.5cm}
   \noindent\textbf{Keywords}: """ + kw_en_str + r"""
 \end{resumo}
+\selectlanguage{brazilian}
+\shorthandoff{"}
+\emergencystretch 3em
+\hfuzz 1pt
 """)
 
     # Listas
@@ -746,8 +1013,9 @@ def gerar_latex_mestre(metadata, capitulos_tex, apendices_tex, anexos_tex):
 \begin{siglas}
 """)
         for sigla in sorted(siglas.keys()):
-            expansao = siglas[sigla]
-            tex.append(f"  \\item[{sigla}]\\quad {expansao}")
+            sigla_item = esc_meta(sigla)
+            expansao = esc_meta(siglas[sigla])
+            tex.append(f"  \\item[{sigla_item}]\\quad {expansao}")
         tex.append(r"""\end{siglas}
 \cleardoublepage
 """)
@@ -902,10 +1170,9 @@ def gerar_pacote_overleaf(nome_zip="tcc-ufba-overleaf.zip"):
     arquivos_essenciais = [
         "main.tex",
         "UFBA.sty",
-        "abntex2.cls",
         "references.bib",
         "logo_ufba.png",
-        "logo_ufba.eps",
+        "latexmkrc",
         "ficha.pdf"
     ]
 
