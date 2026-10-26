@@ -26,13 +26,17 @@
 \usepackage{tabularx}
 \usepackage{booktabs}
 \usepackage{xltabular}
+\keepXColumns
 \usepackage{xurl}
 \usepackage{hyperref}
+\pdfstringdefDisableCommands{%
+  \def\uppercase#1{#1}%
+  \def\MakeUppercase#1{#1}%
+}
 
 % --- DESATIVAÇÃO DE CARACTERES ATIVOS DO BABEL (Evita erros de aspas em títulos/textos) ---
 \AtBeginDocument{%
   \addto\extrasbrazilian{\shorthandoff{"}}%
-  \addto\extrasbrazil{\shorthandoff{"}}%
   \addto\extrasportuges{\shorthandoff{"}}%
   \shorthandoff{"}%
 }
@@ -81,7 +85,7 @@
 % --- DADOS INSTITUCIONAIS ---
 
 \titulo{Assistente de Observabilidade Sociotécnica}
-\subtitulo{Apoio ao diagnóstico da importação de corpora no CorText Manager com RAG e Análise de Logs}
+\subtitulo{Apoio ao diagnóstico da importação de corpora no CorText Manager com RAG\ e Análise de Logs}
 \autor{Wellington Miguel de Jesus Silva}
 \local{Salvador}
 \data{Outubro de 2026}
@@ -126,7 +130,8 @@
   \begin{center}
     {\fontsize{14}{16}\selectfont\bfseries\MakeUppercase{\imprimirautor}\par}
     \vspace{1.5cm}
-    {\fontsize{16}{18}\selectfont\bfseries\MakeUppercase{\imprimirtitulo}\par}
+    {\fontsize{16}{18}\selectfont\bfseries\MakeUppercase{\imprimirtitulo}%
+    \ifx\imprimirsubtitulo\empty\else{: \fontsize{14}{16}\selectfont\MakeUppercase{\imprimirsubtitulo}}\fi\par}
   \end{center}
   \vspace{1cm}
   \begin{flushright}
@@ -182,11 +187,15 @@
 \end{epigrafe}
 
 
-% --- RESUMO (Manual EDUFBA p. 56 e 64: antecedido da referência do trabalho) ---
-\setlength{\absparsep}{0pt}
+% --- RESUMO (Manual EDUFBA p. 56 e 64-65: referência no topo, antes do título) ---
 \begin{resumo}
   \SingleSpacing
-  \noindent SILVA, W. M. de J.. \textbf{Assistente de Observabilidade Sociotécnica: Apoio ao diagnóstico da importação de corpora no CorText Manager com RAG e Análise de Logs}. 2026. \pageref{LastPage} f. Trabalho de Conclusão de Curso (Bacharel em Sistemas de Informação) -- Instituto de Computação, Universidade Federal da Bahia, Salvador, 2026.
+  \noindent SILVA, W. M. de J. \textbf{Assistente de Observabilidade Sociotécnica: Apoio ao diagnóstico da importação de corpora no CorText Manager com RAG\ e Análise de Logs}. 2026. \pageref{LastPage} f. Trabalho de Conclusão de Curso (Bacharel em Sistemas de Informação) -- Instituto de Computação, Universidade Federal da Bahia, Salvador, 2026.
+
+  \vspace{1.0cm}
+  \begin{center}
+    {\ABNTEXchapterfontsize\bfseries\MakeUppercase{\resumoname}}
+  \end{center}
   \vspace{0.6cm}
 
   \noindent Este trabalho propõe o desenvolvimento de um Assistente de Observabilidade Sociotécnica para o CorText Manager, uma plataforma de análise de dados para ciências sociais. A etapa inicial de importação de dados (Data Parsing) frequentemente atua como uma ``caixa preta'' latouriana: suas heurísticas de correção e truncamento silencioso de dados, necessárias para a estabilidade do servidor, tornam-se opacas ao pesquisador, escondendo vieses metodológicos e perdas de informações críticas. Para mitigar essa fricção técnica sem alterar a arquitetura nativa da plataforma, propõe-se uma solução baseada em Qualidade de Dados (Data Profiling) e Recuperação Aumentada por Geração (RAG). O sistema atua de forma preventiva e reativa, auditando anomalias de formatação antes da submissão e traduzindo logs de erro opacos em diagnósticos acionáveis, ancorados na base de conhecimento oficial. Resultados da auditoria do fórum de suporte evidenciam que problemas de infraestrutura de dados afetam 66,4\% dos chamados. O assistente promove a abertura seletiva dessa infraestrutura invisível, devolvendo a agência metodológica ao usuário e preservando o rigor epistêmico das pesquisas.
@@ -196,10 +205,15 @@
 \end{resumo}
 
 
-% --- ABSTRACT ---
+% --- ABSTRACT (Manual EDUFBA p. 56 e 64-65: referência em inglês no topo) ---
 \begin{resumo}[Abstract]
   \SingleSpacing
-  \noindent SILVA, W. M. de J.. \textbf{Assistente de Observabilidade Sociotécnica: Apoio ao diagnóstico da importação de corpora no CorText Manager com RAG e Análise de Logs}. 2026. \pageref{LastPage} p. Final Graduation Project (Bacharel em Sistemas de Informação) -- Instituto de Computação, Universidade Federal da Bahia, Salvador, 2026.
+  \noindent SILVA, W. M. de J. \textbf{Assistente de Observabilidade Sociotécnica: Apoio ao diagnóstico da importação de corpora no CorText Manager com RAG\ e Análise de Logs}. 2026. \pageref{LastPage} p. Final Graduation Project (Bachelor in Information Systems) -- Institute of Computing, Federal University of Bahia, Salvador, 2026.
+
+  \vspace{1.0cm}
+  \begin{center}
+    {\ABNTEXchapterfontsize\bfseries\MakeUppercase{Abstract}}
+  \end{center}
   \vspace{0.6cm}
 
   \noindent This work proposes the development of a Sociotechnical Observability Assistant for CorText Manager, a data analysis platform for social sciences. The initial data importation stage (Data Parsing) frequently acts as a Latourian ``black box'': its heuristics for correction and silent data truncation, necessary for server stability, become opaque to the researcher, hiding methodological biases and critical information losses. To mitigate this technical friction without altering the platform's native architecture, a solution based on Data Quality (Data Profiling) and Retrieval-Augmented Generation (RAG) is proposed. The system acts preventively and reactively, auditing formatting anomalies before submission and translating opaque error logs into actionable diagnoses, anchored in the official knowledge base. Results from the support forum audit show that data infrastructure problems affect 66.4\% of tickets. The assistant promotes the selective opening of this invisible infrastructure, returning methodological agency to the user and preserving the epistemic rigor of the research.
@@ -282,11 +296,11 @@ Embora o sistema ofereça flexibilidade operacional, permitindo, por exemplo, qu
 \section{Motivação}\label{sec:motivacao}
 
 
-A motivação pessoal e técnica para a realização deste projeto decorre do interesse em aplicar conceitos avançados de Engenharia de Dados e Inteligência Artificial (IA), especificamente Modelos de Linguagem de Grande Escala (\textit{Large Language Models} ou LLMs) executados localmente via plataforma Ollama, na resolução de problemas reais de infraestrutura de dados. O trabalho permite articular o desenvolvimento técnico em linguagem Python e a manipulação de bancos de dados relacionais SQLite à criação de soluções de suporte ao usuário, deslocando o uso de IA de tarefas puramente preditivas ou de sumarização textual para o diagnóstico estruturado e a observabilidade de sistemas computacionais [\citeonline{Majors2022}; \citeonline{Lewis2020}].
+A motivação pessoal e técnica para a realização deste projeto decorre do interesse em aplicar conceitos avançados de Engenharia de Dados e Inteligência Artificial (IA), especificamente Modelos de Linguagem de Grande Escala (\textit{Large Language Models} ou LLMs) executados localmente via plataforma Ollama, na resolução de problemas reais de infraestrutura de dados. O trabalho permite articular o desenvolvimento técnico em linguagem Python e a manipulação de bancos de dados relacionais SQLite à criação de soluções de suporte ao usuário, deslocando o uso de IA de tarefas puramente preditivas ou de sumarização textual para o diagnóstico estruturado e a observabilidade de sistemas computacionais \cite{Majors2022,Lewis2020}.
 
 Paralelamente, a motivação acadêmica e empírica emerge da observação direta das barreiras enfrentadas pela comunidade de usuários quando a estrutura de seus arquivos diverge dos padrões esperados pelo analisador nativo \cite{CorText2026}. Diante de inconsistências de formatação, falhas silenciosas de codificação ou interrupções de processamento acompanhadas por mensagens opacas nos arquivos de registro (\textit{logs}), pesquisadores sem formação específica em Ciência da Computação ou Sistemas de Informação encontram severas dificuldades para diagnosticar autonomamente a origem do erro. Como consequência, esses usuários passam a depender da intervenção manual da equipe técnica no fórum oficial de suporte da plataforma para auditar seus arquivos e viabilizar a continuidade de suas pesquisas \cite{CorText2026}.
 
-Nesse contexto, a presente pesquisa propõe o desenvolvimento, a documentação e a avaliação de um Assistente de Observabilidade Sociotécnica, um protótipo fundamentado em Qualidade de Dados (\textit{Data Profiling}) [\citeonline{Wang1996}; \citeonline{Naumann2014}] e Recuperação Aumentada por Geração (\textit{Retrieval-Augmented Generation} ou RAG) \cite{Lewis2020}, visando mitigar dificuldades na etapa de \textit{Data Parsing}. A proposta não tem por finalidade alterar a arquitetura nativa da plataforma CorText Manager, mas oferecer uma camada auxiliar de diagnóstico que identifique inconsistências de formatação antes do processamento e traduza eventuais mensagens opacas de erro de sistema em orientações metodológicas acionáveis para usuários das ciências sociais e humanidades.
+Nesse contexto, a presente pesquisa propõe o desenvolvimento, a documentação e a avaliação de um Assistente de Observabilidade Sociotécnica, um protótipo fundamentado em Qualidade de Dados (\textit{Data Profiling}) \cite{Wang1996,Naumann2014} e Recuperação Aumentada por Geração (\textit{Retrieval-Augmented Generation} ou RAG) \cite{Lewis2020}, visando mitigar dificuldades na etapa de \textit{Data Parsing}. A proposta não tem por finalidade alterar a arquitetura nativa da plataforma CorText Manager, mas oferecer uma camada auxiliar de diagnóstico que identifique inconsistências de formatação antes do processamento e traduza eventuais mensagens opacas de erro de sistema em orientações metodológicas acionáveis para usuários das ciências sociais e humanidades.
 
 Diante desse cenário, o problema de pesquisa que norteia este Trabalho de Conclusão de Curso (TCC) é definido pela seguinte questão investigativa: como a integração de técnicas de Qualidade de Dados (\textit{Data Profiling} preventivo) e um modelo de Inteligência Artificial baseado em Recuperação Aumentada por Geração (RAG) pode mitigar a opacidade técnica das falhas na etapa de importação de dados (\textit{Data Parsing}) da plataforma CorText Manager, auxiliando pesquisadores das ciências sociais a diagnosticarem e estruturarem seus corpora de forma autônoma?
 
@@ -340,11 +354,9 @@ A análise da distribuição temática oficial demonstra que a categoria \textit
     Não Relacionado a \textit{Parsing} & 100 tópicos & 33,6\% & Dúvidas puramente metodológicas e parametrização avançada de algoritmos analíticos. \\ \hline
     Total do Acervo Auditado & 298 tópicos & 100,0\% & Panorama completo do acervo histórico auditado do fórum oficial. \\ \hline
   \end{tabularx}
-  \legend{Fonte: Dados da pesquisa (2026).}
+  \legend{Fonte: Elaborado pelo autor a partir dos dados auditados do fórum oficial (2026).}
 \end{table}
 
-
-\textit{Fonte: Elaborado pelo autor a partir dos dados auditados do fórum oficial (2026).}
 
 \begin{figure}[htb]
   \caption{Decomposição analítica do acervo do fórum CorText Manager demonstrando o escopo expandido de Data Parsing (66,4\% de fricção total)}
@@ -392,11 +404,9 @@ Paralelamente, a análise do engajamento público reforça a criticidade do prob
     \#200 & \textit{Importing ISI files into CorText} & 2.012 & \textit{Data processing} & \textit{Parsing} Direto & Incompatibilidade na exportação de registros em texto plano (\textit{Institute for Scientific Information} ou ISI). \\ \hline
     \#144 & \textit{Impossible de parser un corpus istex} & 1.512 & \textit{Data processing} & \textit{Parsing} Direto & Erros de codificação (\textit{encoding}) e sintaxe em arquivos brutos provenientes do ISTEX. \\ \hline
   \end{tabularx}
-  \legend{Fonte: Dados da pesquisa (2026).}
+  \legend{Fonte: Elaborado pelo autor a partir dos dados auditados do fórum oficial (2026).}
 \end{table}
 
-
-\textit{Fonte: Elaborado pelo autor a partir dos dados auditados do fórum oficial (2026).}
 
 Sob a ótica da contribuição e da relevância social, o tema insere-se diretamente no empoderamento metodológico da comunidade de pesquisadores das ciências sociais e humanidades. Sob o enquadramento teórico dos Estudos de Ciência e Tecnologia (STS), notadamente a partir de \citeonline{Latour1987} e de \citeonline{Bowker1999}, uma falha técnica oculta na etapa de ingestão não representa um mero erro sintático de código, mas sim o apagamento silencioso de atores e inscrições concretas da rede da pesquisa \cite{Abdo2021}. Ao integrar métodos determinísticos de Qualidade de Dados \cite{Wang1996} e um modelo RAG \cite{Lewis2020} para atuar como tradutor técnico e pedagógico, a ferramenta proposta promove a abertura seletiva da ``caixa preta'' da infraestrutura de entrada, devolvendo a agência metodológica ao pesquisador sem interferir na interpretação sociológica dos dados.
 
@@ -498,15 +508,13 @@ A Tabela 3 sintetiza o posicionamento deste Trabalho de Conclusão de Curso pera
   \begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
     \hline
     \textbf{Abordagem / Vertente na Literatura} & \textbf{Foco de Atuação Técnica} & \textbf{Público-Alvo Principal} & \textbf{Limitação Frente ao Problema do CorText Manager} & \textbf{Diferencial do Assistente Sociotécnico Proposto} \\ \hline
-    Ferramentas de \textit{Data Profiling} e Validação de Pipelines [\citeonline{Naumann2014}; \citeonline{Abedjan2015}] & Validação prévia de esquemas, tipos, valores nulos e delimitadores. & Engenheiros de dados e desenvolvedores de software. & Exigem programação de regras e desconhecem as 22 heurísticas internas do \textit{parser} do CorText Manager. & Automatiza as regras específicas do CorText Manager em interface acessível para pesquisadores sociais. \\ \hline
-    Análise de \textit{Logs} e \textit{Debugging} com LLMs e RAG [\citeonline{Lewis2020}; \citeonline{Gao2023}; \citeonline{Majors2022}] & Tradução reativa de \textit{stack traces} e registros de erro de servidores. & Administradores de sistemas e equipes de suporte técnico. & Atuam apenas após a falha visível; não evitam truncamentos silenciosos e frequentemente usam nuvem comercial. & Combina prevenção (\textit{Profiling} no Tempo Zero) e reação (RAG local via Ollama) preservando o sigilo. \\ \hline
-    Ferramentas de IA aplicadas às Humanidades Digitais e STS [\citeonline{Abdo2021}; \citeonline{DIgnazio2020}] & Mineração de texto, modelagem de tópicos e análise semântica do corpus. & Pesquisadores das ciências sociais e humanidades. & Focam na interpretação do conteúdo sociológico, ignorando a fricção de entrada (\textit{data friction}) no banco SQLite. & Mantém neutralidade epistemológica sobre o conteúdo, auditando exclusivamente a infraestrutura de ingestão. \\ \hline
+    Ferramentas de \textit{Data Profiling} e Validação de Pipelines \cite{Naumann2014,Abedjan2015} & Validação prévia de esquemas, tipos, valores nulos e delimitadores. & Engenheiros de dados e desenvolvedores de software. & Exigem programação de regras e desconhecem as 22 heurísticas internas do \textit{parser} do CorText Manager. & Automatiza as regras específicas do CorText Manager em interface acessível para pesquisadores sociais. \\ \hline
+    Análise de \textit{Logs} e \textit{Debugging} com LLMs e RAG \cite{Lewis2020,Gao2023,Majors2022} & Tradução reativa de \textit{stack traces} e registros de erro de servidores. & Administradores de sistemas e equipes de suporte técnico. & Atuam apenas após a falha visível; não evitam truncamentos silenciosos e frequentemente usam nuvem comercial. & Combina prevenção (\textit{Profiling} no Tempo Zero) e reação (RAG local via Ollama) preservando o sigilo. \\ \hline
+    Ferramentas de IA aplicadas às Humanidades Digitais e STS \cite{Abdo2021,DIgnazio2020} & Mineração de texto, modelagem de tópicos e análise semântica do corpus. & Pesquisadores das ciências sociais e humanidades. & Focam na interpretação do conteúdo sociológico, ignorando a fricção de entrada (\textit{data friction}) no banco SQLite. & Mantém neutralidade epistemológica sobre o conteúdo, auditando exclusivamente a infraestrutura de ingestão. \\ \hline
   \end{tabularx}
-  \legend{Fonte: Dados da pesquisa (2026).}
+  \legend{Fonte: Elaborado pelo autor (2026).}
 \end{table}
 
-
-\textit{Fonte: Elaborado pelo autor (2026).}
 
 Conforme demonstrado na Tabela 3, o desenvolvimento do Assistente de Observabilidade Sociotécnica diferencia-se das abordagens isoladas ao integrar, em uma única arquitetura, a validação determinística prévia (\textit{Pre-Flight Data Profiling}) e o diagnóstico reativo via RAG local ancorado na memória empírica da comunidade \cite{CorText2026}, atuando não apenas como um utilitário de tecnologia da informação, mas como um instrumento que devolve transparência epistemológica e autonomia ao pesquisador.
 
@@ -525,7 +533,7 @@ Para traduzir esse rastro técnico em um diagnóstico compreensível ao cientist
 Para superar a barreira das alucinações e a obsolescência da memória paramétrica dos modelos, Lewis e colaboradores \cite{Lewis2020} formularam a arquitetura de Recuperação Aumentada por Geração (RAG). Conforme revisado no estado da arte por Gao e colaboradores \cite{Gao2023}, o paradigma RAG acopla um mecanismo de recuperação de informação não paramétrico (baseado em busca semântica sobre um Banco de Dados Vetorial) a um gerador paramétrico (o LLM). O fluxo arquitetural divide-se em duas etapas determinísticas de engenharia de dados:
 
 a) indexação e recuperação vetorial: o acervo documental de domínio específico, composto neste projeto pela documentação oficial (\textit{CorTexT Manager Comprehensive Documentation and User Guide}) e pelo corpus histórico auditado de 298 tópicos e resoluções do fórum de suporte \cite{CorText2026}, é extraído, higienizado, segmentado em blocos semânticos (\textit{chunks}) e convertido em representações numéricas multidimensionais (\textit{embeddings}) armazenadas localmente;
-b) geração aumentada por contexto: quando uma falha ocorre, o sistema converte o \textit{traceback} do erro e o relatório prévio do \textit{Data Profiling} em uma consulta vetorial (\textit{query}), recuperando os trechos mais similares das discussões historicamente resolvidas pela equipe técnica do CorText Manager; esses documentos verificados são injetados no comando (\textit{prompt}) do sistema juntamente com instruções restritivas (\textit{prompt engineering}), orientando o LLM a atuar exclusivamente como um motor de inferência semântica e síntese tradutória ancorado nas evidências fornecidas [\citeonline{Lewis2020}; \citeonline{Gao2023}].
+b) geração aumentada por contexto: quando uma falha ocorre, o sistema converte o \textit{traceback} do erro e o relatório prévio do \textit{Data Profiling} em uma consulta vetorial (\textit{query}), recuperando os trechos mais similares das discussões historicamente resolvidas pela equipe técnica do CorText Manager; esses documentos verificados são injetados no comando (\textit{prompt}) do sistema juntamente com instruções restritivas (\textit{prompt engineering}), orientando o LLM a atuar exclusivamente como um motor de inferência semântica e síntese tradutória ancorado nas evidências fornecidas \cite{Lewis2020,Gao2023}.
 
 \subsection{Soberania Computacional via Modelos Locais e o Contraponto Técnico: Inteligência Artificial Generativa versus Sistemas Baseados em Regras}\label{sec:soberania_computacional_via_modelos_loca}
 
@@ -543,7 +551,7 @@ c) adaptação epistêmica e pedagógica: diferentemente de mensagens de erro pr
 \subsection{Síntese do Capítulo e Articulação Teórico-Prática}\label{sec:sintese_do_capitulo_e_articulacao_teoric}
 
 
-A revisão bibliográfica conduzida neste capítulo evidencia que os problemas de importação de dados no CorText Manager não podem ser compreendidos nem solucionados de maneira unilateral. Sob o prisma dos Estudos de Ciência e Tecnologia (STS), ficou demonstrado que os arquivos submetidos pelos pesquisadores operam como inscrições concretas \cite{Abdo2021} sujeitas a intensas fricções materiais [\citeonline{Edwards2010}; \citeonline{Kitchin2014}], e que o encapsulamento necessário da plataforma em uma caixa preta funcional [\citeonline{Latour1987}; \citeonline{Parnas1972}] torna a infraestrutura invisível até o momento de sua ruptura \cite{Bowker1999}. Sob o prisma da Ciência da Computação e dos Sistemas de Informação, estabeleceu-se que a proteção dessas inscrições exige o controle rigoroso das dimensões de Qualidade de Dados no ``Tempo Zero'' via \textit{Data Profiling} [\citeonline{Wang1996}; \citeonline{Naumann2014}], combinado a uma arquitetura de Observabilidade \cite{Majors2022} e Recuperação Aumentada por Geração [\citeonline{Lewis2020}; \citeonline{Gao2023}] executada localmente para mitigar alucinações [\citeonline{Bender2021}; \citeonline{Ji2023}] e preservar a soberania dos dados de pesquisa.
+A revisão bibliográfica conduzida neste capítulo evidencia que os problemas de importação de dados no CorText Manager não podem ser compreendidos nem solucionados de maneira unilateral. Sob o prisma dos Estudos de Ciência e Tecnologia (STS), ficou demonstrado que os arquivos submetidos pelos pesquisadores operam como inscrições concretas \cite{Abdo2021} sujeitas a intensas fricções materiais \cite{Edwards2010,Kitchin2014}, e que o encapsulamento necessário da plataforma em uma caixa preta funcional \cite{Latour1987,Parnas1972} torna a infraestrutura invisível até o momento de sua ruptura \cite{Bowker1999}. Sob o prisma da Ciência da Computação e dos Sistemas de Informação, estabeleceu-se que a proteção dessas inscrições exige o controle rigoroso das dimensões de Qualidade de Dados no ``Tempo Zero'' via \textit{Data Profiling} \cite{Wang1996,Naumann2014}, combinado a uma arquitetura de Observabilidade \cite{Majors2022} e Recuperação Aumentada por Geração \cite{Lewis2020,Gao2023} executada localmente para mitigar alucinações \cite{Bender2021,Ji2023} e preservar a soberania dos dados de pesquisa.
 
 A Tabela 4 consolida a relação direta entre os conceitos teóricos revisados, os problemas empíricos diagnosticados no ecossistema do CorText Manager e os componentes arquiteturais que serão desenvolvidos nos capítulos subsequentes.
 
@@ -556,17 +564,15 @@ A Tabela 4 consolida a relação direta entre os conceitos teóricos revisados, 
   \begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}p{3.2cm}|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
     \hline
     \textbf{Eixo Teórico} & \textbf{Conceito Central e Autores-Base} & \textbf{Problema Empírico no CorText Manager} & \textbf{Solução Arquitetural no Assistente Proposto} \\ \hline
-    Estudos de Ciência e Tecnologia (STS) & Inscrições Concretas e Rastreabilidade [\citeonline{Abdo2021}; \citeonline{Kitchin2014}; \citeonline{Gitelman2013}] & Perda silenciosa de linhas (UTF-8), truncamento de colunas e coerção de \texttt{"NA"} para \texttt{"0"}, mutilando o vínculo com o documento original. & Auditoria Preventiva de Integridade: preservação das inscrições antes da conversão para o banco relacional SQLite. \\ \hline
-    Estudos de Ciência e Tecnologia (STS) & Fricção de Dados e Trabalho Invisível [\citeonline{Edwards2010}; \citeonline{DIgnazio2020}] & Sobrecarga da equipe técnica (\textit{Staff as Human Parser} em 81,0\% dos casos) e alto esforço cognitivo do usuário ($p < 0,001$). & Automação da Triagem Inicial: desoneração do suporte humano e validação assistida no ambiente cliente. \\ \hline
-    STS e Engenharia de Software & Infraestruturas Invisíveis e Caixa Preta versus Abstração [\citeonline{Bowker1999}; \citeonline{Latour1987}; \citeonline{Parnas1972}; \citeonline{Norman2013}] & Mensagens opacas (\texttt{"No info in logs"}) e falhas tardias em outras etapas (\textit{Parsing} Derivado em 38,3\% do acervo do fórum). & Abertura Seletiva e Mediada: tradução de exceções técnicas sem expor a complexidade bruta do código ao cientista social. \\ \hline
-    Engenharia e Qualidade de Dados & Adequação ao Uso e \textit{Data Profiling} [\citeonline{Wang1996}; \citeonline{Naumann2014}; \citeonline{Abedjan2015}; \citeonline{Batini2016}] & Inferência falha do \texttt{csv.\allowbreak Sniffer}, cabeçalhos destruídos por \textit{Regex} e deduplicação silenciosa por chaves corrompidas. & Módulo \textit{Pre-Flight Data Profiler} (Estágio 1): validação determinística em Python e Pandas de esquema, codificação e delimitadores. \\ \hline
-    Inteligência Artificial e Infraestrutura & Observabilidade e Arquitetura RAG Local [\citeonline{Majors2022}; \citeonline{Lewis2020}; \citeonline{Gao2023}; \citeonline{Bender2021}] & Incapacidade de LLMs genéricos (\textit{vanilla}) diagnosticarem regras internas do CorText Manager sem alucinar; necessidade de sigilo acadêmico. & Módulo \textit{Log Explainer \& RAG} via Ollama (Estágio 2): cruzamento local do \textit{stack trace}, relatório do \textit{Profiler} e base vetorial do fórum. \\ \hline
+    Estudos de Ciência e Tecnologia (STS) & Inscrições Concretas e Rastreabilidade \cite{Abdo2021,Kitchin2014,Gitelman2013} & Perda silenciosa de linhas (UTF-8), truncamento de colunas e coerção de \texttt{"NA"} para \texttt{"0"}, mutilando o vínculo com o documento original. & Auditoria Preventiva de Integridade: preservação das inscrições antes da conversão para o banco relacional SQLite. \\ \hline
+    Estudos de Ciência e Tecnologia (STS) & Fricção de Dados e Trabalho Invisível \cite{Edwards2010,DIgnazio2020} & Sobrecarga da equipe técnica (\textit{Staff as Human Parser} em 81,0\% dos casos) e alto esforço cognitivo do usuário ($p < 0,001$). & Automação da Triagem Inicial: desoneração do suporte humano e validação assistida no ambiente cliente. \\ \hline
+    STS e Engenharia de Software & Infraestruturas Invisíveis e Caixa Preta versus Abstração \cite{Bowker1999,Latour1987,Parnas1972,Norman2013} & Mensagens opacas (\texttt{"No info in logs"}) e falhas tardias em outras etapas (\textit{Parsing} Derivado em 38,3\% do acervo do fórum). & Abertura Seletiva e Mediada: tradução de exceções técnicas sem expor a complexidade bruta do código ao cientista social. \\ \hline
+    Engenharia e Qualidade de Dados & Adequação ao Uso e \textit{Data Profiling} \cite{Wang1996,Naumann2014,Abedjan2015,Batini2016} & Inferência falha do \texttt{csv.\allowbreak Sniffer}, cabeçalhos destruídos por \textit{Regex} e deduplicação silenciosa por chaves corrompidas. & Módulo \textit{Pre-Flight Data Profiler} (Estágio 1): validação determinística em Python e Pandas de esquema, codificação e delimitadores. \\ \hline
+    Inteligência Artificial e Infraestrutura & Observabilidade e Arquitetura RAG Local \cite{Majors2022,Lewis2020,Gao2023,Bender2021} & Incapacidade de LLMs genéricos (\textit{vanilla}) diagnosticarem regras internas do CorText Manager sem alucinar; necessidade de sigilo acadêmico. & Módulo \textit{Log Explainer \& RAG} via Ollama (Estágio 2): cruzamento local do \textit{stack trace}, relatório do \textit{Profiler} e base vetorial do fórum. \\ \hline
   \end{tabularx}
-  \legend{Fonte: Dados da pesquisa (2026).}
+  \legend{Fonte: Elaborado pelo autor (2026).}
 \end{table}
 
-
-\textit{Fonte: Elaborado pelo autor (2026).}
 
 % --- 04_metodologia.md ---
 \chapter{Metodologia}\label{sec:metodologia}
@@ -575,7 +581,7 @@ A Tabela 4 consolida a relação direta entre os conceitos teóricos revisados, 
 \section{Classificação da Pesquisa}\label{sec:classificacao_da_pesquisa}
 
 
-A presente investigação classifica-se, quanto à sua natureza, como uma pesquisa aplicada e tecnológica em Sistemas de Informação e Ciência da Computação, uma vez que objetiva gerar conhecimento voltado à solução prática de um gargalo operacional real vivenciado pela comunidade científica usuária da plataforma CorText Manager. Quanto à sua abordagem, o estudo caracteriza-se como quali-quantitativo (ou de métodos mistos). A dimensão quantitativa manifesta-se na auditoria estatística censitária do acervo histórico do fórum de suporte, na mensuração não paramétrica do esforço cognitivo dos usuários [\citeonline{Kruskal1952}; \citeonline{Mann1947}] e na aferição objetiva das taxas de detecção preventiva do módulo de \textit{Data Profiling}. Por sua vez, a dimensão qualitativa expressa-se na análise epistemológica das heurísticas do código-fonte sob a lente dos Estudos de Ciência e Tecnologia [\citeonline{Latour1987}; \citeonline{Bowker1999}] e na avaliação da clareza pedagógica dos diagnósticos gerados pelo modelo de Recuperação Aumentada por Geração (RAG).
+A presente investigação classifica-se, quanto à sua natureza, como uma pesquisa aplicada e tecnológica em Sistemas de Informação e Ciência da Computação, uma vez que objetiva gerar conhecimento voltado à solução prática de um gargalo operacional real vivenciado pela comunidade científica usuária da plataforma CorText Manager. Quanto à sua abordagem, o estudo caracteriza-se como quali-quantitativo (ou de métodos mistos). A dimensão quantitativa manifesta-se na auditoria estatística censitária do acervo histórico do fórum de suporte, na mensuração não paramétrica do esforço cognitivo dos usuários \cite{Kruskal1952,Mann1947} e na aferição objetiva das taxas de detecção preventiva do módulo de \textit{Data Profiling}. Por sua vez, a dimensão qualitativa expressa-se na análise epistemológica das heurísticas do código-fonte sob a lente dos Estudos de Ciência e Tecnologia \cite{Latour1987,Bowker1999} e na avaliação da clareza pedagógica dos diagnósticos gerados pelo modelo de Recuperação Aumentada por Geração (RAG).
 
 No que tange aos seus objetivos metodológicos, a pesquisa combina um caráter exploratório e descritivo, empregado no mapeamento inédito das 22 anomalias arquiteturais do analisador sintático (\textit{parser}) e na catalogação empírica dos chamados da comunidade, a um delineamento experimental. O caráter experimental concretiza-se no desenvolvimento iterativo de um protótipo de software de código aberto e na sua validação controlada mediante técnicas de Engenharia do Caos e testes comparativos (Teste A/B), assegurando reprodutibilidade científica e independência operacional em relação aos servidores de produção da plataforma francesa.
 
@@ -592,12 +598,12 @@ Para garantir o cumprimento integral dos objetivos específicos estabelecidos, o
 \subsection{Etapa 1: Revisão Bibliográfica e Análise Arquitetural do Código Legado}\label{sec:etapa_1_revisao_bibliografica_e_analise_}
 
 
-A etapa inicial compreendeu a consolidação do referencial teórico interdisciplinar, articulando os Estudos de Ciência e Tecnologia (STS) [\citeonline{Latour1987}; \citeonline{Bowker1999}; \citeonline{Edwards2010}; \citeonline{Abdo2021}] às dimensões formais de Qualidade de Dados [\citeonline{Wang1996}; \citeonline{Naumann2014}] e Observabilidade de Sistemas \cite{Majors2022}. Paralelamente, realizou-se a inspeção estática e o mapeamento profundo do código-fonte em linguagem Python responsável pela rotina de \textit{Data Parsing} do CorText Manager. Essa dissecação algorítmica visou rastrear o fluxo de ingestão dos documentos desde a leitura em disco até a consolidação das tabelas no banco relacional SQLite, permitindo identificar as decisões de programação defensiva, os blocos de silenciamento de exceções (\texttt{try/\allowbreak except}), os limites estáticos de memória e as expressões regulares destrutivas que originam a perda silenciosa de inscrições científicas.
+A etapa inicial compreendeu a consolidação do referencial teórico interdisciplinar, articulando os Estudos de Ciência e Tecnologia (STS) \cite{Latour1987,Bowker1999,Edwards2010,Abdo2021} às dimensões formais de Qualidade de Dados \cite{Wang1996,Naumann2014} e Observabilidade de Sistemas \cite{Majors2022}. Paralelamente, realizou-se a inspeção estática e o mapeamento profundo do código-fonte em linguagem Python responsável pela rotina de \textit{Data Parsing} do CorText Manager. Essa dissecação algorítmica visou rastrear o fluxo de ingestão dos documentos desde a leitura em disco até a consolidação das tabelas no banco relacional SQLite, permitindo identificar as decisões de programação defensiva, os blocos de silenciamento de exceções (\texttt{try/\allowbreak except}), os limites estáticos de memória e as expressões regulares destrutivas que originam a perda silenciosa de inscrições científicas.
 
 \subsection{Etapa 2: Engenharia de Extração e Auditoria Empírica do Fórum Oficial}\label{sec:etapa_2_engenharia_de_extracao_e_auditor}
 
 
-Com o propósito de fundamentar empiricamente a barreira de preparação de dados e construir a memória técnica do assistente, desenvolveu-se uma infraestrutura determinística de extração completa (\textit{web scraping}) do fórum oficial de suporte da plataforma (\texttt{https://docs.\allowbreak cortext.\allowbreak net/\allowbreak forum/}) [\citeonline{CorText2026}; \citeonline{Crawl4AI2026}]. A coleta e a estruturação dos dados foram operacionalizadas por meio do script customizado \texttt{extract\_\allowbreak forum.\allowbreak py}, arquitetado em três fases estritamente auditáveis que garantiram a cobertura de 100\% do acervo público (298 tópicos únicos distribuídos em 34 páginas), conforme detalhado na Tabela 5.
+Com o propósito de fundamentar empiricamente a barreira de preparação de dados e construir a memória técnica do assistente, desenvolveu-se uma infraestrutura determinística de extração completa (\textit{web scraping}) do fórum oficial de suporte da plataforma (\texttt{https://docs.\allowbreak cortext.\allowbreak net/\allowbreak forum/}) \cite{CorText2026,Crawl4AI2026}. A coleta e a estruturação dos dados foram operacionalizadas por meio do script customizado \texttt{extract\_\allowbreak forum.\allowbreak py}, arquitetado em três fases estritamente auditáveis que garantiram a cobertura de 100\% do acervo público (298 tópicos únicos distribuídos em 34 páginas), conforme detalhado na Tabela 5.
 
 \begin{table}[htb]
   \caption{Fases da engenharia de extração do acervo do fórum oficial}
@@ -612,11 +618,9 @@ Com o propósito de fundamentar empiricamente a barreira de preparação de dado
     Fase 2: Extração Profunda & Requisições assíncronas concorrentes via biblioteca \texttt{aiohttp} com semáforo controlado e novas tentativas (\textit{retries}) automáticas. & Captura de marcações semânticas JSON-LD Schema do WordPress (datas exatas em ISO 8601), dúvida na íntegra e vetor completo de respostas. \\ \hline
     Fase 3: Enriquecimento & Detecção de autores oficiais do projeto (insígnias de \textit{Staff} do CorText) e cálculo automatizado de métricas textuais. & Paridade de 100\%: sincronização simultânea nos arquivos \texttt{forum\_\allowbreak topics\_\allowbreak full.\allowbreak json}, \texttt{forum\_\allowbreak topics.\allowbreak csv} e \texttt{forum\_\allowbreak corpus.\allowbreak md}. \\ \hline
   \end{tabularx}
-  \legend{Fonte: Dados da pesquisa (2026).}
+  \legend{Fonte: Elaborado pelo autor (2026).}
 \end{table}
 
-
-\textit{Fonte: Elaborado pelo autor (2026).}
 
 Durante a auditoria epistêmica e semântica dos 298 tópicos extraídos, constatou-se que a categorização nativa do fórum (que registra 84 tópicos na categoria \textit{Data processing}, ou 28,2\% do total) subdimensiona a crise de preparação de dados. Quando o usuário comete um equívoco de formatação na entrada (como um delimitador incorreto em CSV ou marcadores de autoria não padronizados), a falha frequentemente não interrompe o \textit{parser} de imediato, mas gera um banco SQLite estruturalmente inconsistente cujo erro só eclode tardiamente em módulos analíticos subsequentes, tais como \textit{Network mapping} ou \textit{Topic modeling}.
 
@@ -635,11 +639,9 @@ Para capturar esse fenômeno com rigor metodológico, estabeleceram-se três cri
     Critério 2: Indexação, \textit{Parsing} e Codificação em Outras Etapas & 50 tópicos (43,9\% dos derivados) & Discussões mencionando expressamente ferramentas de estruturação preliminar (\textit{Corpus Terms Indexer}, \textit{Corpus List Indexer}, \textit{upload}, \textit{encoding} UTF-8, \textit{subcorpus}) durante a execução de etapas de mineração de texto ou redes. \\ \hline
     Critério 3: Sintomas Patognomônicos de Corpus Vazio ou Corrompido & 2 tópicos (1,8\% dos derivados) & Chamados reportando o sintoma clássico de ingestão quebrada: geração de redes vazias (\texttt{network you produced is empty} ou \texttt{reseau vide}) e ausência de registros (\textit{logs}) devido a colunas obrigatórias vazias. \\ \hline
   \end{tabularx}
-  \legend{Fonte: Dados da pesquisa (2026).}
+  \legend{Fonte: Elaborado pelo autor (2026).}
 \end{table}
 
-
-\textit{Fonte: Elaborado pelo autor (2026).}
 
 \subsection{Etapa 3: Construção e Vetorização da Base de Conhecimento Local}\label{sec:etapa_3_construcao_e_vetorizacao_da_base}
 
@@ -667,7 +669,7 @@ A etapa final compreende a execução do protocolo experimental de validação d
 A seleção do arcabouço tecnológico deste projeto foi orientada pelos princípios de software livre, reprodutibilidade científica, soberania computacional e custo financeiro zero de execução. As ferramentas adotadas dividem-se em quatro camadas funcionais:
 
 a) linguagem de programação e manipulação de dados: utiliza-se o Python (versão 3.10 ou superior) como linguagem nuclear de desenvolvimento, garantindo compatibilidade direta com o ecossistema nativo do CorText Manager; para as rotinas determinísticas do \textit{Pre-Flight Data Profiler}, empregam-se as bibliotecas Pandas (inspeção matricial, validação de tipos e detecção de \texttt{ParserError}), \texttt{sqlite3} (auditoria de esquemas e tabelas relacionais do arquivo \texttt{.db}), \texttt{re} (avaliação preventiva de expressões regulares), \texttt{zipfile} (varredura de caminhos e nomes acentuados em arquivos compactados) e \texttt{chardet} / \texttt{codecs} (verificação estrita de cadeias de bytes UTF-8 e Windows-1252);
-b) extração assíncrona e auditoria estatística: para a construção do extrator \texttt{extract\_\allowbreak forum.\allowbreak py} e coleta da base de conhecimento, utilizaram-se a biblioteca assíncrona \texttt{aiohttp} (gerenciamento de concorrência com semáforos e \textit{retries}), o arcabouço de raspagem web amigável a modelos de linguagem Crawl4AI (v0.9.x) \cite{Crawl4AI2026} e extratores de marcação estruturada JSON-LD Schema; para os testes estatísticos não paramétricos de Kruskal-Wallis e Mann-Whitney sobre a dispersão textual do fórum, empregaram-se as bibliotecas \texttt{scipy.\allowbreak stats}, \texttt{numpy} e \texttt{matplotlib} / \texttt{seaborn} [\citeonline{Kruskal1952}; \citeonline{Mann1947}];
+b) extração assíncrona e auditoria estatística: para a construção do extrator \texttt{extract\_\allowbreak forum.\allowbreak py} e coleta da base de conhecimento, utilizaram-se a biblioteca assíncrona \texttt{aiohttp} (gerenciamento de concorrência com semáforos e \textit{retries}), o arcabouço de raspagem web amigável a modelos de linguagem Crawl4AI (v0.9.x) \cite{Crawl4AI2026} e extratores de marcação estruturada JSON-LD Schema; para os testes estatísticos não paramétricos de Kruskal-Wallis e Mann-Whitney sobre a dispersão textual do fórum, empregaram-se as bibliotecas \texttt{scipy.\allowbreak stats}, \texttt{numpy} e \texttt{matplotlib} / \texttt{seaborn} \cite{Kruskal1952,Mann1947};
 c) inteligência artificial local e banco de dados vetorial: a orquestração local dos modelos de linguagem fundacionais é realizada por meio da plataforma Ollama, permitindo a execução em infraestrutura local (\textit{on-premises}) de modelos compactos de pesos abertos, tais como Llama 3 (8B), Mistral (7B) ou Phi-3 Mini (3.8B), sem envio de dados sensíveis à nuvem; o armazenamento dos \textit{embeddings} documentais e a busca por similaridade de cosseno do módulo RAG são gerenciados localmente via banco vetorial ChromaDB (ou FAISS) integrado a pipelines de orquestração em Python;
 d) interface de usuário e reprodutibilidade: a camada visual da aplicação companheira (\textit{companion app}) e o painel público de exploração dos dados auditados do fórum foram desenvolvidos com o \textit{framework} Streamlit, proporcionando uma interface web reativa de arrastar e soltar (\textit{Drag and Drop}), enquanto o controle de versão e a disponibilização aberta dos conjuntos de dados e códigos-fonte são mantidos na plataforma GitHub.
 
@@ -706,11 +708,9 @@ O planejamento temporal do projeto foi distribuído ao longo de seis meses de ex
     Etapa 5: Integração do Módulo \textit{Log Explainer \& RAG} via Ollama e Interface \textit{Companion App} &  &  &  & X & X &  & Planejado \\ \hline
     Etapa 6: Testes via Engenharia do Caos, Teste A/B, Avaliação na UFBA e Redação Final do TCC &  &  &  &  & X & X & Em execução \\ \hline
   \end{tabularx}
-  \legend{Fonte: Dados da pesquisa (2026).}
+  \legend{Fonte: Elaborado pelo autor (2026).}
 \end{table}
 
-
-\textit{Fonte: Elaborado pelo autor (2026).}
 
 % --- 05_desenvolvimento.md ---
 \chapter{Desenvolvimento}\label{sec:desenvolvimento}
@@ -772,10 +772,8 @@ A partir desse diagnóstico de infraestrutura e das demandas empíricas de \text
   RF23 & \textit{Early-Warning Parser} & Fórum & Auditar o banco SQLite (\texttt{.db}) recém-gerado e emitir alerta obstativo caso tabelas essenciais estejam vazias ou gerem matriz de adjacência zerada (\texttt{network empty}). & Validação Pós-Ingestão \\ \hline
   RF24 & Orquestrador / Sessão & Geral & Persistir em memória de sessão o resumo estrutural do arquivo auditado pelo \textit{Profiler} (\textit{Prompt Oculto de Contexto}) para enriquecer a consulta ao motor RAG. & Contextualização Diagnóstica \\ \hline
 \end{xltabular}
-\vspace{-0.2cm}\noindent{\footnotesize\textit{Fonte: Dados da pesquisa (2026).}}\par\vspace{0.4cm}
+\vspace{-0.2cm}\noindent{\footnotesize\textit{Fonte: Elaborado pelo autor (2026).}}\par\vspace{0.4cm}
 }
-
-\textit{Fonte: Elaborado pelo autor (2026).}
 
 Complementarmente, a Tabela 9 especifica os quatro Requisitos Não Funcionais (RNF01 a RNF04) que asseguram a viabilidade ética, arquitetural e computacional do protótipo no ecossistema acadêmico.
 
@@ -793,11 +791,9 @@ Complementarmente, a Tabela 9 especifica os quatro Requisitos Não Funcionais (R
     RNF03 & Parcimônia e Divisão de Responsabilidades & A auditoria sintática e quantitativa de matrizes brutas deve ser executada exclusivamente por rotinas determinísticas vetorizadas em Python e Pandas (Estágio 1), acionando o LLM (Estágio 2) apenas diante de exceções e \textit{logs}. & Evita latência computacional, consumo energético desnecessário e alucinações numéricas em tarefas que exigem contagem exata de bytes e delimitadores. \\ \hline
     RNF04 & Auditabilidade e Reprodutibilidade Aberta & A base de conhecimento vetorial deve manter paridade estrita de 100\% com os conjuntos de dados públicos auditados (\texttt{forum\_\allowbreak topics.\allowbreak csv}, \texttt{forum\_\allowbreak topics\_\allowbreak full.\allowbreak json} e \texttt{forum\_\allowbreak corpus.\allowbreak md}). & Assegura transparência científica, rastreabilidade das respostas do RAG aos tópicos originais do \textit{Staff} e facilidade de atualização contínua. \\ \hline
   \end{tabularx}
-  \legend{Fonte: Dados da pesquisa (2026).}
+  \legend{Fonte: Elaborado pelo autor (2026).}
 \end{table}
 
-
-\textit{Fonte: Elaborado pelo autor (2026).}
 
 \section{Arquitetura da Solução}\label{sec:arquitetura_da_solucao}
 
@@ -817,11 +813,9 @@ A arquitetura do Assistente de Observabilidade Sociotécnica foi projetada para 
     2. \textit{Early-Warning Parser} & Validador estrutural pós-ingestão que inspeciona o banco relacional SQLite (\texttt{.db}) gerado, verificando o povoamento de tabelas e a densidade da matriz de adjacência antes da fila de computação. & RF23 & Extingue os sintomas patognomônicos de redes vazias (\texttt{network you produced is empty}), que respondem pelos chamados de maior esforço cognitivo no \textit{Parsing} Derivado. \\ \hline
     3. \textit{Log Explainer \& RAG} & Sistema de Recuperação Aumentada por Geração (RAG) ancorado no corpus do fórum (\texttt{forum\_\allowbreak corpus.\allowbreak md}) e no guia oficial, executado localmente via Ollama para traduzir \textit{tracebacks} e mensagens opacas (\texttt{No info in Logs}). & RF02, RF07, RF09, RF13, RF24 & Reduz a dependência de intervenção manual da equipe técnica (\textit{Staff}), atualmente exigida em 81,0\% dos chamados de preparação de dados. \\ \hline
   \end{tabularx}
-  \legend{Fonte: Dados da pesquisa (2026).}
+  \legend{Fonte: Elaborado pelo autor (2026).}
 \end{table}
 
-
-\textit{Fonte: Elaborado pelo autor (2026).}
 
 \subsection{Fluxo de Interação e Orquestração como Aplicação Companheira}\label{sec:fluxo_de_interacao_e_orquestracao_como_a}
 
@@ -936,10 +930,8 @@ Cada artefato do \textit{Corpus de Caos} foi projetado para acionar exatamente u
   TC21 & RF21 & \texttt{.docx} / \texttt{.txt} & Texto denso sem marcação de parágrafo submetido ao delimitador \texttt{"djkqsjsdlmkq..."}. & Achatamento de todo o livro ou tese em um único parágrafo, destruindo coocorrências. & \textit{Pre-Flight Profiler} & Alerta de planificação estrutural orientando ativação de fatiamento por parágrafo. \\ \hline
   TC22 & RF22 & \texttt{.xml} / \texttt{.txt} & XML PubMed com autor corporativo (sem 3 subcampos) e corpus textual com 160.000 sentenças. & \texttt{IndexError} silencioso apagando autores e corte cego do excedente acima de 150.000 sentenças. & \textit{Pre-Flight Profiler} & Auditoria volumétrica (>150K) e validação de esquema XML antes da perda de dados. \\ \hline
 \end{xltabular}
-\vspace{-0.2cm}\noindent{\footnotesize\textit{Fonte: Dados da pesquisa (2026).}}\par\vspace{0.4cm}
+\vspace{-0.2cm}\noindent{\footnotesize\textit{Fonte: Elaborado pelo autor (2026).}}\par\vspace{0.4cm}
 }
-
-\textit{Fonte: Elaborado pelo autor (2026).}
 
 \subsection{Protocolo do Teste A/B para Avaliação do Módulo RAG}\label{sec:protocolo_do_teste_a_b_para_avaliacao_do}
 
@@ -1021,11 +1013,9 @@ Paralelamente, a inspeção dos estados formais de conclusão dos tópicos na ca
     \textit{Closed} (Fechado) & 3 (3,6\%) & Tópico trancado administrativamente por duplicação ou encerramento direto pela moderação. \\ \hline
     \textit{Pending} (Pendente) & 1 (1,2\%) & Chamado retido na fila de moderação antispam do WordPress antes de circular publicamente. \\ \hline
   \end{tabularx}
-  \legend{Fonte: Dados da pesquisa (2026).}
+  \legend{Fonte: Elaborado pelo autor a partir dos dados auditados do fórum oficial (2026).}
 \end{table}
 
-
-\textit{Fonte: Elaborado pelo autor a partir dos dados auditados do fórum oficial (2026).}
 
 \subsection{O Custo Cognitivo da Opacidade: Evidências Estatísticas Textuais}\label{sec:o_custo_cognitivo_da_opacidade_evidencia}
 
@@ -1055,13 +1045,11 @@ Para mensurar quantitativamente o esforço cognitivo despendido pelos pesquisado
     2. \textit{Parsing} Direto (\textit{Data processing}) & 84 & 81,5 pal. & 93,8 pal. & 117,0 pal. & 387 pal. (Tópico \#280) \\ \hline
     3. Não Relacionado a \textit{Parsing} & 100 & 68,5 pal. & 90,6 pal. & 108,0 pal. & 765 pal. (Tópico \#109) \\ \hline
   \end{tabularx}
-  \legend{Fonte: Dados da pesquisa (2026).}
+  \legend{Fonte: Elaborado pelo autor a partir dos dados auditados do fórum oficial (2026).}
 \end{table}
 
 
-\textit{Fonte: Elaborado pelo autor a partir dos dados auditados do fórum oficial (2026).}
-
-Considerando a assimetria positiva das distribuições de contagem de palavras, aplicaram-se testes de hipótese não paramétricos sobre as amostras [\citeonline{Kruskal1952}; \citeonline{Mann1947}]. No Teste de Kruskal-Wallis para comparação simultânea dos três grupos, obteve-se a estatística $H = 15,923$, com valor de probabilidade $p = 0,00035$ ($p < 0,001$), rejeitando-se categoricamente a hipótese nula com 99,9\% de confiança e comprovando a existência de diferença estatisticamente altamente significante entre as extensões textuais dos três escopos \cite{Kruskal1952}. Complementarmente, na aplicação do Teste de Mann-Whitney contrastando o conjunto total de problemas de \textit{Data Parsing} (Direto somado ao Indireto, $N = 198$) contra os demais temas metodológicos ($N = 100$), obteve-se $Z = 3,380$ ($p = 0,0007 < 0,001$), confirmando que chamados envolvendo falhas de ingestão e formatação exigem significativamente mais palavras e esforço descritivo por parte do pesquisador \cite{Mann1947}.
+Considerando a assimetria positiva das distribuições de contagem de palavras, aplicaram-se testes de hipótese não paramétricos sobre as amostras \cite{Kruskal1952,Mann1947}. No Teste de Kruskal-Wallis para comparação simultânea dos três grupos, obteve-se a estatística $H = 15,923$, com valor de probabilidade $p = 0,00035$ ($p < 0,001$), rejeitando-se categoricamente a hipótese nula com 99,9\% de confiança e comprovando a existência de diferença estatisticamente altamente significante entre as extensões textuais dos três escopos \cite{Kruskal1952}. Complementarmente, na aplicação do Teste de Mann-Whitney contrastando o conjunto total de problemas de \textit{Data Parsing} (Direto somado ao Indireto, $N = 198$) contra os demais temas metodológicos ($N = 100$), obteve-se $Z = 3,380$ ($p = 0,0007 < 0,001$), confirmando que chamados envolvendo falhas de ingestão e formatação exigem significativamente mais palavras e esforço descritivo por parte do pesquisador \cite{Mann1947}.
 
 \subsection{Resultados da Engenharia do Caos, do Teste A/B e da Avaliação de Usabilidade}\label{sec:resultados_da_engenharia_do_caos_do_test}
 
@@ -1076,7 +1064,7 @@ Considerando a assimetria positiva das distribuições de contagem de palavras, 
 
 Os resultados empíricos auferidos na auditoria do fórum validam integralmente os pressupostos teóricos mobilizados a partir dos Estudos de Ciência e Tecnologia (STS) e da Engenharia de Qualidade de Dados. A constatação estatística de que o grupo de \textit{Parsing} Indireto apresenta a maior mediana (95,0 palavras), a maior média (129,6 palavras) e o maior terceiro quartil (163,0 palavras) de todo o ecossistema ($p < 0,001$) \cite{Kruskal1952} materializa empiricamente o conceito de fricção de dados de \citeonline{Edwards2010} e o princípio da ruptura infraestrutural de \citeonline{Bowker1999}. Quando o analisador sintático nativo silencia exceções ou aplica truncamentos defensivos sem notificar o usuário, o erro não desaparece: ele contamina o banco relacional SQLite e eclode tardiamente na forma de artefatos vazios.
 
-O caso mais emblemático desse fenômeno em todo o acervo histórico é o Tópico \#2, que registra o valor máximo absoluto de 1.118 palavras em uma única pergunta e pertence justamente ao grupo de \textit{Parsing} Derivado \cite{CorText2026}. Nesse chamado, o pesquisador relatou que o algoritmo de mapeamento de redes falhou exibindo a mensagem \texttt{'network you produced is empty'}. Impedido pela opacidade da caixa preta \cite{Latour1987} de compreender que a causa raiz residia em delimitadores corrompidos na etapa inicial de importação do CSV, o usuário viu-se forçado a colar tabelas inteiras, scripts e centenas de linhas de dados brutos no fórum na tentativa de obter auxílio. De maneira convergente, a taxa de 81,0\% de intervenção manual da equipe técnica nos chamados de \textit{Data processing} comprova que, na ausência de um módulo preventivo de \textit{Data Profiling} [\citeonline{Wang1996}; \citeonline{Naumann2014}] e de um tradutor de registros ancorado em RAG \cite{Lewis2020}, o trabalho invisível de curadoria (\textit{data janitor work}) descrito por \citeonline{DIgnazio2020} sobrecarrega severamente os próprios engenheiros mantenedores da plataforma (como evidenciado nas interações em que desenvolvedores precisam solicitar acesso manual aos projetos privados dos usuários diante de \textit{logs} vazios) \cite{CorText2026}.
+O caso mais emblemático desse fenômeno em todo o acervo histórico é o Tópico \#2, que registra o valor máximo absoluto de 1.118 palavras em uma única pergunta e pertence justamente ao grupo de \textit{Parsing} Derivado \cite{CorText2026}. Nesse chamado, o pesquisador relatou que o algoritmo de mapeamento de redes falhou exibindo a mensagem \texttt{'network you produced is empty'}. Impedido pela opacidade da caixa preta \cite{Latour1987} de compreender que a causa raiz residia em delimitadores corrompidos na etapa inicial de importação do CSV, o usuário viu-se forçado a colar tabelas inteiras, scripts e centenas de linhas de dados brutos no fórum na tentativa de obter auxílio. De maneira convergente, a taxa de 81,0\% de intervenção manual da equipe técnica nos chamados de \textit{Data processing} comprova que, na ausência de um módulo preventivo de \textit{Data Profiling} \cite{Wang1996,Naumann2014} e de um tradutor de registros ancorado em RAG \cite{Lewis2020}, o trabalho invisível de curadoria (\textit{data janitor work}) descrito por \citeonline{DIgnazio2020} sobrecarrega severamente os próprios engenheiros mantenedores da plataforma (como evidenciado nas interações em que desenvolvedores precisam solicitar acesso manual aos projetos privados dos usuários diante de \textit{logs} vazios) \cite{CorText2026}.
 
 \begin{citacao}
 \textbf{[ESPAÇO RESERVADO — DISCUSSÃO DOS RESULTADOS DO PROTÓTIPO]:} \textit{Inserir aqui, após o preenchimento dos resultados da Engenharia do Caos e do Teste A/B, um a dois parágrafos discutindo como o desempenho obtido pelo Pre-Flight Data Profiler e pelo Log Explainer \& RAG confirma as hipóteses H1 e H2 e protege a rastreabilidade das inscrições concretas postulada por \citeonline{Abdo2021}.}
@@ -1104,16 +1092,16 @@ c) cobertura circunscrita às heurísticas de entrada (\textit{Data Parsing}): c
 \section{Considerações Finais}\label{sec:consideracoes_finais}
 
 
-Este Trabalho de Conclusão de Curso abordou o desafio sociotécnico representado pela etapa de importação, validação e estruturação de corpora (\textit{Data Parsing}) na plataforma científica CorText Manager \cite{CorText2026}. Partindo da constatação empírica de que a heterogeneidade das bases de dados brutas colide frequentemente com as heurísticas de programação defensiva necessárias para manter a estabilidade do servidor compartilhado, investigou-se como a articulação entre técnicas determinísticas de Qualidade de Dados (\textit{Data Profiling}) [\citeonline{Wang1996}; \citeonline{Naumann2014}] e um sistema de Recuperação Aumentada por Geração (RAG) [\citeonline{Lewis2020}; \citeonline{Gao2023}] executado localmente poderia mitigar a opacidade técnica dos erros e devolver a autonomia diagnóstica aos pesquisadores das ciências sociais e humanidades.
+Este Trabalho de Conclusão de Curso abordou o desafio sociotécnico representado pela etapa de importação, validação e estruturação de corpora (\textit{Data Parsing}) na plataforma científica CorText Manager \cite{CorText2026}. Partindo da constatação empírica de que a heterogeneidade das bases de dados brutas colide frequentemente com as heurísticas de programação defensiva necessárias para manter a estabilidade do servidor compartilhado, investigou-se como a articulação entre técnicas determinísticas de Qualidade de Dados (\textit{Data Profiling}) \cite{Wang1996,Naumann2014} e um sistema de Recuperação Aumentada por Geração (RAG) \cite{Lewis2020,Gao2023} executado localmente poderia mitigar a opacidade técnica dos erros e devolver a autonomia diagnóstica aos pesquisadores das ciências sociais e humanidades.
 
-A trajetória investigativa cumpriu integralmente os objetivos propostos. Em um primeiro momento, a auditoria censitária dos 298 tópicos do fórum oficial de suporte (operacionalizada pelo extrator determinístico \texttt{extract\_\allowbreak forum.\allowbreak py}) e a dissecação estática do código-fonte legado de \textit{Data Parsing} revelaram que problemas vinculados à preparação de dados motivam 66,4\% de toda a demanda histórica de suporte da comunidade (198 chamados, sendo 28,2\% diretos e 38,3\% derivados em etapas subsequentes), exigindo intervenção manual da equipe técnica (\textit{Staff as Human Parser}) em 81,0\% dos casos de processamento e impondo um custo cognitivo significativamente superior aos usuários ($p < 0,001$ nos testes de Kruskal-Wallis e Mann-Whitney) [\citeonline{Kruskal1952}; \citeonline{Mann1947}]. Em um segundo momento, o mapeamento de 22 vulnerabilidades arquiteturais de truncamento silencioso, coerção temporal e falha de codificação sustentou a engenharia de um Assistente de Observabilidade Sociotécnica estruturado em três módulos (\textit{Pre-Flight Data Profiler}, \textit{Early-Warning Parser} e \textit{Log Explainer \& RAG} via Ollama), demonstrando que a integração entre auditoria preditiva no ambiente cliente e modelos de linguagem ancorados na memória técnica da comunidade constitui uma alternativa viável, segura e de custo operacional marginal zero.
+A trajetória investigativa cumpriu integralmente os objetivos propostos. Em um primeiro momento, a auditoria censitária dos 298 tópicos do fórum oficial de suporte (operacionalizada pelo extrator determinístico \texttt{extract\_\allowbreak forum.\allowbreak py}) e a dissecação estática do código-fonte legado de \textit{Data Parsing} revelaram que problemas vinculados à preparação de dados motivam 66,4\% de toda a demanda histórica de suporte da comunidade (198 chamados, sendo 28,2\% diretos e 38,3\% derivados em etapas subsequentes), exigindo intervenção manual da equipe técnica (\textit{Staff as Human Parser}) em 81,0\% dos casos de processamento e impondo um custo cognitivo significativamente superior aos usuários ($p < 0,001$ nos testes de Kruskal-Wallis e Mann-Whitney) \cite{Kruskal1952,Mann1947}. Em um segundo momento, o mapeamento de 22 vulnerabilidades arquiteturais de truncamento silencioso, coerção temporal e falha de codificação sustentou a engenharia de um Assistente de Observabilidade Sociotécnica estruturado em três módulos (\textit{Pre-Flight Data Profiler}, \textit{Early-Warning Parser} e \textit{Log Explainer \& RAG} via Ollama), demonstrando que a integração entre auditoria preditiva no ambiente cliente e modelos de linguagem ancorados na memória técnica da comunidade constitui uma alternativa viável, segura e de custo operacional marginal zero.
 
 \begin{citacao}
 \textbf{[ESPAÇO RESERVADO — FECHAMENTO QUANTITATIVO DAS HIPÓTESES H1 E H2]:} \textit{Inserir aqui, após a conclusão dos testes do protótipo, duas frases reportando os índices finais alcançados na Engenharia do Caos ($TDP = X\%$) e no Teste A/B do RAG, selando a confirmação empírica das hipóteses H1 e H2.}
 \end{citacao}
 
 
-Conclui-se, portanto, que a promoção da observabilidade em infraestruturas de software científico não exige o desmantelamento das abstrações arquiteturais que protegem o usuário leigo da complexidade bruta do código [\citeonline{Parnas1972}; \citeonline{Norman2013}]. Ao operar como um mediador pedagógico que abre seletivamente a caixa preta \cite{Latour1987} apenas no momento de ruptura infraestrutural \cite{Bowker1999}, o assistente proposto converte a etapa de \textit{Data Parsing} de uma barreira opaca em uma experiência de aprendizado guiado, preservando a integridade das inscrições concretas \cite{Abdo2021} que fundamentam a produção do conhecimento nas ciências sociais.
+Conclui-se, portanto, que a promoção da observabilidade em infraestruturas de software científico não exige o desmantelamento das abstrações arquiteturais que protegem o usuário leigo da complexidade bruta do código \cite{Parnas1972,Norman2013}. Ao operar como um mediador pedagógico que abre seletivamente a caixa preta \cite{Latour1987} apenas no momento de ruptura infraestrutural \cite{Bowker1999}, o assistente proposto converte a etapa de \textit{Data Parsing} de uma barreira opaca em uma experiência de aprendizado guiado, preservando a integridade das inscrições concretas \cite{Abdo2021} que fundamentam a produção do conhecimento nas ciências sociais.
 
 \section{Contribuições do Trabalho}\label{sec:contribuicoes_do_trabalho}
 
@@ -1122,8 +1110,8 @@ Os resultados e artefatos produzidos ao longo desta pesquisa consolidam quatro c
 
 a) contribuição empírica e documental aberta: a entrega do primeiro mapeamento quantitativo e estatístico completo das fricções de suporte do CorText Manager (2014 a 2026), acompanhado da publicação aberta do conjunto de dados auditado (\texttt{forum\_\allowbreak topics.\allowbreak csv} com 25 atributos métricos, \texttt{forum\_\allowbreak topics\_\allowbreak full.\allowbreak json} e \texttt{forum\_\allowbreak corpus.\allowbreak md}) e de um painel interativo em Streamlit para livre exploração pela comunidade científica;
 b) contribuição de engenharia de software e qualidade de dados: a catalogação sistemática das 22 anomalias de programação defensiva do script legado de \textit{Data Parsing} e sua tradução direta nos algoritmos determinísticos do módulo \textit{Pre-Flight Data Profiler} e do \textit{Early-Warning Parser}, prevenindo a corrupção silenciosa de bancos relacionais SQLite antes do envio ao servidor;
-c) contribuição arquitetural em Inteligência Artificial aplicada a suporte: a demonstração prática de uma arquitetura híbrida de dois estágios que acopla metadados de \textit{Data Profiling} (via \textit{Prompt Oculto de Contexto}) a um sistema RAG 100\% local orquestrado no Ollama, superando as alucinações de modelos genéricos [\citeonline{Bender2021}; \citeonline{Ji2023}] e garantindo soberania computacional e sigilo absoluto para dados acadêmicos sensíveis;
-d) contribuição epistemológica e sociotécnica: a materialização de uma ferramenta de Inteligência Artificial que respeita rigorosamente a fronteira metodológica das ciências sociais, atuando na transparência da camada de infraestrutura e no alívio do trabalho invisível de limpeza de dados [\citeonline{DIgnazio2020}; \citeonline{Edwards2010}] sem jamás interferir ou substituir a agência interpretativa do pesquisador sobre o conteúdo de seu corpus.
+c) contribuição arquitetural em Inteligência Artificial aplicada a suporte: a demonstração prática de uma arquitetura híbrida de dois estágios que acopla metadados de \textit{Data Profiling} (via \textit{Prompt Oculto de Contexto}) a um sistema RAG 100\% local orquestrado no Ollama, superando as alucinações de modelos genéricos \cite{Bender2021,Ji2023} e garantindo soberania computacional e sigilo absoluto para dados acadêmicos sensíveis;
+d) contribuição epistemológica e sociotécnica: a materialização de uma ferramenta de Inteligência Artificial que respeita rigorosamente a fronteira metodológica das ciências sociais, atuando na transparência da camada de infraestrutura e no alívio do trabalho invisível de limpeza de dados \cite{DIgnazio2020,Edwards2010} sem jamás interferir ou substituir a agência interpretativa do pesquisador sobre o conteúdo de seu corpus.
 
 \section{Trabalhos Futuros}\label{sec:trabalhos_futuros}
 
@@ -1150,7 +1138,7 @@ d) generalização do \textit{framework} de Observabilidade Sociotécnica para o
 \chapter{Diagnóstico de Infraestrutura, Catálogo das 22 Anomalias do Data Parsing e Formatos Suportados}\label{sec:diagnostico_de_infraestrutura_catalogo_d}
 
 
-Este apêndice consolida o mapeamento técnico exaustivo das vulnerabilidades e heurísticas de programação defensiva identificadas na auditoria estática do código-fonte legado em linguagem Python responsável pelo módulo de \textit{Data Parsing} do CorText Manager (\texttt{parser\_\allowbreak science\_\allowbreak se.\allowbreak py}), bem como a taxonomia completa de formatos de arquivos aceitos pelo analisador sintático nativo. Sob a ótica dos Estudos de Ciência e Tecnologia (STS) [\citeonline{Latour1987}; \citeonline{Bowker1999}], cada item documentado a seguir explicita o mecanismo pelo qual decisões internas de infraestrutura, tomadas originalmente para evitar travamentos visíveis do servidor compartilhado, atuam como uma caixa preta que pode introduzir vieses metodológicos ou suprimir inscrições concretas \cite{Abdo2021}, justificando as diretrizes de intervenção do módulo preventivo (\textit{Pre-Flight Data Profiler}) e do módulo reativo (\textit{Log Explainer \& RAG}).
+Este apêndice consolida o mapeamento técnico exaustivo das vulnerabilidades e heurísticas de programação defensiva identificadas na auditoria estática do código-fonte legado em linguagem Python responsável pelo módulo de \textit{Data Parsing} do CorText Manager (\texttt{parser\_\allowbreak science\_\allowbreak se.\allowbreak py}), bem como a taxonomia completa de formatos de arquivos aceitos pelo analisador sintático nativo. Sob a ótica dos Estudos de Ciência e Tecnologia (STS) \cite{Latour1987,Bowker1999}, cada item documentado a seguir explicita o mecanismo pelo qual decisões internas de infraestrutura, tomadas originalmente para evitar travamentos visíveis do servidor compartilhado, atuam como uma caixa preta que pode introduzir vieses metodológicos ou suprimir inscrições concretas \cite{Abdo2021}, justificando as diretrizes de intervenção do módulo preventivo (\textit{Pre-Flight Data Profiler}) e do módulo reativo (\textit{Log Explainer \& RAG}).
 
 \section{Catálogo das 22 Anomalias Arquiteturais Mapeadas no Código Legado}\label{sec:catalogo_das_22_anomalias_arquiteturais_}
 
@@ -1438,10 +1426,8 @@ O conjunto de dados tabular consolidado a partir da varredura integral das 34 p�
   24 & \texttt{parsing\_\allowbreak type} & Categórico & Classificação analítica do escopo: \texttt{Parsing Direto}, \texttt{Parsing Indireto / Derivado} ou \texttt{Não Relacionado}. \\ \hline
   25 & \texttt{parsing\_\allowbreak cause} & Categórico & Critério heurístico ou formato bruto específico que motivou a falha (CSV, ZIP, WOS, Scopus, RIS, Factiva, Encoding, Rede Vazia). \\ \hline
 \end{xltabular}
-\vspace{-0.2cm}\noindent{\footnotesize\textit{Fonte: Dados da pesquisa (2026).}}\par\vspace{0.4cm}
+\vspace{-0.2cm}\noindent{\footnotesize\textit{Fonte: Elaborado pelo autor a partir do dataset auditado \texttt{forum\_\allowbreak topics.\allowbreak csv} (2026).}}\par\vspace{0.4cm}
 }
-
-\textit{Fonte: Elaborado pelo autor a partir do dataset auditado \texttt{forum\_\allowbreak topics.\allowbreak csv} (2026).}
 
 \section{Recursos Complementares, Código-Fonte e Painel Interativo}\label{sec:recursos_complementares_codigo_fonte_e_p}
 

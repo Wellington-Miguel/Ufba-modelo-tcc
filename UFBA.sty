@@ -158,7 +158,43 @@
     \vspace*{0.5cm}
   \end{center}
 }
+
+% ---
+% RESUMO E ABSTRACT (Manual EDUFBA 6ª ed., p. 64-65)
+% A referência da monografia antecede a palavra RESUMO/ABSTRACT centralizada no topo
+% ---
+\renewenvironment{resumo}[1][\resumoname]{%
+  \clearpage
+  \PRIVATEbookmarkthis{#1}%
+}{%
+  \PRIVATEclearpageifneeded
+}
 \makeatother
+
+% ---
+% CABEÇALHO E NUMERAÇÃO DE PÁGINAS (Manual EDUFBA 6ª ed., p. 75-76 / ABNT NBR 14724)
+% Apenas número da página no canto superior direito, sem linhas ou títulos de capítulos
+% ---
+\makepagestyle{abntheadings}
+\makeevenhead{abntheadings}{}{}{\thepage}
+\makeoddhead{abntheadings}{}{}{\thepage}
+\makeheadrule{abntheadings}{\textwidth}{0pt}
+\makeevenfoot{abntheadings}{}{}{}
+\makeoddfoot{abntheadings}{}{}{}
+
+\makepagestyle{abntchapfirst}
+\makeevenhead{abntchapfirst}{}{}{\thepage}
+\makeoddhead{abntchapfirst}{}{}{\thepage}
+\makeheadrule{abntchapfirst}{\textwidth}{0pt}
+\makeevenfoot{abntchapfirst}{}{}{}
+\makeoddfoot{abntchapfirst}{}{}{}
+
+\makepagestyle{ufbapagestyle}
+\makeevenhead{ufbapagestyle}{}{}{\thepage}
+\makeoddhead{ufbapagestyle}{}{}{\thepage}
+\makeheadrule{ufbapagestyle}{\textwidth}{0pt}
+\makeevenfoot{ufbapagestyle}{}{}{}
+\makeoddfoot{ufbapagestyle}{}{}{}
 
 % ---
 % FORMATAÇÃO DE TÍTULOS DE SEÇÕES (Manual EDUFBA 6ª ed., p. 89-90)
@@ -175,11 +211,17 @@
 \renewcommand{\ABNTEXsubsubsubsectionfontsize}{\fontsize{12}{14}\selectfont\itshape}
 
 % ---
+% TÍTULO DAS REFERÊNCIAS (Manual EDUFBA 6ª ed., p. 77 / ABNT NBR 6023)
+% ---
+\renewcommand{\bibname}{REFER\^ENCIAS}
+
+% ---
 % DESATIVAÇÃO DAS ASPAS ATIVAS DO BABEL (Evita erro de Argument of \language@active@arg")
 % ---
 \AtBeginDocument{%
+  \renewcommand{\bibname}{REFER\^ENCIAS}%
+  \addto\captionsbrazilian{\renewcommand{\bibname}{REFER\^ENCIAS}}%
   \addto\extrasbrazilian{\shorthandoff{"}}%
-  \addto\extrasbrazil{\shorthandoff{"}}%
   \addto\extrasportuges{\shorthandoff{"}}%
   \shorthandoff{"}%
 }

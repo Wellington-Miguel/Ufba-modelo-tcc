@@ -23,26 +23,142 @@ except ImportError:
     yaml = None
 
 
+def parse_yaml_fallback(text):
+    """
+    Parser YAML leve embutido para ambientes sem a biblioteca PyYAML.
+    Suporta dicionários aninhados, listas, literais escalares e blocos multilinhas (|).
+    """
+    lines = text.splitlines()
+
+    def parse_scalar(val):
+        val = val.strip()
+        if not val:
+            return ""
+        if (val.startswith('"') and val.endswith('"')) or (val.startswith("'") and val.endswith("'")):
+            return val[1:-1]
+        if val.lower() == 'true':
+            return True
+        if val.lower() == 'false':
+            return False
+        if val.lower() in ('null', '~'):
+            return None
+        try:
+            return int(val)
+        except ValueError:
+            try:
+                return float(val)
+            except ValueError:
+                return val
+
+    def parse_block(start_idx, min_indent):
+        result = None
+        i = start_idx
+        while i < len(lines):
+            line = lines[i]
+            stripped = line.strip()
+            if not stripped or stripped.startswith('#'):
+                i += 1
+                continue
+
+            indent = len(line) - len(line.lstrip(' '))
+            if indent < min_indent:
+                break
+
+            # Item de lista (- ...)
+            if stripped.startswith('- '):
+                if result is None:
+                    result = []
+                elif not isinstance(result, list):
+                    break
+
+                content = stripped[2:].strip()
+                if ':' in content:
+                    k, v = content.split(':', 1)
+                    item_dict = {k.strip(): parse_scalar(v)}
+                    sub_dict, next_i = parse_block(i + 1, indent + 2)
+                    if isinstance(sub_dict, dict):
+                        item_dict.update(sub_dict)
+                        i = next_i
+                    else:
+                        i += 1
+                    result.append(item_dict)
+                    continue
+                else:
+                    result.append(parse_scalar(content))
+                    i += 1
+                    continue
+
+            # Par chave-valor ou início de bloco mapeado
+            if ':' in stripped:
+                if result is None:
+                    result = {}
+                elif not isinstance(result, dict):
+                    break
+
+                k, v = stripped.split(':', 1)
+                k = k.strip()
+                v = v.strip()
+
+                if v == '|':
+                    # Bloco multilinha com preservação de formatação
+                    block_lines = []
+                    i += 1
+                    block_indent = None
+                    while i < len(lines):
+                        bline = lines[i]
+                        bstripped = bline.strip()
+                        if not bstripped:
+                            block_lines.append('')
+                            i += 1
+                            continue
+                        bindent = len(bline) - len(bline.lstrip(' '))
+                        if block_indent is None:
+                            if bindent <= indent:
+                                break
+                            block_indent = bindent
+                        elif bindent < block_indent:
+                            break
+                        block_lines.append(bline[block_indent:])
+                        i += 1
+                    while block_lines and block_lines[-1] == '':
+                        block_lines.pop()
+                    result[k] = '\n'.join(block_lines) + '\n'
+                    continue
+                elif v == '':
+                    # Objeto aninhado ou lista subsequente
+                    sub_val, next_i = parse_block(i + 1, indent + 1)
+                    result[k] = sub_val if sub_val is not None else {}
+                    i = next_i
+                    continue
+                else:
+                    result[k] = parse_scalar(v)
+                    i += 1
+                    continue
+            else:
+                i += 1
+        return result, i
+
+    res, _ = parse_block(0, 0)
+    return res or {}
+
+
 def carregar_metadados(arquivo_yaml="metadata.yaml"):
     """Carrega metadados do arquivo YAML com tratamento de fallbacks."""
     if not os.path.exists(arquivo_yaml):
         print(f"[AVISO] Arquivo {arquivo_yaml} não encontrado. Usando padrões.")
         return {}
 
+    with open(arquivo_yaml, "r", encoding="utf-8") as f:
+        conteudo = f.read()
+
     if yaml is not None:
-        with open(arquivo_yaml, "r", encoding="utf-8") as f:
-            return yaml.safe_load(f) or {}
-    else:
-        # Fallback simples se PyYAML não estiver disponível
-        print("[INFO] PyYAML não encontrado, utilizando parser básico.")
-        meta = {}
-        with open(arquivo_yaml, "r", encoding="utf-8") as f:
-            for line in f:
-                line = line.strip()
-                if line and not line.startswith("#") and ":" in line:
-                    k, v = line.split(":", 1)
-                    meta[k.strip()] = v.strip().strip('"').strip("'")
-        return meta
+        try:
+            return yaml.safe_load(conteudo) or {}
+        except Exception as e:
+            print(f"[AVISO] Erro no PyYAML ({e}), utilizando parser embutido.")
+
+    print("[INFO] PyYAML não encontrado, utilizando parser básico embutido.")
+    return parse_yaml_fallback(conteudo)
 
 
 def formatar_nome_referencia(nome_completo):
@@ -66,7 +182,9 @@ def formatar_nome_referencia(nome_completo):
             iniciais.append(p.lower())
         else:
             iniciais.append(f"{p[0].upper()}.")
-    return f"{sobrenome}, {' '.join(iniciais)}"
+    res = f"{sobrenome}, {' '.join(iniciais)}"
+    res = re.sub(r'\.\.+', '.', res)
+    return res
 
 
 def gerar_slug(texto):
@@ -151,13 +269,14 @@ class MarkdownToLatex:
 
         linha = re.sub(r'`([^`]+)`', repl_code, linha)
 
-        # 3. Citações estilo Pandoc: [@Chave, p. 12] -> \cite[p.~12]{Chave}
+        # 3. Citações estilo Pandoc: [@Chave, p. 12] -> \cite[p.~12]{Chave} ou [@Chave1; @Chave2] -> \cite{Chave1,Chave2}
         cite_tokens = []
         def repl_cite(match):
             corpo = match.group(1).strip()
             if ';' in corpo:
-                itens = [c.strip().lstrip('@') for c in corpo.split(';')]
-                res = f"\\cite{{{', '.join(itens)}}}"
+                itens = [c.strip().lstrip('@').strip() for c in corpo.split(';') if c.strip()]
+                chaves = [c.split(',')[0].strip().lstrip('@') for c in itens]
+                res = f"\\cite{{{','.join(chaves)}}}"
             elif ',' in corpo:
                 partes = corpo.split(',', 1)
                 chave = partes[0].strip().lstrip('@')
@@ -168,7 +287,7 @@ class MarkdownToLatex:
             cite_tokens.append(res)
             return f"@@CITE_{len(cite_tokens)-1}@@"
 
-        linha = re.sub(r'\[(@[a-zA-Z0-9_\-:\.,\s;]+)\]', repl_cite, linha)
+        linha = re.sub(r'\[(@[a-zA-Z0-9_\-:\.,\s;@]+)\]', repl_cite, linha)
 
         # 4. Citação no fluxo do texto: @Chave -> \citeonline{Chave}
         def repl_citeonline(match):
@@ -402,14 +521,18 @@ class MarkdownToLatex:
                     tabela_linhas.append(linhas[i].strip())
                     i += 1
 
-                # Verifica se a linha seguinte é fonte
+                # Verifica se a linha seguinte é fonte (pulando eventuais linhas em branco)
                 fonte_tab = "Dados da pesquisa (2026)."
-                if i < total_linhas:
-                    prox = linhas[i].strip()
+                idx_f = i
+                while idx_f < total_linhas and not linhas[idx_f].strip():
+                    idx_f += 1
+
+                if idx_f < total_linhas:
+                    prox = linhas[idx_f].strip()
                     m_tab_fonte = re.match(r'^\*?Fonte:\s*(.*?)\*?$', prox, re.IGNORECASE)
                     if m_tab_fonte:
                         fonte_tab = m_tab_fonte.group(1).rstrip('*').strip()
-                        i += 1
+                        i = idx_f + 1
 
                 self.table_counter += 1
                 tab_latex = self._converter_tabela(tabela_linhas, f"Tabela descritiva {self.table_counter}", f"tab:tabela_{self.table_counter}", fonte_tab)
@@ -677,6 +800,7 @@ def gerar_latex_mestre(metadata, capitulos_tex, apendices_tex, anexos_tex):
 
     titulo = esc_meta(metadata.get("titulo", "Título do Trabalho"))
     subtitulo = esc_meta(metadata.get("subtitulo", ""))
+    subtitulo = subtitulo.replace("RAG e", r"RAG\ e")
     autor = esc_meta(metadata.get("autor", "Nome do Autor"))
     instituicao = esc_meta(metadata.get("instituicao", "Universidade Federal da Bahia"))
     faculdade = esc_meta(metadata.get("faculdade", "Instituto de Computação"))
@@ -690,13 +814,23 @@ def gerar_latex_mestre(metadata, capitulos_tex, apendices_tex, anexos_tex):
 
     # Orientador(a)
     orientador = metadata.get("orientador", {})
+    if isinstance(orientador, str):
+        orientador = {"nome": orientador}
+    elif not isinstance(orientador, dict):
+        orientador = {}
     nome_orientador = esc_meta(orientador.get("nome", "Prof. Dr. Orientador"))
-    genero_orientador = orientador.get("genero", "M").upper()
+    genero_orientador = orientador.get("genero", "M")
+    genero_orientador = genero_orientador.upper() if isinstance(genero_orientador, str) else "M"
 
     # Coorientador(a)
     coorientador = metadata.get("coorientador", {})
+    if isinstance(coorientador, str):
+        coorientador = {"nome": coorientador}
+    elif not isinstance(coorientador, dict):
+        coorientador = {}
     nome_coorientador = esc_meta(coorientador.get("nome", ""))
-    genero_coorientador = coorientador.get("genero", "M").upper()
+    genero_coorientador = coorientador.get("genero", "M")
+    genero_coorientador = genero_coorientador.upper() if isinstance(genero_coorientador, str) else "M"
 
     # Preâmbulo padrão
     preambulo = metadata.get("preambulo_customizado", "")
@@ -707,13 +841,57 @@ def gerar_latex_mestre(metadata, capitulos_tex, apendices_tex, anexos_tex):
         )
     preambulo = esc_meta(preambulo)
 
-    # Referência própria para cabeçalho do Resumo (exigência EDUFBA p. 56)
+    # Referência própria para cabeçalho do Resumo (exigência EDUFBA p. 56 e 64-65)
     ref_autor = formatar_nome_referencia(autor)
+    ref_autor_ponto = ref_autor if ref_autor.endswith('.') else f"{ref_autor}."
     subtitulo_ref = f": {subtitulo}" if subtitulo else ""
     ref_trabalho = (
-        f"{ref_autor}. \\textbf{{{titulo}{subtitulo_ref}}}. {ano}. "
+        f"{ref_autor_ponto} \\textbf{{{titulo}{subtitulo_ref}}}. {ano}. "
         f"\\pageref{{LastPage}} f. {tipotrabalho} ({grau}) -- {faculdade}, "
         f"{instituicao}, {cidade}, {ano}."
+    )
+
+    # Mapeamentos para referência em inglês do Abstract (EDUFBA p. 64-65)
+    trad_grau = {
+        "Bacharel em Sistemas de Informação": "Bachelor in Information Systems",
+        "Bacharel em Ciência da Computação": "Bachelor in Computer Science",
+        "Bacharel em Engenharia de Computação": "Bachelor in Computer Engineering",
+        "Bacharelado em Sistemas de Informação": "Bachelor in Information Systems",
+        "Bacharelado em Ciência da Computação": "Bachelor in Computer Science",
+        "Bacharelado em Engenharia de Computação": "Bachelor in Computer Engineering",
+    }
+    trad_inst = {
+        "Universidade Federal da Bahia": "Federal University of Bahia",
+    }
+    trad_fac = {
+        "Instituto de Computação": "Institute of Computing",
+        "Escola Politécnica": "Polytechnic School",
+        "Faculdade de Farmácia": "Faculty of Pharmacy",
+        "Faculdade de Medicina": "Faculty of Medicine",
+        "Faculdade de Direito": "Faculty of Law",
+    }
+    grau_raw = str(metadata.get("grau", "Bacharel em Sistemas de Informação")).strip()
+    faculdade_raw = str(metadata.get("faculdade", "Instituto de Computação")).strip()
+    instituicao_raw = str(metadata.get("instituicao", "Universidade Federal da Bahia")).strip()
+
+    grau_en = esc_meta(metadata.get("grau_en") or trad_grau.get(grau_raw, grau_raw.replace("Bacharel em", "Bachelor in").replace("Bacharelado em", "Bachelor in")))
+    faculdade_en = esc_meta(metadata.get("faculdade_en") or trad_fac.get(faculdade_raw, faculdade_raw.replace("Instituto de", "Institute of").replace("Faculdade de", "Faculty of")))
+    instituicao_en = esc_meta(metadata.get("instituicao_en") or trad_inst.get(instituicao_raw, "Federal University of Bahia" if "Bahia" in instituicao_raw else instituicao_raw))
+    tipo_en = esc_meta(metadata.get("tipotrabalho_en", "Final Graduation Project"))
+
+    titulo_en = esc_meta(metadata.get("titulo_en", ""))
+    subtitulo_en = esc_meta(metadata.get("subtitulo_en", ""))
+    if subtitulo_en:
+        subtitulo_en = subtitulo_en.replace("RAG e", r"RAG\ e").replace("RAG and", r"RAG\ and")
+    if not titulo_en:
+        titulo_en = titulo
+        subtitulo_en = subtitulo
+
+    subtitulo_ref_en = f": {subtitulo_en}" if subtitulo_en else ""
+    ref_trabalho_en = (
+        f"{ref_autor_ponto} \\textbf{{{titulo_en}{subtitulo_ref_en}}}. {ano}. "
+        f"\\pageref{{LastPage}} p. {tipo_en} ({grau_en}) -- {faculdade_en}, "
+        f"{instituicao_en}, {cidade}, {ano}."
     )
 
     # Início do documento
@@ -746,13 +924,17 @@ def gerar_latex_mestre(metadata, capitulos_tex, apendices_tex, anexos_tex):
 \usepackage{tabularx}
 \usepackage{booktabs}
 \usepackage{xltabular}
+\keepXColumns
 \usepackage{xurl}
 \usepackage{hyperref}
+\pdfstringdefDisableCommands{%
+  \def\uppercase#1{#1}%
+  \def\MakeUppercase#1{#1}%
+}
 
 % --- DESATIVAÇÃO DE CARACTERES ATIVOS DO BABEL (Evita erros de aspas em títulos/textos) ---
 \AtBeginDocument{%
   \addto\extrasbrazilian{\shorthandoff{"}}%
-  \addto\extrasbrazil{\shorthandoff{"}}%
   \addto\extrasportuges{\shorthandoff{"}}%
   \shorthandoff{"}%
 }
@@ -856,11 +1038,15 @@ def gerar_latex_mestre(metadata, capitulos_tex, apendices_tex, anexos_tex):
 
     # Ficha catalográfica
     ficha = metadata.get("ficha_catalografica", {})
+    if not isinstance(ficha, dict):
+        ficha = {}
     if ficha.get("inserir", False) and os.path.exists(ficha.get("arquivo", "ficha.pdf")):
         tex.append("% Ficha Catalográfica (SIBI/UFBA)\n\\includepdf{" + ficha.get("arquivo", "ficha.pdf") + "}\n")
 
     # Folha de aprovação
     aprov = metadata.get("folha_aprovacao", {})
+    if not isinstance(aprov, dict):
+        aprov = {}
     if aprov.get("inserir", True):
         data_aprov = esc_meta(aprov.get("data_aprovacao", f"xx de mês de {ano}"))
         tex.append(r"""
@@ -869,7 +1055,8 @@ def gerar_latex_mestre(metadata, capitulos_tex, apendices_tex, anexos_tex):
   \begin{center}
     {\fontsize{14}{16}\selectfont\bfseries\MakeUppercase{\imprimirautor}\par}
     \vspace{1.5cm}
-    {\fontsize{16}{18}\selectfont\bfseries\MakeUppercase{\imprimirtitulo}\par}
+    {\fontsize{16}{18}\selectfont\bfseries\MakeUppercase{\imprimirtitulo}%
+    \ifx\imprimirsubtitulo\empty\else{: \fontsize{14}{16}\selectfont\MakeUppercase{\imprimirsubtitulo}}\fi\par}
   \end{center}
   \vspace{1cm}
   \begin{flushright}
@@ -886,9 +1073,11 @@ def gerar_latex_mestre(metadata, capitulos_tex, apendices_tex, anexos_tex):
   \end{center}
 """)
         banca = aprov.get("banca", [])
-        if not banca:
+        if not isinstance(banca, list) or not banca:
             banca = [{"nome": nome_orientador, "papel": "Orientador", "instituicao": instituicao}]
         for membro in banca:
+            if not isinstance(membro, dict):
+                membro = {"nome": str(membro)}
             m_nome = esc_meta(membro.get("nome", ""))
             m_papel = esc_meta(membro.get("papel", "Examinador"))
             m_inst = esc_meta(membro.get("instituicao", instituicao))
@@ -896,7 +1085,7 @@ def gerar_latex_mestre(metadata, capitulos_tex, apendices_tex, anexos_tex):
         tex.append(r"\end{folhadeaprovacao}" + "\n")
 
     # Dedicatória
-    dedicatoria = metadata.get("dedicatoria", "").strip()
+    dedicatoria = str(metadata.get("dedicatoria") or "").strip()
     if dedicatoria:
         dedicatoria_tex = esc_meta(dedicatoria).replace('\n', '\\\\\n')
         tex.append(r"""
@@ -911,7 +1100,7 @@ def gerar_latex_mestre(metadata, capitulos_tex, apendices_tex, anexos_tex):
 """)
 
     # Agradecimentos
-    agradecimentos = metadata.get("agradecimentos", "").strip()
+    agradecimentos = str(metadata.get("agradecimentos") or "").strip()
     if agradecimentos:
         agradecimentos_tex = esc_meta(agradecimentos)
         tex.append(r"""
@@ -923,9 +1112,11 @@ def gerar_latex_mestre(metadata, capitulos_tex, apendices_tex, anexos_tex):
 
     # Epígrafe
     epigrafe = metadata.get("epigrafe", {})
+    if not isinstance(epigrafe, dict):
+        epigrafe = {}
     if epigrafe and epigrafe.get("texto"):
-        ep_texto = esc_meta(epigrafe.get("texto", "").strip()).replace('\n', '\\\\\n    ')
-        ep_autor = esc_meta(epigrafe.get("autor", "").strip())
+        ep_texto = esc_meta(str(epigrafe.get("texto") or "").strip()).replace('\n', '\\\\\n    ')
+        ep_autor = esc_meta(str(epigrafe.get("autor") or "").strip())
         tex.append(r"""
 % --- EPÍGRAFE (Manual EDUFBA p. 55 / ABNT NBR 14724) ---
 \begin{epigrafe}
@@ -941,17 +1132,23 @@ def gerar_latex_mestre(metadata, capitulos_tex, apendices_tex, anexos_tex):
 """)
 
     # Resumo em Português
-    resumo = metadata.get("resumo", "").strip()
+    resumo = str(metadata.get("resumo") or "").strip()
     palavras_chave = metadata.get("palavras_chave", [])
+    if not isinstance(palavras_chave, list):
+        palavras_chave = [str(palavras_chave)] if palavras_chave else []
     if resumo:
         resumo_tex = esc_meta(resumo)
         kw_str = ". ".join([esc_meta(k) for k in palavras_chave]) + "." if palavras_chave else ""
         tex.append(r"""
-% --- RESUMO (Manual EDUFBA p. 56 e 64: antecedido da referência do trabalho) ---
-\setlength{\absparsep}{0pt}
+% --- RESUMO (Manual EDUFBA p. 56 e 64-65: referência no topo, antes do título) ---
 \begin{resumo}
   \SingleSpacing
   \noindent """ + ref_trabalho + r"""
+
+  \vspace{1.0cm}
+  \begin{center}
+    {\ABNTEXchapterfontsize\bfseries\MakeUppercase{\resumoname}}
+  \end{center}
   \vspace{0.6cm}
 
   \noindent """ + resumo_tex + r"""
@@ -962,21 +1159,23 @@ def gerar_latex_mestre(metadata, capitulos_tex, apendices_tex, anexos_tex):
 """)
 
     # Abstract em Inglês
-    abstract = metadata.get("abstract", "").strip()
+    abstract = str(metadata.get("abstract") or "").strip()
     keywords = metadata.get("keywords", [])
+    if not isinstance(keywords, list):
+        keywords = [str(keywords)] if keywords else []
     if abstract:
         abstract_tex = esc_meta(abstract)
         kw_en_str = ". ".join([esc_meta(k) for k in keywords]) + "." if keywords else ""
-        ref_trabalho_en = (
-            f"{ref_autor}. \\textbf{{{titulo}{subtitulo_ref}}}. {ano}. "
-            f"\\pageref{{LastPage}} p. Final Graduation Project ({grau}) -- {faculdade}, "
-            f"{instituicao}, {cidade}, {ano}."
-        )
         tex.append(r"""
-% --- ABSTRACT ---
+% --- ABSTRACT (Manual EDUFBA p. 56 e 64-65: referência em inglês no topo) ---
 \begin{resumo}[Abstract]
   \SingleSpacing
   \noindent """ + ref_trabalho_en + r"""
+
+  \vspace{1.0cm}
+  \begin{center}
+    {\ABNTEXchapterfontsize\bfseries\MakeUppercase{Abstract}}
+  \end{center}
   \vspace{0.6cm}
 
   \noindent """ + abstract_tex + r"""
@@ -992,6 +1191,8 @@ def gerar_latex_mestre(metadata, capitulos_tex, apendices_tex, anexos_tex):
 
     # Listas
     listas = metadata.get("listas", {})
+    if not isinstance(listas, dict):
+        listas = {}
     if listas.get("figuras", True):
         tex.append(r"""
 \pdfbookmark[0]{\listfigurename}{lof}
@@ -1007,6 +1208,8 @@ def gerar_latex_mestre(metadata, capitulos_tex, apendices_tex, anexos_tex):
 
     # Siglas
     siglas = metadata.get("siglas", {})
+    if not isinstance(siglas, dict):
+        siglas = {}
     if listas.get("siglas", True) and siglas:
         tex.append(r"""
 % --- LISTA DE ABREVIATURAS E SIGLAS ---
