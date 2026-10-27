@@ -6,6 +6,7 @@
 \ProvidesPackage{UFBA}[2026/10/22 v2.0 Customizacao abnTeX2 para UFBA]
 
 \RequirePackage{graphicx}
+\RequirePackage{placeins}
 
 % ---
 % DADOS INSTITUCIONAIS E ACADÊMICOS
@@ -197,18 +198,46 @@
 \makeoddfoot{ufbapagestyle}{}{}{}
 
 % ---
-% FORMATAÇÃO DE TÍTULOS DE SEÇÕES (Manual EDUFBA 6ª ed., p. 89-90)
+% FORMATAÇÃO DE TÍTULOS DE SEÇÕES NO TEXTO (Manual EDUFBA 6ª ed., p. 89-90)
 % Seção Primária: Maiúsculas, Negrito
-% Seção Secundária: Maiúsculas, Redondo (Normal)
+% Seção Secundária: Maiúsculas, Redondo (Sem Negrito)
 % Seção Terciária: Minúsculas com inicial maiúscula, Negrito
-% Seção Quaternária: Minúsculas com inicial maiúscula, Redondo
+% Seção Quaternária: Minúsculas com inicial maiúscula, Redondo (Sem Negrito)
 % Seção Quinária: Minúsculas com inicial maiúscula, Itálico
 % ---
+\renewcommand{\ABNTEXchapterfont}{\bfseries}
+\renewcommand{\ABNTEXsectionfont}{\normalfont\mdseries}
+\renewcommand{\ABNTEXsubsectionfont}{\bfseries}
+\renewcommand{\ABNTEXsubsubsectionfont}{\normalfont\mdseries}
+\renewcommand{\ABNTEXsubsubsubsectionfont}{\itshape}
+
 \renewcommand{\ABNTEXchapterfontsize}{\fontsize{12}{14}\selectfont\bfseries}
-\renewcommand{\ABNTEXsectionfontsize}{\fontsize{12}{14}\selectfont\normalfont}
+\renewcommand{\ABNTEXsectionfontsize}{\fontsize{12}{14}\selectfont\normalfont\mdseries}
 \renewcommand{\ABNTEXsubsectionfontsize}{\fontsize{12}{14}\selectfont\bfseries}
-\renewcommand{\ABNTEXsubsubsectionfontsize}{\fontsize{12}{14}\selectfont\normalfont}
+\renewcommand{\ABNTEXsubsubsectionfontsize}{\fontsize{12}{14}\selectfont\normalfont\mdseries}
 \renewcommand{\ABNTEXsubsubsubsectionfontsize}{\fontsize{12}{14}\selectfont\itshape}
+
+% ---
+% FORMATAÇÃO DE TÍTULOS NO SUMÁRIO (Manual EDUFBA 6ª ed., p. 69 e 89)
+% Nível 1 (\chapter): CAIXA ALTA e Negrito
+% Nível 2 (\section): CAIXA ALTA e Sem Negrito
+% Nível 3 (\subsection): Title Case e Com Negrito
+% Nível 4 (\subsubsection): Title Case e Sem Negrito
+% ---
+\renewcommand{\cftchapterfont}{\bfseries}
+\renewcommand{\cftchapterpagefont}{\cftchapterfont}
+
+\renewcommand{\cftsectionfont}{\normalfont\mdseries}
+\renewcommand{\cftsectionpagefont}{\cftsectionfont}
+
+\renewcommand{\cftsubsectionfont}{\bfseries}
+\renewcommand{\cftsubsectionpagefont}{\cftsubsectionfont}
+
+\renewcommand{\cftsubsubsectionfont}{\normalfont\mdseries}
+\renewcommand{\cftsubsubsectionpagefont}{\cftsubsubsectionfont}
+
+\renewcommand{\cftparagraphfont}{\normalfont\mdseries}
+\renewcommand{\cftparagraphpagefont}{\cftparagraphfont}
 
 % ---
 % TÍTULO DAS REFERÊNCIAS (Manual EDUFBA 6ª ed., p. 77 / ABNT NBR 6023)

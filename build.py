@@ -168,6 +168,8 @@ def formatar_nome_referencia(nome_completo):
     """
     if not nome_completo:
         return "AUTOR, A."
+    if "Wellington Miguel de Jesus Silva" in nome_completo:
+        return "SILVA, W. M. de J."
     partes = nome_completo.strip().split()
     if len(partes) == 1:
         return partes[0].upper()
@@ -246,16 +248,33 @@ class MarkdownToLatex:
         math_tokens = []
         def salvar_math(match):
             math_tokens.append(match.group(0))
-            return f"@@MATH_{len(math_tokens)-1}@@"
+            return f"@@MATHTOKEN{len(math_tokens)-1}@@"
 
         linha = re.sub(r'\$.*?\$', salvar_math, linha)
+
+        # Tokens de comandos/links sem underscore para evitar interferência com o parser de itálico
+        cmd_tokens = []
+        def salvar_cmd(s):
+            cmd_tokens.append(s)
+            return f"@@CMDTOKEN{len(cmd_tokens)-1}@@"
+
+        # 1.5. Garante que qualquer ocorrência de |%| fora de crases seja tratada como código inline
+        linha = re.sub(r'(?<![`\w])\\?\|%\\?\|(?![`\w])', r'`|%|`', linha)
 
         # 2. Inline code: `codigo` -> \texttt{codigo}
         code_tokens = []
         def repl_code(match):
             c = match.group(1)
+            if c == 'build_vector_db.py':
+                code_tokens.append(r"\mbox{\texttt{build\_vector\_db.py}}")
+                return f"@@CODETOKEN{len(code_tokens)-1}@@"
+
+            c = c.replace(r'\|', '|')
             c = c.replace('\\', r'@@BACKSLASH@@')
             c = c.replace('{', r'\{').replace('}', r'\}')
+            # Substitui duas aspas simples seguidas por '{}' para que não virem aspas duplas (ligadura LaTeX)
+            c = c.replace("''", "'{}'")
+            c = c.replace('|', r'\textbar{}')
             c = c.replace('%', r'\%').replace('&', r'\&').replace('#', r'\#')
             c = c.replace('^', r'\textasciicircum{}').replace('~', r'\textasciitilde{}')
             c = c.replace('$', r'\$')
@@ -265,7 +284,7 @@ class MarkdownToLatex:
             c = re.sub(r'(?<=[a-zA-Z0-9])\.(?=[a-zA-Z0-9])', r'.\\allowbreak ', c)
             c = re.sub(r'(?<=[a-zA-Z0-9])/(?=[a-zA-Z0-9])', r'/\\allowbreak ', c)
             code_tokens.append(f"\\texttt{{{c}}}")
-            return f"@@CODE_{len(code_tokens)-1}@@"
+            return f"@@CODETOKEN{len(code_tokens)-1}@@"
 
         linha = re.sub(r'`([^`]+)`', repl_code, linha)
 
@@ -285,7 +304,7 @@ class MarkdownToLatex:
             else:
                 res = f"\\cite{{{corpo.lstrip('@')}}}"
             cite_tokens.append(res)
-            return f"@@CITE_{len(cite_tokens)-1}@@"
+            return f"@@CITETOKEN{len(cite_tokens)-1}@@"
 
         linha = re.sub(r'\[(@[a-zA-Z0-9_\-:\.,\s;@]+)\]', repl_cite, linha)
 
@@ -293,16 +312,11 @@ class MarkdownToLatex:
         def repl_citeonline(match):
             chave = match.group(1)
             cite_tokens.append(f"\\citeonline{{{chave}}}")
-            return f"@@CITE_{len(cite_tokens)-1}@@"
+            return f"@@CITETOKEN{len(cite_tokens)-1}@@"
 
         linha = re.sub(r'(?<![\\@\w])@([a-zA-Z0-9_\-:]+)', repl_citeonline, linha)
 
         # 5. Links Markdown
-        cmd_tokens = []
-        def salvar_cmd(s):
-            cmd_tokens.append(s)
-            return f"@@CMD_{len(cmd_tokens)-1}@@"
-
         linha = re.sub(r'\[([^\]]+)\]\(#(sec:[^\)]+)\)', lambda m: salvar_cmd(f"\\autoref{{{m.group(2)}}}"), linha)
         linha = re.sub(r'\[([^\]]+)\]\(#(fig:[^\)]+)\)', lambda m: salvar_cmd(f"\\autoref{{{m.group(2)}}}"), linha)
         linha = re.sub(r'\[([^\]]+)\]\(#(tab:[^\)]+)\)', lambda m: salvar_cmd(f"\\autoref{{{m.group(2)}}}"), linha)
@@ -326,13 +340,13 @@ class MarkdownToLatex:
 
         # 8. Restauração dos tokens protegidos
         for idx, t in enumerate(cmd_tokens):
-            linha = linha.replace(f"@@CMD_{idx}@@", t)
+            linha = linha.replace(f"@@CMDTOKEN{idx}@@", t)
         for idx, t in enumerate(cite_tokens):
-            linha = linha.replace(f"@@CITE_{idx}@@", t)
+            linha = linha.replace(f"@@CITETOKEN{idx}@@", t)
         for idx, t in enumerate(code_tokens):
-            linha = linha.replace(f"@@CODE_{idx}@@", t)
+            linha = linha.replace(f"@@CODETOKEN{idx}@@", t)
         for idx, t in enumerate(math_tokens):
-            linha = linha.replace(f"@@MATH_{idx}@@", t)
+            linha = linha.replace(f"@@MATHTOKEN{idx}@@", t)
 
         return linha
 
@@ -421,6 +435,8 @@ class MarkdownToLatex:
 
                 # Remove numeração manual do título se fornecida pela LLM
                 titulo_limpo = re.sub(r'^\d+(\.\d+)*\.?\s*', '', titulo).strip()
+                if nivel == 2:
+                    titulo_limpo = titulo_limpo.upper()
                 slug = gerar_slug(titulo_limpo)
                 titulo_tex = self.converter_formatacao_inline(titulo_limpo)
                 titulo_tex = re.sub(r'"([^"\n]+)"', r"``\1''", titulo_tex).replace('"', "''")
@@ -428,9 +444,9 @@ class MarkdownToLatex:
                 if nivel == 1:
                     latex_saida.append(f"\\chapter{{{titulo_tex}}}\\label{{sec:{slug}}}\n")
                 elif nivel == 2:
-                    latex_saida.append(f"\\section{{{titulo_tex}}}\\label{{sec:{slug}}}\n")
+                    latex_saida.append(f"\\FloatBarrier\n\\section{{{titulo_tex}}}\\label{{sec:{slug}}}\n")
                 elif nivel == 3:
-                    latex_saida.append(f"\\subsection{{{titulo_tex}}}\\label{{sec:{slug}}}\n")
+                    latex_saida.append(f"\\FloatBarrier\n\\subsection{{{titulo_tex}}}\\label{{sec:{slug}}}\n")
                 elif nivel == 4:
                     latex_saida.append(f"\\subsubsection{{{titulo_tex}}}\\label{{sec:{slug}}}\n")
                 else:
@@ -509,7 +525,7 @@ class MarkdownToLatex:
                 latex_saida.append(f"    \\includegraphics[width={largura}\\textwidth]{{{caminho}}}")
                 latex_saida.append("  \\end{center}")
                 latex_saida.append(f"  \\legend{{Fonte: {fonte_tex}}}")
-                latex_saida.append("\\end{figure}\n")
+                latex_saida.append("\\end{figure}\n\\FloatBarrier\n")
                 i += 1
                 continue
 
@@ -559,8 +575,10 @@ class MarkdownToLatex:
                 i += 1
                 continue
 
-            # --- 11. Parágrafo comum ---
+            # --- 11. Parágrafo comum e Alíneas a), b), c) (Manual EDUFBA p. 86) ---
             linha_formatada = self.converter_formatacao_inline(linha)
+            if re.match(r'^[a-z]\)\s+', linha):
+                linha_formatada = r"\par\indent " + linha_formatada
             latex_saida.append(linha_formatada)
             i += 1
 
@@ -583,8 +601,20 @@ class MarkdownToLatex:
 
         def parse_row(linha_str):
             s = linha_str.strip().strip('|')
-            s = s.replace(r'\|', '@@ESCAPED_PIPE@@')
-            cols = [c.strip().replace('@@ESCAPED_PIPE@@', '|') for c in s.split('|')]
+            # Protege códigos inline que contenham | para não partir colunas da tabela
+            code_in_row = []
+            def hide_code_in_table(m):
+                code_in_row.append(m.group(0))
+                return f"@@TABLECODE{len(code_in_row)-1}@@"
+            s = re.sub(r'`[^`]+`', hide_code_in_table, s)
+            s = s.replace(r'\|', '@@ESCAPEDPIPE@@')
+            cols = []
+            for c in s.split('|'):
+                col_txt = c.strip()
+                for idx, t in enumerate(code_in_row):
+                    col_txt = col_txt.replace(f"@@TABLECODE{idx}@@", t)
+                col_txt = col_txt.replace('@@ESCAPEDPIPE@@', r'\textbar{}')
+                cols.append(col_txt)
             return cols
 
         # Cabeçalho
@@ -768,7 +798,7 @@ class MarkdownToLatex:
                 row_tex = " & ".join([self.converter_formatacao_inline(c) for c in row])
                 latex.append(f"  {row_tex} \\\\ \\hline")
             latex.append("\\end{xltabular}")
-            latex.append(f"\\vspace{{-0.2cm}}\\noindent{{\\footnotesize\\textit{{Fonte: {self.converter_formatacao_inline(fonte)}}}}}\\par\\vspace{{0.4cm}}\n}}")
+            latex.append(f"\\vspace{{-0.2cm}}\\noindent{{\\footnotesize\\textit{{Fonte: {self.converter_formatacao_inline(fonte)}}}}}\\par\\vspace{{0.4cm}}\n}}\n\\FloatBarrier\n")
             return "\n".join(latex)
 
         latex = []
@@ -786,7 +816,7 @@ class MarkdownToLatex:
             latex.append(f"    {row_tex} \\\\ \\hline")
         latex.append("  \\end{tabularx}")
         latex.append(f"  \\legend{{Fonte: {self.converter_formatacao_inline(fonte)}}}")
-        latex.append("\\end{table}\n")
+        latex.append("\\end{table}\n\\FloatBarrier\n")
         return "\n".join(latex)
 
 
@@ -800,7 +830,7 @@ def gerar_latex_mestre(metadata, capitulos_tex, apendices_tex, anexos_tex):
 
     titulo = esc_meta(metadata.get("titulo", "Título do Trabalho"))
     subtitulo = esc_meta(metadata.get("subtitulo", ""))
-    subtitulo = subtitulo.replace("RAG e", r"RAG\ e")
+    subtitulo = re.sub(r'RAG\s+e\b', r'RAG\\space e', subtitulo, flags=re.IGNORECASE)
     autor = esc_meta(metadata.get("autor", "Nome do Autor"))
     instituicao = esc_meta(metadata.get("instituicao", "Universidade Federal da Bahia"))
     faculdade = esc_meta(metadata.get("faculdade", "Instituto de Computação"))
@@ -842,7 +872,13 @@ def gerar_latex_mestre(metadata, capitulos_tex, apendices_tex, anexos_tex):
     preambulo = esc_meta(preambulo)
 
     # Referência própria para cabeçalho do Resumo (exigência EDUFBA p. 56 e 64-65)
-    ref_autor = formatar_nome_referencia(autor)
+    ref_autor_custom = metadata.get("autor_referencia") or metadata.get("autor_citacao")
+    if ref_autor_custom:
+        ref_autor = esc_meta(str(ref_autor_custom).strip())
+        if "SILVA, W. M. de J. S." in ref_autor:
+            ref_autor = "SILVA, W. M. de J."
+    else:
+        ref_autor = formatar_nome_referencia(autor)
     ref_autor_ponto = ref_autor if ref_autor.endswith('.') else f"{ref_autor}."
     subtitulo_ref = f": {subtitulo}" if subtitulo else ""
     ref_trabalho = (
@@ -879,13 +915,11 @@ def gerar_latex_mestre(metadata, capitulos_tex, apendices_tex, anexos_tex):
     instituicao_en = esc_meta(metadata.get("instituicao_en") or trad_inst.get(instituicao_raw, "Federal University of Bahia" if "Bahia" in instituicao_raw else instituicao_raw))
     tipo_en = esc_meta(metadata.get("tipotrabalho_en", "Final Graduation Project"))
 
-    titulo_en = esc_meta(metadata.get("titulo_en", ""))
-    subtitulo_en = esc_meta(metadata.get("subtitulo_en", ""))
+    titulo_en = esc_meta(metadata.get("titulo_en", "") or "Sociotechnical Observability Assistant")
+    subtitulo_en = esc_meta(metadata.get("subtitulo_en", "") or "support for diagnosing corpora import in CorText Manager with RAG and Log Analysis")
     if subtitulo_en:
-        subtitulo_en = subtitulo_en.replace("RAG e", r"RAG\ e").replace("RAG and", r"RAG\ and")
-    if not titulo_en:
-        titulo_en = titulo
-        subtitulo_en = subtitulo
+        subtitulo_en = re.sub(r'RAG\s+and\b', r'RAG\\space and', subtitulo_en, flags=re.IGNORECASE)
+        subtitulo_en = re.sub(r'RAG\s+e\b', r'RAG\\space e', subtitulo_en, flags=re.IGNORECASE)
 
     subtitulo_ref_en = f": {subtitulo_en}" if subtitulo_en else ""
     ref_trabalho_en = (
@@ -916,6 +950,7 @@ def gerar_latex_mestre(metadata, capitulos_tex, apendices_tex, anexos_tex):
 \usepackage{color}
 \usepackage{graphicx}
 \usepackage{float}
+\usepackage{placeins}
 % \usepackage{microtype} % Desativado para compilação ultrarrápida no Overleaf (ative se desejar na versão final)
 \usepackage{amsmath}
 \usepackage{amssymb}

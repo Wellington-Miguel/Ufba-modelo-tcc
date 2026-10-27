@@ -18,6 +18,7 @@
 \usepackage{color}
 \usepackage{graphicx}
 \usepackage{float}
+\usepackage{placeins}
 % \usepackage{microtype} % Desativado para compilação ultrarrápida no Overleaf (ative se desejar na versão final)
 \usepackage{amsmath}
 \usepackage{amssymb}
@@ -85,7 +86,7 @@
 % --- DADOS INSTITUCIONAIS ---
 
 \titulo{Assistente de Observabilidade Sociotécnica}
-\subtitulo{Apoio ao diagnóstico da importação de corpora no CorText Manager com RAG\ e Análise de Logs}
+\subtitulo{Apoio ao diagnóstico da importação de corpora no CorText Manager com RAG\space e Análise de Logs}
 \autor{Wellington Miguel de Jesus Silva}
 \local{Salvador}
 \data{Outubro de 2026}
@@ -190,7 +191,7 @@
 % --- RESUMO (Manual EDUFBA p. 56 e 64-65: referência no topo, antes do título) ---
 \begin{resumo}
   \SingleSpacing
-  \noindent SILVA, W. M. de J. \textbf{Assistente de Observabilidade Sociotécnica: Apoio ao diagnóstico da importação de corpora no CorText Manager com RAG\ e Análise de Logs}. 2026. \pageref{LastPage} f. Trabalho de Conclusão de Curso (Bacharel em Sistemas de Informação) -- Instituto de Computação, Universidade Federal da Bahia, Salvador, 2026.
+  \noindent SILVA, W. M. de J. \textbf{Assistente de Observabilidade Sociotécnica: Apoio ao diagnóstico da importação de corpora no CorText Manager com RAG\space e Análise de Logs}. 2026. \pageref{LastPage} f. Trabalho de Conclusão de Curso (Bacharel em Sistemas de Informação) -- Instituto de Computação, Universidade Federal da Bahia, Salvador, 2026.
 
   \vspace{1.0cm}
   \begin{center}
@@ -208,7 +209,7 @@
 % --- ABSTRACT (Manual EDUFBA p. 56 e 64-65: referência em inglês no topo) ---
 \begin{resumo}[Abstract]
   \SingleSpacing
-  \noindent SILVA, W. M. de J. \textbf{Assistente de Observabilidade Sociotécnica: Apoio ao diagnóstico da importação de corpora no CorText Manager com RAG\ e Análise de Logs}. 2026. \pageref{LastPage} p. Final Graduation Project (Bachelor in Information Systems) -- Institute of Computing, Federal University of Bahia, Salvador, 2026.
+  \noindent SILVA, W. M. de J. \textbf{Sociotechnical Observability Assistant: support for diagnosing corpora import in CorText Manager with RAG\space and Log Analysis}. 2026. \pageref{LastPage} p. Final Graduation Project (Bachelor in Information Systems) -- Institute of Computing, Federal University of Bahia, Salvador, 2026.
 
   \vspace{1.0cm}
   \begin{center}
@@ -284,7 +285,8 @@
 \chapter{Introdução}\label{sec:introducao}
 
 
-\section{Contextualização}\label{sec:contextualizacao}
+\FloatBarrier
+\section{CONTEXTUALIZAÇÃO}\label{sec:contextualizacao}
 
 
 O CorText Manager é uma plataforma digital consolidada com mais de quinze anos de desenvolvimento, projetada para auxiliar pesquisadores das ciências sociais e humanidades na exploração empírica de corpora textuais complexos \cite{CorText2026}. Mantida por uma equipe multidisciplinar e atendendo a cerca de 1.190 usuários ativos distribuídos em 492 instituições de 70 países, somando mais de 45 mil computações e centenas de publicações científicas associadas desde 2016, a plataforma oferece um ecossistema robusto para o processamento, a análise espacial, o mapeamento de redes e a visualização de dados heterogêneos \cite{Abdo2021}.
@@ -293,7 +295,8 @@ Para sustentar esse volume massivo de requisições, a plataforma busca tratar a
 
 Embora o sistema ofereça flexibilidade operacional, permitindo, por exemplo, que a inferência de separadores tabulares seja parametrizada manualmente pelo usuário, a extrema diversidade estrutural das bases documentais científicas brutas torna o tratamento automatizado um desafio altamente complexo \cite{CorText2026}. Tais bases provêm de repositórios dinâmicos com esquemas variados, incluindo Web of Science (WOS), Scopus, PubMed, Factiva, arquivos no formato \textit{Research Information Systems} (RIS), planilhas tabulares de repositórios governamentais em \textit{Comma-Separated Values} (CSV) e extrações de mídias sociais em \textit{JavaScript Object Notation} (JSON) \cite{CorText2026}. Assim, mesmo com os esforços contínuos da ferramenta para acomodar múltiplos formatos e codificações textuais, a fase preliminar de preparação, ingestão e formatação de corpora frequentemente representa o principal obstáculo operacional, cognitivo e técnico para a fluidez do processo investigativo dos pesquisadores.
 
-\section{Motivação}\label{sec:motivacao}
+\FloatBarrier
+\section{MOTIVAÇÃO}\label{sec:motivacao}
 
 
 A motivação pessoal e técnica para a realização deste projeto decorre do interesse em aplicar conceitos avançados de Engenharia de Dados e Inteligência Artificial (IA), especificamente Modelos de Linguagem de Grande Escala (\textit{Large Language Models} ou LLMs) executados localmente via plataforma Ollama, na resolução de problemas reais de infraestrutura de dados. O trabalho permite articular o desenvolvimento técnico em linguagem Python e a manipulação de bancos de dados relacionais SQLite à criação de soluções de suporte ao usuário, deslocando o uso de IA de tarefas puramente preditivas ou de sumarização textual para o diagnóstico estruturado e a observabilidade de sistemas computacionais \cite{Majors2022,Lewis2020}.
@@ -304,7 +307,8 @@ Nesse contexto, a presente pesquisa propõe o desenvolvimento, a documentação 
 
 Diante desse cenário, o problema de pesquisa que norteia este Trabalho de Conclusão de Curso (TCC) é definido pela seguinte questão investigativa: como a integração de técnicas de Qualidade de Dados (\textit{Data Profiling} preventivo) e um modelo de Inteligência Artificial baseado em Recuperação Aumentada por Geração (RAG) pode mitigar a opacidade técnica das falhas na etapa de importação de dados (\textit{Data Parsing}) da plataforma CorText Manager, auxiliando pesquisadores das ciências sociais a diagnosticarem e estruturarem seus corpora de forma autônoma?
 
-\section{Estrutura do Trabalho}\label{sec:estrutura_do_trabalho}
+\FloatBarrier
+\section{ESTRUTURA DO TRABALHO}\label{sec:estrutura_do_trabalho}
 
 
 Além deste capítulo introdutório, este Trabalho de Conclusão de Curso está organizado em outros seis capítulos, estruturados de modo a articular a reflexão sociotécnica ao rigor metodológico da engenharia de sistemas de informação. O Capítulo 2 apresenta os objetivos geral e específicos da pesquisa, a justificativa acadêmica, empírica e social fundamentada no levantamento quantitativo do fórum oficial de suporte da plataforma, bem como as premissas, as hipóteses de investigação e a delimitação formal do escopo do projeto. O Capítulo 3 desenvolve a revisão bibliográfica de forma interdisciplinar, articulando os Estudos de Ciência e Tecnologia (\textit{Science and Technology Studies} ou STS) e as dimensões de Qualidade de Dados na fundamentação teórica, analisando os trabalhos relacionados e consolidando o estado da arte em Observabilidade de Sistemas e arquitetura RAG executada sob modelos de linguagem locais.
@@ -315,23 +319,26 @@ Na sequência, o Capítulo 4 descreve a metodologia da pesquisa, detalhando sua 
 \chapter{Objetivos}\label{sec:objetivos}
 
 
-\section{Objetivo Geral}\label{sec:objetivo_geral}
+\FloatBarrier
+\section{OBJETIVO GERAL}\label{sec:objetivo_geral}
 
 
 Desenvolver, documentar e avaliar um protótipo de Assistente de Observabilidade Sociotécnica focado na etapa de \textit{Data Parsing} da plataforma CorText Manager, integrando validação algorítmica preventiva de matrizes de dados (\textit{Data Profiling}) e um modelo de Recuperação Aumentada por Geração (RAG) para traduzir falhas técnicas e registros de erro (\textit{logs}) em diagnósticos metodologicamente compreensíveis.
 
-\section{Objetivos Específicos}\label{sec:objetivos_especificos}
+\FloatBarrier
+\section{OBJETIVOS ESPECÍFICOS}\label{sec:objetivos_especificos}
 
 
 Para alcançar o propósito geral estabelecido e responder à questão de pesquisa formulada, foram definidos cinco objetivos específicos sequenciais e verificáveis:
 
-a) caracterizar o problema de pesquisa mapeando quantitativa e qualitativamente as falhas mais recorrentes de importação de corpora, utilizando a extração automatizada das discussões do fórum oficial de suporte, a análise estática do script legado de \textit{Data Parsing} e interações com a comunidade de usuários;
-b) mapear, extrair (\textit{web scraping}) e vetorizar a base de conhecimento técnica presente no fórum histórico de dúvidas e na documentação oficial da plataforma (\textit{CorTexT Manager Comprehensive Documentation and User Guide}), armazenando-a em um Banco de Dados Vetorial operando localmente;
-c) construir um módulo determinístico de \textit{Data Profiling} em linguagem Python, capaz de auditar estruturalmente arquivos brutos (nos formatos CSV, RIS, JSON e texto plano) e bancos de dados SQLite para detectar preventivamente anomalias de codificação no padrão \textit{8-bit Unicode Transformation Format} (UTF-8), escassez de delimitadores e inconsistências estruturais;
-d) implementar e parametrizar um modelo de linguagem local (orquestrado via Ollama) integrado à arquitetura RAG para interpretar registros de erro (\textit{logs} e \textit{tracebacks}) e gerar diagnósticos acionáveis em linguagem natural;
-e) homologar e avaliar o protótipo por meio de técnicas de Engenharia do Caos, simulando o processamento de matrizes de dados corrompidas e falhas historicamente documentadas para mensurar a precisão dos diagnósticos gerados pelo sistema proposto.
+\par\indent a) caracterizar o problema de pesquisa mapeando quantitativa e qualitativamente as falhas mais recorrentes de importação de corpora, utilizando a extração automatizada das discussões do fórum oficial de suporte, a análise estática do script legado de \textit{Data Parsing} e interações com a comunidade de usuários;
+\par\indent b) mapear, extrair (\textit{web scraping}) e vetorizar a base de conhecimento técnica presente no fórum histórico de dúvidas e na documentação oficial da plataforma (\textit{CorTexT Manager Comprehensive Documentation and User Guide}), armazenando-a em um Banco de Dados Vetorial operando localmente;
+\par\indent c) construir um módulo determinístico de \textit{Data Profiling} em linguagem Python, capaz de auditar estruturalmente arquivos brutos (nos formatos CSV, RIS, JSON e texto plano) e bancos de dados SQLite para detectar preventivamente anomalias de codificação no padrão \textit{8-bit Unicode Transformation Format} (UTF-8), escassez de delimitadores e inconsistências estruturais;
+\par\indent d) implementar e parametrizar um modelo de linguagem local (orquestrado via Ollama) integrado à arquitetura RAG para interpretar registros de erro (\textit{logs} e \textit{tracebacks}) e gerar diagnósticos acionáveis em linguagem natural;
+\par\indent e) homologar e avaliar o protótipo por meio de técnicas de Engenharia do Caos, simulando o processamento de matrizes de dados corrompidas e falhas historicamente documentadas para mensurar a precisão dos diagnósticos gerados pelo sistema proposto.
 
-\section{Justificativa}\label{sec:justificativa}
+\FloatBarrier
+\section{JUSTIFICATIVA}\label{sec:justificativa}
 
 
 No âmbito acadêmico e profissional, a justificativa para a realização desta pesquisa apoia-se nas severas barreiras documentadas no fórum oficial de suporte da plataforma CorText Manager \cite{CorText2026}. Apesar do sucesso de adoção da ferramenta e de sua capacidade de processar volumetrias massivas, a etapa inicial de preparação, estruturação e importação de dados (\textit{Data Parsing}), essencial para a criação do banco de dados relacional SQLite, apresenta alta incidência de falhas acompanhadas por registros de erro opacos ou mensagens genéricas de sistema. Há relatos críticos e recorrentes de usuários que não conseguem processar arquivos textuais em codificação UTF-8, que esbarram em falhas sintáticas ao submeter bases bibliométricas no formato RIS provenientes da Scopus, ou que sofrem perdas silenciosas de dados, tais como tabelas de endereços ou redes inteiras que resultam vazias após a conclusão do processamento \cite{CorText2026}.
@@ -356,6 +363,7 @@ A análise da distribuição temática oficial demonstra que a categoria \textit
   \end{tabularx}
   \legend{Fonte: Elaborado pelo autor a partir dos dados auditados do fórum oficial (2026).}
 \end{table}
+\FloatBarrier
 
 
 \begin{figure}[htb]
@@ -366,6 +374,7 @@ A análise da distribuição temática oficial demonstra que a categoria \textit
   \end{center}
   \legend{Fonte: Elaborado pelo autor a partir dos dados auditados do fórum oficial (2026).}
 \end{figure}
+\FloatBarrier
 
 
 Os dados empíricos apresentados na Tabela 1 e na Figura 1 comprovam que dois terços de toda a demanda de suporte da comunidade estão vinculados à preparação e ingestão de dados. Adicionalmente, a auditoria revelou que 81,0\% dos chamados na categoria \textit{Data processing} (68 de 84 tópicos) exigiram intervenção manual direta da equipe técnica mantenedora, fenômeno caracterizado nesta pesquisa como \textit{Staff as Human Parser}. Essa dependência evidencia um expressivo gargalo operacional para contornar falhas de formatação em um ecossistema que acumula mais de 791 mil visualizações orgânicas \cite{CorText2026}.
@@ -380,6 +389,7 @@ Além do volume global de chamados, a análise longitudinal ao longo de doze ano
   \end{center}
   \legend{Fonte: Elaborado pelo autor a partir dos dados auditados do fórum oficial (2026).}
 \end{figure}
+\FloatBarrier
 
 
 Paralelamente, a análise do engajamento público reforça a criticidade do problema. Ao isolar os dez tópicos mais visualizados de toda a história do fórum CorText Manager, constata-se que 90\% das discussões com maior acesso orgânico da comunidade tratam direta ou indiretamente de falhas em \textit{Data Parsing} e interpretação de registros de erro, restando apenas um chamado referente à indisponibilidade temporária do painel web. A Tabela 2 apresenta o mapeamento consolidado dos dez tópicos de maior engajamento no fórum oficial.
@@ -394,7 +404,7 @@ Paralelamente, a análise do engajamento público reforça a criticidade do prob
     \hline
     \textbf{ID} & \textbf{Título da Discussão no Fórum Oficial} & \textbf{Visualizações} & \textbf{Categoria Oficial} & \textbf{Relação com \textit{Parsing}} & \textbf{Causa Raiz / Síntese do Atrito Reportado} \\ \hline
     \#292 & \textit{Cortext seems to be down. Dashboard is not loading.} & 4.208 & \textit{Something else} & Não Relacionado & Instabilidade temporária no servidor e falha de carregamento da interface do painel. \\ \hline
-    \#280 & \textit{Web of Science (WOS) Corpus | Expert query | SQL} & 3.033 & \textit{Data processing} & \textit{Parsing} Direto & Consultas complexas e erros de sintaxe SQL e filtros na importação de corpora WOS. \\ \hline
+    \#280 & \textit{Web of Science (WOS) Corpus \textbar{} Expert query \textbar{} SQL} & 3.033 & \textit{Data processing} & \textit{Parsing} Direto & Consultas complexas e erros de sintaxe SQL e filtros na importação de corpora WOS. \\ \hline
     \#269 & \textit{troubles parsing json files from ISTEX} & 2.984 & \textit{Data processing} & \textit{Parsing} Direto & Incompatibilidade na estrutura JSON aninhada exportada da plataforma ISTEX. \\ \hline
     \#267 & \textit{How to avoid error message when parsing a zip folder...} & 2.958 & \textit{Data processing} & \textit{Parsing} Direto & Estruturas de arquivos ZIP aninhadas ou com subpastas internas incompatíveis. \\ \hline
     \#247 & \textit{Problem with log files} & 2.625 & \textit{Something else} & \textit{Parsing} Indireto & Dificuldade de interpretação de erros em scripts e registros (\textit{logs}) de processamento. \\ \hline
@@ -406,11 +416,13 @@ Paralelamente, a análise do engajamento público reforça a criticidade do prob
   \end{tabularx}
   \legend{Fonte: Elaborado pelo autor a partir dos dados auditados do fórum oficial (2026).}
 \end{table}
+\FloatBarrier
 
 
 Sob a ótica da contribuição e da relevância social, o tema insere-se diretamente no empoderamento metodológico da comunidade de pesquisadores das ciências sociais e humanidades. Sob o enquadramento teórico dos Estudos de Ciência e Tecnologia (STS), notadamente a partir de \citeonline{Latour1987} e de \citeonline{Bowker1999}, uma falha técnica oculta na etapa de ingestão não representa um mero erro sintático de código, mas sim o apagamento silencioso de atores e inscrições concretas da rede da pesquisa \cite{Abdo2021}. Ao integrar métodos determinísticos de Qualidade de Dados \cite{Wang1996} e um modelo RAG \cite{Lewis2020} para atuar como tradutor técnico e pedagógico, a ferramenta proposta promove a abertura seletiva da ``caixa preta'' da infraestrutura de entrada, devolvendo a agência metodológica ao pesquisador sem interferir na interpretação sociológica dos dados.
 
-\section{Delimitação do Escopo}\label{sec:delimitacao_do_escopo}
+\FloatBarrier
+\section{DELIMITAÇÃO DO ESCOPO}\label{sec:delimitacao_do_escopo}
 
 
 O desenvolvimento metodológico deste estudo assume como verdadeiras três premissas fundamentais que guiam a viabilidade técnica da investigação. A primeira premissa estabelece que a etapa de importação de dados constitui, de fato, uma barreira frequente para usuários da plataforma, justificando a adoção de sistemas automatizados de apoio diagnóstico. A segunda premissa postula que a base de conhecimento pública do CorText Manager, composta pela documentação oficial e pelas resoluções históricas no fórum, possui densidade informacional relevante para ancorar a recuperação vetorial de um modelo RAG com eficácia. A terceira premissa assume que os rastros de exceção (\textit{tracebacks}) produzidos no ambiente local de testes a partir do script de \textit{parsing} são estruturalmente análogos aos gerados no servidor de produção da plataforma.
@@ -419,9 +431,9 @@ A partir dessas premissas, a investigação estrutura-se para testar empiricamen
 
 Compreendendo a amplitude arquitetural da plataforma CorText Manager e visando assegurar a exequibilidade e o rigor científico do projeto, estabelecem-se três limites estritos de escopo para o protótipo:
 
-a) restrição exclusiva ao módulo de entrada (\textit{Data Parsing}): o assistente atuará unicamente na etapa de preparação, ingestão e padronização metodológica dos arquivos brutos e na auditoria imediata do banco SQLite resultante, não oferecendo suporte ou diagnósticos para a parametrização de módulos analíticos posteriores, tais como \textit{Network Mapping}, \textit{Topic Modeling}, \textit{Distant Reading} ou \textit{Demography};
-b) neutralidade epistemológica na camada de engenharia de dados: a ferramenta operará estritamente em nível de infraestrutura de dados (\textit{Data Engineering}), não realizando análises sociológicas, sumarizações de artigos ou interpretações qualitativas sobre o conteúdo semântico dos textos submetidos pelos pesquisadores;
-c) desacoplamento arquitetural como microsserviço auxiliar: o protótipo não visa reescrever, refatorar ou substituir o código-fonte nativo de \textit{parsing} nos servidores de produção do CorText Manager, mas sim operar como um microsserviço independente e complementar de curadoria prévia e auditoria de registros de erro.
+\par\indent a) restrição exclusiva ao módulo de entrada (\textit{Data Parsing}): o assistente atuará unicamente na etapa de preparação, ingestão e padronização metodológica dos arquivos brutos e na auditoria imediata do banco SQLite resultante, não oferecendo suporte ou diagnósticos para a parametrização de módulos analíticos posteriores, tais como \textit{Network Mapping}, \textit{Topic Modeling}, \textit{Distant Reading} ou \textit{Demography};
+\par\indent b) neutralidade epistemológica na camada de engenharia de dados: a ferramenta operará estritamente em nível de infraestrutura de dados (\textit{Data Engineering}), não realizando análises sociológicas, sumarizações de artigos ou interpretações qualitativas sobre o conteúdo semântico dos textos submetidos pelos pesquisadores;
+\par\indent c) desacoplamento arquitetural como microsserviço auxiliar: o protótipo não visa reescrever, refatorar ou substituir o código-fonte nativo de \textit{parsing} nos servidores de produção do CorText Manager, mas sim operar como um microsserviço independente e complementar de curadoria prévia e auditoria de registros de erro.
 
 % --- 03_revisao.md ---
 \chapter{Revisão Bibliográfica}\label{sec:revisao_bibliografica}
@@ -431,9 +443,11 @@ A construção de um Assistente de Observabilidade Sociotécnica voltado para a 
 
 As seções a seguir articulam essas frentes teóricas, demonstrando como o diálogo entre a reflexão epistemológica de STS e as garantias formais da Ciência da Computação e dos Sistemas de Informação sustenta a arquitetura proposta neste Trabalho de Conclusão de Curso.
 
-\section{Fundamentação Teórica}\label{sec:fundamentacao_teorica}
+\FloatBarrier
+\section{FUNDAMENTAÇÃO TEÓRICA}\label{sec:fundamentacao_teorica}
 
 
+\FloatBarrier
 \subsection{A Materialidade dos Dados, Inscrições Concretas e o Trabalho Invisível de Curadoria}\label{sec:a_materialidade_dos_dados_inscricoes_con}
 
 
@@ -449,6 +463,7 @@ Quando a fricção de dados no \textit{Data Parsing} corrompe silenciosamente a 
 
 Adicionalmente, \citeonline{DIgnazio2020}, em \textit{Data Feminism}, destacam a necessidade de valorizar e tornar visível o trabalho braçal e cognitivo de limpeza, formatação e manutenção de dados (\textit{data janitor work}), historicamente tratado como secundário na ciência de dados. Na prática empírica do CorText Manager, a ausência de ferramentas automatizadas de diagnóstico prévio transfere o ônus dessa fricção para duas pontas: para o cientista social, que enfrenta alto custo cognitivo ao tentar decifrar falhas técnicas fora de sua área de formação (evidenciado estatisticamente pelo maior volume textual das dúvidas de \textit{parsing} no fórum, com $p < 0,001$ no teste de Kruskal-Wallis) \cite{Kruskal1952}, e para a própria equipe mantenedora da plataforma. Conforme demonstrado pelo levantamento empírico no fórum de suporte da instituição, 81,0\% dos chamados na categoria de processamento de dados exigem a intervenção manual direta dos desenvolvedores e engenheiros do projeto, fenômeno caracterizado neste estudo como \textit{Staff as Human Parser}. O suporte humano atua, assim, como um amortecedor sociotécnico vital que sustenta a infraestrutura e preserva a qualidade das pesquisas, mas que acaba severamente sobrecarregado por tarefas repetitivas de auditoria manual de arquivos.
 
+\FloatBarrier
 \subsection{Infraestruturas Invisíveis, Padronização e Ruptura}\label{sec:infraestruturas_invisiveis_padronizacao_}
 
 
@@ -458,6 +473,7 @@ No entanto, \citeonline{Bowker1999} postulam o princípio da invisibilidade até
 
 A ruptura infraestrutural ocorre no choque entre a necessidade de padronização interna do software e a extrema heterogeneidade externa dos dados trazidos pelos pesquisadores. Quando um pesquisador submete uma base modificada da Scopus em formato RIS, um arquivo JSON profundamente aninhado da plataforma ISTEX ou uma pasta compactada (ZIP) contendo subdiretórios incompatíveis e recebe como resultado um travamento de processo, a infraestrutura deixa de ser invisível \cite{CorText2026}. O usuário é subitamente confrontado com a rigidez necessária dos esquemas de banco de dados, mas sem dispor de instrumentos de mediação que lhe permitam visualizar qual regra estrutural foi violada pelo seu arquivo bruto antes ou durante a submissão.
 
+\FloatBarrier
 \subsection{A Caixa Preta Latouriana e o Contraponto da Engenharia de Software: Abstração versus Opacidade}\label{sec:a_caixa_preta_latouriana_e_o_contraponto}
 
 
@@ -471,6 +487,7 @@ O dilema sociotécnico reside no fato de que, embora a abstração (a caixa pret
 
 É exatamente na conciliação entre a necessidade de abstração da Engenharia de Software e a exigência de transparência epistemológica dos Estudos de Ciência e Tecnologia que se insere a contribuição deste trabalho. O Assistente de Observabilidade Sociotécnica proposto não pretende desmantelar a arquitetura nativa do CorText Manager nem forçar o cientista social a ler códigos de programação. Em vez disso, operando como um microsserviço auxiliar que combina validação preventiva (\textit{Data Profiling}) e tradução contextualizada de \textit{logs} via Recuperação Aumentada por Geração (RAG), a ferramenta promove uma abertura seletiva e mediada da caixa preta. Ao converter exceções técnicas de infraestrutura em orientações metodológicas acionáveis em linguagem natural, estritamente ancoradas na memória técnica acumulada pela equipe do CorText Manager em seu fórum oficial e documentação, o assistente preserva a elegância da abstração do sistema ao mesmo tempo em que protege a rastreabilidade das inscrições concretas, devolve a autonomia diagnóstica ao pesquisador e desonera a equipe mantenedora da plataforma.
 
+\FloatBarrier
 \subsection{Dimensões da Qualidade de Dados e Data Profiling Preventivo}\label{sec:dimensoes_da_qualidade_de_dados_e_data_p}
 
 
@@ -480,15 +497,16 @@ Expandindo essa taxonomia para o contexto de integração de bases heterogêneas
 
 No ecossistema do CorText Manager, a aplicação do \textit{Data Profiling} preventivo atua diretamente sobre as dimensões contextual e representacional de \citeonline{Wang1996} no momento inicial da pesquisa, isto é, no ambiente cliente, antes que o arquivo bruto seja submetido ao script legado de \textit{Data Parsing} e convertido no banco relacional SQLite. A auditoria técnica do código-fonte da plataforma e o mapeamento empírico do fórum revelam que a ausência de um analisador prévio expõe os corpora dos pesquisadores a três categorias principais de transformações silenciosas:
 
-a) violação de conformidade e codificação: a rotina nativa de decodificação (\texttt{utf\_\allowbreak 8\_\allowbreak encoder}), ao encontrar bytes incompatíveis com o padrão UTF-8 (comuns em bases internacionais do ISTEX ou exportações em Windows-1252), substitui silenciosamente toda a linha por uma cadeia vazia (\texttt{yield('')}), gerando tabelas ocas sem alertar o usuário; similarmente, o uso da classe \texttt{csv.\allowbreak Sniffer} limitada aos primeiros 4.094 bytes falha na inferência de separadores quando a primeira célula contém um resumo científico extenso;
-b) comprometimento da simetria matricial: para forçar o encaixe no esquema relacional do SQLite, o \textit{parser} aplica fatiamentos imperativos (\texttt{row=row[:nb\_\allowbreak field]}) que amputam o final de textos longos caso existam vírgulas não escapadas, ou injeta células vazias (\texttt{row.\allowbreak insert()}) quando há escassez de delimitadores, provocando o deslocamento taxonômico de colunas inteiras;
-c) coerção semântica e deduplicação silenciosa: a conversão arbitrária de valores textuais ausentes declarados como \texttt{"NA"} para a \textit{string} numérica \texttt{"0"} contamina a modelagem topológica subsequente, gerando super-nós artificiais em grafos de coocorrência; paralelamente, rotinas de deduplicação baseadas em identificadores mal formatados descartam documentos em massa sem emissão de relatórios de perda.
+\par\indent a) violação de conformidade e codificação: a rotina nativa de decodificação (\texttt{utf\_\allowbreak 8\_\allowbreak encoder}), ao encontrar bytes incompatíveis com o padrão UTF-8 (comuns em bases internacionais do ISTEX ou exportações em Windows-1252), substitui silenciosamente toda a linha por uma cadeia vazia (\texttt{yield('{}')}), gerando tabelas ocas sem alertar o usuário; similarmente, o uso da classe \texttt{csv.\allowbreak Sniffer} limitada aos primeiros 4.094 bytes falha na inferência de separadores quando a primeira célula contém um resumo científico extenso;
+\par\indent b) comprometimento da simetria matricial: para forçar o encaixe no esquema relacional do SQLite, o \textit{parser} aplica fatiamentos imperativos (\texttt{row=row[:nb\_\allowbreak field]}) que amputam o final de textos longos caso existam vírgulas não escapadas, ou injeta células vazias (\texttt{row.\allowbreak insert()}) quando há escassez de delimitadores, provocando o deslocamento taxonômico de colunas inteiras;
+\par\indent c) coerção semântica e deduplicação silenciosa: a conversão arbitrária de valores textuais ausentes declarados como \texttt{"NA"} para a \textit{string} numérica \texttt{"0"} contamina a modelagem topológica subsequente, gerando super-nós artificiais em grafos de coocorrência; paralelamente, rotinas de deduplicação baseadas em identificadores mal formatados descartam documentos em massa sem emissão de relatórios de perda.
 
 Neste ponto, surge um contraponto arquitetural relevante na Engenharia de Dados: o embate entre abordagens \textit{Schema-on-Write} (validação estrita na escrita, típica de bancos relacionais como o SQLite) e \textit{Schema-on-Read} (leitura flexível tardia, comum em bancos não relacionais e \textit{Data Lakes}, conforme discutido por \citeonline{Kleppmann2017}). Críticos de sistemas de validação prévia argumentam que impor barreiras rígidas de \textit{Data Profiling} na entrada pode aumentar a fricção inicial, rejeitando arquivos que poderiam ser processados parcialmente por heurísticas tolerantes a falhas, em consonância com a Lei de Postel, segundo a qual um sistema deve ser conservador no que envia e liberal no que aceita.
 
 De fato, a equipe de desenvolvimento do CorText Manager adotou historicamente essa filosofia liberal e defensiva para evitar que o servidor travasse diante da imensa diversidade de arquivos submetidos por usuários não programadores. Contudo, se na engenharia de redes de telecomunicações a tolerância silenciosa a falhas é uma virtude, na ciência de dados aplicada às humanidades ela cobra um preço epistemológico alto: o princípio \textit{Garbage In, Garbage Out} (GIGO) converte-se em viés metodológico oculto. Como provam os dados empíricos deste estudo, a leniência na entrada não elimina o erro, apenas o posterga, fazendo com que 38,3\% dos chamados do fórum explodam tardiamente em outras etapas analíticas (\textit{Parsing} Derivado, como redes vazias em \textit{Network Mapping}). Portanto, o módulo de \textit{Pre-Flight Data Profiler} proposto neste trabalho resolve essa tensão dialética ao não alterar a rigidez do SQLite nativo nem o código do servidor, atuando como um auditor pedagógico prévio que alerta o pesquisador sobre truncamentos, coerções de \texttt{"NA"} e falhas de UTF-8 antes que a perda de inscrições ocorra.
 
-\section{Trabalhos Relacionados}\label{sec:trabalhos_relacionados}
+\FloatBarrier
+\section{TRABALHOS RELACIONADOS}\label{sec:trabalhos_relacionados}
 
 
 A literatura recente aponta para uma intersecção emergente entre a validação de qualidade de dados em pipelines científicos, a engenharia de observabilidade assistida por modelos de linguagem e a transparência sociotécnica em plataformas de humanidades digitais. No campo da Engenharia de Dados, estudos fundamentados na taxonomia de \citeonline{Wang1996} e nas revisões sistemáticas de \citeonline{Naumann2014} e \citeonline{Abedjan2015} ressaltam a necessidade de validação estrutural prévia (\textit{schema validation}, detecção de anomalias de codificação e auditoria de completude) para prevenir a propagação de dados corrompidos em fluxos analíticos. Ferramentas industriais modernas de validação de pipelines (como bibliotecas de asserção de esquemas e geradores automatizados de relatórios exploratórios em Python) permitem auditar matrizes tabulares com alta eficiência computacional. Entretanto, tais ferramentas são projetadas estritamente para engenheiros de dados e desenvolvedores de software, exigindo a escrita de contratos de dados programáticos e ignorando completamente as regras idiossincráticas de analisadores acadêmicos específicos, como os separadores multivalorados ou a indexação bibliométrica do CorText Manager.
@@ -514,13 +532,16 @@ A Tabela 3 sintetiza o posicionamento deste Trabalho de Conclusão de Curso pera
   \end{tabularx}
   \legend{Fonte: Elaborado pelo autor (2026).}
 \end{table}
+\FloatBarrier
 
 
 Conforme demonstrado na Tabela 3, o desenvolvimento do Assistente de Observabilidade Sociotécnica diferencia-se das abordagens isoladas ao integrar, em uma única arquitetura, a validação determinística prévia (\textit{Pre-Flight Data Profiling}) e o diagnóstico reativo via RAG local ancorado na memória empírica da comunidade \cite{CorText2026}, atuando não apenas como um utilitário de tecnologia da informação, mas como um instrumento que devolve transparência epistemológica e autonomia ao pesquisador.
 
-\section{Estado da Arte}\label{sec:estado_da_arte}
+\FloatBarrier
+\section{ESTADO DA ARTE}\label{sec:estado_da_arte}
 
 
+\FloatBarrier
 \subsection{Observabilidade Sociotécnica, Modelos de Linguagem e a Arquitetura RAG}\label{sec:observabilidade_sociotecnica_modelos_de_}
 
 
@@ -532,9 +553,10 @@ Para traduzir esse rastro técnico em um diagnóstico compreensível ao cientist
 
 Para superar a barreira das alucinações e a obsolescência da memória paramétrica dos modelos, Lewis e colaboradores \cite{Lewis2020} formularam a arquitetura de Recuperação Aumentada por Geração (RAG). Conforme revisado no estado da arte por Gao e colaboradores \cite{Gao2023}, o paradigma RAG acopla um mecanismo de recuperação de informação não paramétrico (baseado em busca semântica sobre um Banco de Dados Vetorial) a um gerador paramétrico (o LLM). O fluxo arquitetural divide-se em duas etapas determinísticas de engenharia de dados:
 
-a) indexação e recuperação vetorial: o acervo documental de domínio específico, composto neste projeto pela documentação oficial (\textit{CorTexT Manager Comprehensive Documentation and User Guide}) e pelo corpus histórico auditado de 298 tópicos e resoluções do fórum de suporte \cite{CorText2026}, é extraído, higienizado, segmentado em blocos semânticos (\textit{chunks}) e convertido em representações numéricas multidimensionais (\textit{embeddings}) armazenadas localmente;
-b) geração aumentada por contexto: quando uma falha ocorre, o sistema converte o \textit{traceback} do erro e o relatório prévio do \textit{Data Profiling} em uma consulta vetorial (\textit{query}), recuperando os trechos mais similares das discussões historicamente resolvidas pela equipe técnica do CorText Manager; esses documentos verificados são injetados no comando (\textit{prompt}) do sistema juntamente com instruções restritivas (\textit{prompt engineering}), orientando o LLM a atuar exclusivamente como um motor de inferência semântica e síntese tradutória ancorado nas evidências fornecidas \cite{Lewis2020,Gao2023}.
+\par\indent a) indexação e recuperação vetorial: o acervo documental de domínio específico, composto neste projeto pela documentação oficial (\textit{CorTexT Manager Comprehensive Documentation and User Guide}) e pelo corpus histórico auditado de 298 tópicos e resoluções do fórum de suporte \cite{CorText2026}, é extraído, higienizado, segmentado em blocos semânticos (\textit{chunks}) e convertido em representações numéricas multidimensionais (\textit{embeddings}) armazenadas localmente;
+\par\indent b) geração aumentada por contexto: quando uma falha ocorre, o sistema converte o \textit{traceback} do erro e o relatório prévio do \textit{Data Profiling} em uma consulta vetorial (\textit{query}), recuperando os trechos mais similares das discussões historicamente resolvidas pela equipe técnica do CorText Manager; esses documentos verificados são injetados no comando (\textit{prompt}) do sistema juntamente com instruções restritivas (\textit{prompt engineering}), orientando o LLM a atuar exclusivamente como um motor de inferência semântica e síntese tradutória ancorado nas evidências fornecidas \cite{Lewis2020,Gao2023}.
 
+\FloatBarrier
 \subsection{Soberania Computacional via Modelos Locais e o Contraponto Técnico: Inteligência Artificial Generativa versus Sistemas Baseados em Regras}\label{sec:soberania_computacional_via_modelos_loca}
 
 
@@ -544,10 +566,11 @@ Por fim, cabe apresentar uma contrapartida crítica de engenharia de software qu
 
 Entretanto, quando a falha transpõe a barreira preventiva e atinge a interpretação de \textit{logs} e suporte ao usuário no segundo estágio, sistemas estáticos de regras mostram-se estruturalmente insuficientes por três razões documentadas no ecossistema do CorText Manager:
 
-a) combinatória contextual: um mesmo erro sintático no banco SQLite pode decorrer de dezenas de causas metodológicas distintas dependendo do formato de origem (Scopus em RIS, Web of Science em TXT, Factiva em ZIP ou JSON do ISTEX); o RAG é capaz de cruzar dinamicamente três fontes heterogêneas (o \textit{traceback} técnico, a radiografia estrutural prévia gerada pelo \textit{Profiling} e os relatos em linguagem natural do fórum) para sintetizar um diagnóstico adequado a cada arquivo;
-b) evolução contínua sem recompilação de código: a base de conhecimento do suporte científico é dinâmica; em um sistema baseado em regras estáticas (\texttt{if/\allowbreak else}), cada nova anomalia descoberta em mudanças de leiaute da Scopus ou da Web of Science exigiria manutenção de código-fonte pelos desenvolvedores, ao passo que, na arquitetura RAG, basta atualizar o índice vetorial com as novas postagens resolvidas no fórum oficial para que o assistente absorva o novo conhecimento coletivo da comunidade;
-c) adaptação epistêmica e pedagógica: diferentemente de mensagens de erro pré-programadas e rígidas, o LLM ancorado em RAG possui a capacidade linguística de traduzir conceitos abstratos de engenharia de dados (como \texttt{IndexError}, \texttt{ParserError} ou \textit{Docker Timeout}) em orientações metodológicas acessíveis ao vocabulário das ciências sociais, convertendo o momento de falha técnica em uma experiência de aprendizado guiado sobre a infraestrutura da plataforma.
+\par\indent a) combinatória contextual: um mesmo erro sintático no banco SQLite pode decorrer de dezenas de causas metodológicas distintas dependendo do formato de origem (Scopus em RIS, Web of Science em TXT, Factiva em ZIP ou JSON do ISTEX); o RAG é capaz de cruzar dinamicamente três fontes heterogêneas (o \textit{traceback} técnico, a radiografia estrutural prévia gerada pelo \textit{Profiling} e os relatos em linguagem natural do fórum) para sintetizar um diagnóstico adequado a cada arquivo;
+\par\indent b) evolução contínua sem recompilação de código: a base de conhecimento do suporte científico é dinâmica; em um sistema baseado em regras estáticas (\texttt{if/\allowbreak else}), cada nova anomalia descoberta em mudanças de leiaute da Scopus ou da Web of Science exigiria manutenção de código-fonte pelos desenvolvedores, ao passo que, na arquitetura RAG, basta atualizar o índice vetorial com as novas postagens resolvidas no fórum oficial para que o assistente absorva o novo conhecimento coletivo da comunidade;
+\par\indent c) adaptação epistêmica e pedagógica: diferentemente de mensagens de erro pré-programadas e rígidas, o LLM ancorado em RAG possui a capacidade linguística de traduzir conceitos abstratos de engenharia de dados (como \texttt{IndexError}, \texttt{ParserError} ou \textit{Docker Timeout}) em orientações metodológicas acessíveis ao vocabulário das ciências sociais, convertendo o momento de falha técnica em uma experiência de aprendizado guiado sobre a infraestrutura da plataforma.
 
+\FloatBarrier
 \subsection{Síntese do Capítulo e Articulação Teórico-Prática}\label{sec:sintese_do_capitulo_e_articulacao_teoric}
 
 
@@ -572,20 +595,23 @@ A Tabela 4 consolida a relação direta entre os conceitos teóricos revisados, 
   \end{tabularx}
   \legend{Fonte: Elaborado pelo autor (2026).}
 \end{table}
+\FloatBarrier
 
 
 % --- 04_metodologia.md ---
 \chapter{Metodologia}\label{sec:metodologia}
 
 
-\section{Classificação da Pesquisa}\label{sec:classificacao_da_pesquisa}
+\FloatBarrier
+\section{CLASSIFICAÇÃO DA PESQUISA}\label{sec:classificacao_da_pesquisa}
 
 
 A presente investigação classifica-se, quanto à sua natureza, como uma pesquisa aplicada e tecnológica em Sistemas de Informação e Ciência da Computação, uma vez que objetiva gerar conhecimento voltado à solução prática de um gargalo operacional real vivenciado pela comunidade científica usuária da plataforma CorText Manager. Quanto à sua abordagem, o estudo caracteriza-se como quali-quantitativo (ou de métodos mistos). A dimensão quantitativa manifesta-se na auditoria estatística censitária do acervo histórico do fórum de suporte, na mensuração não paramétrica do esforço cognitivo dos usuários \cite{Kruskal1952,Mann1947} e na aferição objetiva das taxas de detecção preventiva do módulo de \textit{Data Profiling}. Por sua vez, a dimensão qualitativa expressa-se na análise epistemológica das heurísticas do código-fonte sob a lente dos Estudos de Ciência e Tecnologia \cite{Latour1987,Bowker1999} e na avaliação da clareza pedagógica dos diagnósticos gerados pelo modelo de Recuperação Aumentada por Geração (RAG).
 
 No que tange aos seus objetivos metodológicos, a pesquisa combina um caráter exploratório e descritivo, empregado no mapeamento inédito das 22 anomalias arquiteturais do analisador sintático (\textit{parser}) e na catalogação empírica dos chamados da comunidade, a um delineamento experimental. O caráter experimental concretiza-se no desenvolvimento iterativo de um protótipo de software de código aberto e na sua validação controlada mediante técnicas de Engenharia do Caos e testes comparativos (Teste A/B), assegurando reprodutibilidade científica e independência operacional em relação aos servidores de produção da plataforma francesa.
 
-\section{Etapas do Projeto}\label{sec:etapas_do_projeto}
+\FloatBarrier
+\section{ETAPAS DO PROJETO}\label{sec:etapas_do_projeto}
 
 
 Para garantir o cumprimento integral dos objetivos específicos estabelecidos, o percurso metodológico foi estruturado em seis etapas sequenciais e interdependentes, que articulam as quatro fases macroestruturais de construção e avaliação do artefato tecnológico.
@@ -595,11 +621,13 @@ Para garantir o cumprimento integral dos objetivos específicos estabelecidos, o
 \end{citacao}
 
 
+\FloatBarrier
 \subsection{Etapa 1: Revisão Bibliográfica e Análise Arquitetural do Código Legado}\label{sec:etapa_1_revisao_bibliografica_e_analise_}
 
 
 A etapa inicial compreendeu a consolidação do referencial teórico interdisciplinar, articulando os Estudos de Ciência e Tecnologia (STS) \cite{Latour1987,Bowker1999,Edwards2010,Abdo2021} às dimensões formais de Qualidade de Dados \cite{Wang1996,Naumann2014} e Observabilidade de Sistemas \cite{Majors2022}. Paralelamente, realizou-se a inspeção estática e o mapeamento profundo do código-fonte em linguagem Python responsável pela rotina de \textit{Data Parsing} do CorText Manager. Essa dissecação algorítmica visou rastrear o fluxo de ingestão dos documentos desde a leitura em disco até a consolidação das tabelas no banco relacional SQLite, permitindo identificar as decisões de programação defensiva, os blocos de silenciamento de exceções (\texttt{try/\allowbreak except}), os limites estáticos de memória e as expressões regulares destrutivas que originam a perda silenciosa de inscrições científicas.
 
+\FloatBarrier
 \subsection{Etapa 2: Engenharia de Extração e Auditoria Empírica do Fórum Oficial}\label{sec:etapa_2_engenharia_de_extracao_e_auditor}
 
 
@@ -620,6 +648,7 @@ Com o propósito de fundamentar empiricamente a barreira de preparação de dado
   \end{tabularx}
   \legend{Fonte: Elaborado pelo autor (2026).}
 \end{table}
+\FloatBarrier
 
 
 Durante a auditoria epistêmica e semântica dos 298 tópicos extraídos, constatou-se que a categorização nativa do fórum (que registra 84 tópicos na categoria \textit{Data processing}, ou 28,2\% do total) subdimensiona a crise de preparação de dados. Quando o usuário comete um equívoco de formatação na entrada (como um delimitador incorreto em CSV ou marcadores de autoria não padronizados), a falha frequentemente não interrompe o \textit{parser} de imediato, mas gera um banco SQLite estruturalmente inconsistente cujo erro só eclode tardiamente em módulos analíticos subsequentes, tais como \textit{Network mapping} ou \textit{Topic modeling}.
@@ -641,53 +670,61 @@ Para capturar esse fenômeno com rigor metodológico, estabeleceram-se três cri
   \end{tabularx}
   \legend{Fonte: Elaborado pelo autor (2026).}
 \end{table}
+\FloatBarrier
 
 
+\FloatBarrier
 \subsection{Etapa 3: Construção e Vetorização da Base de Conhecimento Local}\label{sec:etapa_3_construcao_e_vetorizacao_da_base}
 
 
 Concluída a extração e a higienização do corpus histórico do fórum (\texttt{forum\_\allowbreak corpus.\allowbreak md}), esta etapa dedica-se à agregação da documentação técnica oficial da plataforma (\textit{CorTexT Manager Comprehensive Documentation and User Guide}). O material unificado passa por rotinas de limpeza sintática, segmentação em blocos semânticos (\textit{chunking}) que preservam o par pergunta-resposta validado pela equipe técnica (\textit{Staff}), e conversão em representações numéricas multidimensionais (\textit{embeddings}). Os vetores gerados são indexados e armazenados em um Banco de Dados Vetorial operando localmente, assegurando recuperação semântica de baixa latência sem dependência de serviços externos em nuvem.
 
+\FloatBarrier
 \subsection{Etapa 4: Desenvolvimento do Módulo Pre-Flight Data Profiler e Early-Warning Parser}\label{sec:etapa_4_desenvolvimento_do_modulo_pre_fl}
 
 
 Esta etapa concentra-se na engenharia do primeiro estágio do assistente: a elaboração de rotinas determinísticas em linguagem Python, utilizando a biblioteca Pandas e expressões regulares, para inspecionar preventivamente as matrizes brutas de entrada (CSV, RIS, JSON, XML, HTML e lotes ZIP) antes da submissão ao CorText Manager. O módulo verifica a conformidade de codificação UTF-8, a simetria de delimitadores, a integridade de chaves únicas e a sobrevivência de metadados. Adicionalmente, desenvolve-se o validador pós-ingestão (\textit{Early-Warning Parser}) para auditar a estrutura das tabelas do banco SQLite (\texttt{.db}) recém-gerado, prevenindo a submissão de matrizes de adjacência zeradas aos algoritmos de rede.
 
+\FloatBarrier
 \subsection{Etapa 5: Integração do Módulo Log Explainer e Arquitetura RAG via Ollama}\label{sec:etapa_5_integracao_do_modulo_log_explain}
 
 
 No segundo estágio arquitetural, realiza-se a implantação e a parametrização de um Modelo de Linguagem de Grande Escala (LLM) de pesos abertos (\textit{open-weights}), executado localmente por meio da plataforma Ollama. Implementa-se a engenharia de comandos (\textit{prompt engineering}) restritiva do sistema RAG, responsável por interceptar o rastro técnico da exceção (\textit{stack trace} ou \textit{log} de erro), acoplá-lo automaticamente ao resumo estrutural do arquivo coletado pelo \textit{Data Profiler} no estágio preventivo e consultar os casos análogos no Banco de Dados Vetorial. Dessa forma, o modelo sintetiza narrativas de diagnóstico e instruções de correção acionáveis na interface da aplicação companheira (\textit{companion app}).
 
+\FloatBarrier
 \subsection{Etapa 6: Homologação via Engenharia do Caos, Avaliação e Documentação}\label{sec:etapa_6_homologacao_via_engenharia_do_ca}
 
 
 A etapa final compreende a execução do protocolo experimental de validação do protótipo. Conduz-se a bateria de testes de Engenharia do Caos mediante a submissão deliberada de 22 arquivos sinteticamente corrompidos (\textit{Corpus de Caos}) para aferir a taxa de interceptação preventiva do \textit{Profiler} (validação da Hipótese H1), seguida pelo Teste A/B comparativo entre o assistente com RAG local e o mesmo LLM em configuração genérica (\textit{vanilla}) frente a erros reais do fórum (validação da Hipótese H2). Concluem-se os trabalhos com a avaliação de usabilidade junto a usuários locais, a documentação exaustiva dos scripts segundo as convenções do repositório oficial e a consolidação desta monografia.
 
-\section{Ferramentas e Tecnologias}\label{sec:ferramentas_e_tecnologias}
+\FloatBarrier
+\section{FERRAMENTAS E TECNOLOGIAS}\label{sec:ferramentas_e_tecnologias}
 
 
 A seleção do arcabouço tecnológico deste projeto foi orientada pelos princípios de software livre, reprodutibilidade científica, soberania computacional e custo financeiro zero de execução. As ferramentas adotadas dividem-se em quatro camadas funcionais:
 
-a) linguagem de programação e manipulação de dados: utiliza-se o Python (versão 3.10 ou superior) como linguagem nuclear de desenvolvimento, garantindo compatibilidade direta com o ecossistema nativo do CorText Manager; para as rotinas determinísticas do \textit{Pre-Flight Data Profiler}, empregam-se as bibliotecas Pandas (inspeção matricial, validação de tipos e detecção de \texttt{ParserError}), \texttt{sqlite3} (auditoria de esquemas e tabelas relacionais do arquivo \texttt{.db}), \texttt{re} (avaliação preventiva de expressões regulares), \texttt{zipfile} (varredura de caminhos e nomes acentuados em arquivos compactados) e \texttt{chardet} / \texttt{codecs} (verificação estrita de cadeias de bytes UTF-8 e Windows-1252);
-b) extração assíncrona e auditoria estatística: para a construção do extrator \texttt{extract\_\allowbreak forum.\allowbreak py} e coleta da base de conhecimento, utilizaram-se a biblioteca assíncrona \texttt{aiohttp} (gerenciamento de concorrência com semáforos e \textit{retries}), o arcabouço de raspagem web amigável a modelos de linguagem Crawl4AI (v0.9.x) \cite{Crawl4AI2026} e extratores de marcação estruturada JSON-LD Schema; para os testes estatísticos não paramétricos de Kruskal-Wallis e Mann-Whitney sobre a dispersão textual do fórum, empregaram-se as bibliotecas \texttt{scipy.\allowbreak stats}, \texttt{numpy} e \texttt{matplotlib} / \texttt{seaborn} \cite{Kruskal1952,Mann1947};
-c) inteligência artificial local e banco de dados vetorial: a orquestração local dos modelos de linguagem fundacionais é realizada por meio da plataforma Ollama, permitindo a execução em infraestrutura local (\textit{on-premises}) de modelos compactos de pesos abertos, tais como Llama 3 (8B), Mistral (7B) ou Phi-3 Mini (3.8B), sem envio de dados sensíveis à nuvem; o armazenamento dos \textit{embeddings} documentais e a busca por similaridade de cosseno do módulo RAG são gerenciados localmente via banco vetorial ChromaDB (ou FAISS) integrado a pipelines de orquestração em Python;
-d) interface de usuário e reprodutibilidade: a camada visual da aplicação companheira (\textit{companion app}) e o painel público de exploração dos dados auditados do fórum foram desenvolvidos com o \textit{framework} Streamlit, proporcionando uma interface web reativa de arrastar e soltar (\textit{Drag and Drop}), enquanto o controle de versão e a disponibilização aberta dos conjuntos de dados e códigos-fonte são mantidos na plataforma GitHub.
+\par\indent a) linguagem de programação e manipulação de dados: utiliza-se o Python (versão 3.10 ou superior) como linguagem nuclear de desenvolvimento, garantindo compatibilidade direta com o ecossistema nativo do CorText Manager; para as rotinas determinísticas do \textit{Pre-Flight Data Profiler}, empregam-se as bibliotecas Pandas (inspeção matricial, validação de tipos e detecção de \texttt{ParserError}), \texttt{sqlite3} (auditoria de esquemas e tabelas relacionais do arquivo \texttt{.db}), \texttt{re} (avaliação preventiva de expressões regulares), \texttt{zipfile} (varredura de caminhos e nomes acentuados em arquivos compactados) e \texttt{chardet} / \texttt{codecs} (verificação estrita de cadeias de bytes UTF-8 e Windows-1252);
+\par\indent b) extração assíncrona e auditoria estatística: para a construção do extrator \texttt{extract\_\allowbreak forum.\allowbreak py} e coleta da base de conhecimento, utilizaram-se a biblioteca assíncrona \texttt{aiohttp} (gerenciamento de concorrência com semáforos e \textit{retries}), o arcabouço de raspagem web amigável a modelos de linguagem Crawl4AI (v0.9.x) \cite{Crawl4AI2026} e extratores de marcação estruturada JSON-LD Schema; para os testes estatísticos não paramétricos de Kruskal-Wallis e Mann-Whitney sobre a dispersão textual do fórum, empregaram-se as bibliotecas \texttt{scipy.\allowbreak stats}, \texttt{numpy} e \texttt{matplotlib} / \texttt{seaborn} \cite{Kruskal1952,Mann1947};
+\par\indent c) inteligência artificial local e banco de dados vetorial: a orquestração local dos modelos de linguagem fundacionais é realizada por meio da plataforma Ollama, permitindo a execução em infraestrutura local (\textit{on-premises}) de modelos compactos de pesos abertos, tais como Llama 3 (8B), Mistral (7B) ou Phi-3 Mini (3.8B), sem envio de dados sensíveis à nuvem; o armazenamento dos \textit{embeddings} documentais e a busca por similaridade de cosseno do módulo RAG são gerenciados localmente via banco vetorial ChromaDB (ou FAISS) integrado a pipelines de orquestração em Python;
+\par\indent d) interface de usuário e reprodutibilidade: a camada visual da aplicação companheira (\textit{companion app}) e o painel público de exploração dos dados auditados do fórum foram desenvolvidos com o \textit{framework} Streamlit, proporcionando uma interface web reativa de arrastar e soltar (\textit{Drag and Drop}), enquanto o controle de versão e a disponibilização aberta dos conjuntos de dados e códigos-fonte são mantidos na plataforma GitHub.
 
-\section{Interação com Equipe Técnica e Usuários}\label{sec:interacao_com_equipe_tecnica_e_usuarios}
+\FloatBarrier
+\section{INTERAÇÃO COM EQUIPE TÉCNICA E USUÁRIOS}\label{sec:interacao_com_equipe_tecnica_e_usuarios}
 
 
 Embora a arquitetura de validação do protótipo tenha sido desenhada para operar com total autonomia técnica por meio do \textit{Corpus de Caos} e dos dados históricos extraídos do fórum oficial (uma vez que o código-fonte do \textit{Data Parsing}, o esquema SQLite e a documentação integral já se encontram disponíveis localmente), o projeto estabelece três frentes de articulação sociotécnica com a comunidade e com os mantenedores da plataforma CorText Manager:
 
-a) incorporação da memória empírica da equipe técnica (\textit{Staff}): ao indexar as respostas oficiais fornecidas pelos engenheiros e desenvolvedores do CorText Manager ao longo de doze anos de operação do fórum (onde o \textit{Staff} interveio manualmente em 81,0\% dos tópicos de \textit{Data processing}), o assistente incorpora diretamente a práxis de resolução de problemas da equipe mantenedora como fonte primária de verdade (\textit{ground truth}) para o modelo RAG;
-b) observação e aplicação de questionário com usuários na UFBA: prevê-se a condução de uma atividade prática com estudantes e pesquisadores da Universidade Federal da Bahia (UFBA) durante sessões de introdução ao uso da plataforma CorText Manager; os participantes utilizarão o protótipo do Assistente de Observabilidade Sociotécnica para diagnosticar bases de dados com anomalias de formatação e responderão a um questionário curto estruturado, visando colher percepções reais sobre as barreiras iniciais de importação e sobre a clareza pedagógica das instruções geradas pela ferramenta;
-c) preparação para integração aberta (\textit{Pull Request}): todo o desenvolvimento modular do assistente segue as convenções de diretório, configuração de parâmetros (\texttt{.yaml}) e documentação (\texttt{README.\allowbreak md}) adotadas no repositório oficial do CorText Manager, permitindo que o artefato final seja formalmente apresentado à equipe técnica da plataforma como uma contribuição de código aberto (\textit{Pull Request} ou ferramenta auxiliar integrada à documentação).
+\par\indent a) incorporação da memória empírica da equipe técnica (\textit{Staff}): ao indexar as respostas oficiais fornecidas pelos engenheiros e desenvolvedores do CorText Manager ao longo de doze anos de operação do fórum (onde o \textit{Staff} interveio manualmente em 81,0\% dos tópicos de \textit{Data processing}), o assistente incorpora diretamente a práxis de resolução de problemas da equipe mantenedora como fonte primária de verdade (\textit{ground truth}) para o modelo RAG;
+\par\indent b) observação e aplicação de questionário com usuários na UFBA: prevê-se a condução de uma atividade prática com estudantes e pesquisadores da Universidade Federal da Bahia (UFBA) durante sessões de introdução ao uso da plataforma CorText Manager; os participantes utilizarão o protótipo do Assistente de Observabilidade Sociotécnica para diagnosticar bases de dados com anomalias de formatação e responderão a um questionário curto estruturado, visando colher percepções reais sobre as barreiras iniciais de importação e sobre a clareza pedagógica das instruções geradas pela ferramenta;
+\par\indent c) preparação para integração aberta (\textit{Pull Request}): todo o desenvolvimento modular do assistente segue as convenções de diretório, configuração de parâmetros (\texttt{.yaml}) e documentação (\texttt{README.\allowbreak md}) adotadas no repositório oficial do CorText Manager, permitindo que o artefato final seja formalmente apresentado à equipe técnica da plataforma como uma contribuição de código aberto (\textit{Pull Request} ou ferramenta auxiliar integrada à documentação).
 
 \begin{citacao}
 \textbf{[ESPAÇO RESERVADO — A PREENCHER APÓS A EXECUÇÃO DA OFICINA UFBA E CONTATO COM EQUIPE CORTEXT]:} \textit{Inserir aqui, após a aplicação prática do protótipo, um parágrafo relatando: (1) a data de realização da oficina introdutória na UFBA e o número total de estudantes/pesquisadores participantes ($N = X$); (2) o resumo da percepção colhida no questionário curto sobre a utilidade do assistente; e (3) o registro de submissão do Pull Request ou comunicação técnica realizada com os mantenedores do CorText Manager.}
 \end{citacao}
 
 
-\section{Cronograma}\label{sec:cronograma}
+\FloatBarrier
+\section{CRONOGRAMA}\label{sec:cronograma}
 
 
 O planejamento temporal do projeto foi distribuído ao longo de seis meses de execução, correlacionando diretamente as seis etapas metodológicas descritas na Seção 4.2 aos marcos de entrega da monografia e do software, conforme apresentado na Tabela 7.
@@ -710,23 +747,25 @@ O planejamento temporal do projeto foi distribuído ao longo de seis meses de ex
   \end{tabularx}
   \legend{Fonte: Elaborado pelo autor (2026).}
 \end{table}
+\FloatBarrier
 
 
 % --- 05_desenvolvimento.md ---
 \chapter{Desenvolvimento}\label{sec:desenvolvimento}
 
 
-\section{Levantamento de Requisitos}\label{sec:levantamento_de_requisitos}
+\FloatBarrier
+\section{LEVANTAMENTO DE REQUISITOS}\label{sec:levantamento_de_requisitos}
 
 
 A especificação de requisitos do Assistente de Observabilidade Sociotécnica fundamenta-se na inspeção estática e no mapeamento algorítmico do código-fonte legado em linguagem Python responsável pelo módulo de \textit{Data Parsing} do CorText Manager (\texttt{parser\_\allowbreak science\_\allowbreak se.\allowbreak py}), articulados às evidências empíricas extraídas dos 298 tópicos do fórum oficial de suporte \cite{CorText2026}. A dissecação do código revelou que o analisador sintático nativo emprega práticas extensivas de programação defensiva, tais como o silenciamento de exceções em blocos \texttt{try/\allowbreak except}, o fatiamento forçado de matrizes, a injeção de células vazias e coerções matemáticas arbitrárias. Embora essas heurísticas cumpram o propósito de engenharia de proteger a estabilidade do servidor compartilhado contra falhas visíveis diante de dados heterogêneos, elas operam de maneira opaca, convertendo a infraestrutura de ingestão em uma caixa preta \cite{Latour1987} que introduz vieses metodológicos e apaga inscrições concretas \cite{Abdo2021} sem o conhecimento do pesquisador. O detalhamento individualizado de cada uma das 22 anomalias arquiteturais identificadas, contemplando o problema no código, o impacto científico e a diretriz de mitigação, encontra-se integralmente documentado no Apêndice A.
 
 Para estruturar a engenharia de requisitos de forma sistemática e alinhada às dimensões de Qualidade de Dados de \citeonline{Wang1996} e às técnicas de \textit{Data Profiling} de \citeonline{Naumann2014} e \citeonline{Abedjan2015}, as 22 vulnerabilidades mapeadas no código legado foram agrupadas em quatro eixos sociotécnicos:
 
-a) anomalias de codificação, nomenclatura e subprocessos de sistema: na camada de leitura de arquivos, a rotina nativa \texttt{utf\_\allowbreak 8\_\allowbreak encoder} silencia falhas de decodificação executando o comando \texttt{yield('')}, o que converte linhas inteiras com caracteres não compatíveis com UTF-8 (como alfabetos cirílicos, asiáticos ou codificação Windows-1252) em espaços em branco (Anomalia 1); paralelamente, a presença de acentuação nos nomes de arquivos dentro de lotes compactados (\texttt{.zip}) ou pastas de PDFs provoca a falha de funções estáticas \texttt{.replace()} e aciona comandos deliberadamente quebrados no código (\texttt{dkjslq}) que interrompem o servidor sem explicação clara (Anomalia 8); no processamento de documentos PDF, uma verificação dependente do diretório local do criador da plataforma (\texttt{Users/\allowbreak jpcointet/}) dispara um subprocesso externo com um laço \texttt{while} limitado a 200 tentativas de um segundo (\texttt{time.\allowbreak sleep(1)}), abortando silenciosamente arquivos densos que excedam esse tempo limite (Anomalia 9); de modo análogo, arquivos do repositório acadêmico ISTEX são delegados ao script \texttt{docker\_\allowbreak wrapper.\allowbreak py}, cujo esgotamento de memória encerra o processo via \texttt{sys.\allowbreak exit()} e congela a tela do usuário (Anomalia 13), ao passo que falhas na criação das tabelas SQLite na rotina \texttt{fonctions.\allowbreak insert\_\allowbreak notices} mascaram o rastro real da exceção com impressões internas de terminal (\texttt{shitty1}) e exibem apenas a mensagem opaca \texttt{"No info in Logs"} (Anomalia 2);
-b) quebras de simetria matricial e inferência de delimitadores: na manipulação de bases tabulares em formato CSV, o analisador restringe a leitura automática da classe \texttt{csv.\allowbreak Sniffer} aos primeiros 4.094 bytes do arquivo, falhando na detecção do separador quando a primeira célula contém um resumo científico extenso (Anomalia 5); durante a ingestão linha a linha, caso uma vírgula não escapada gere colunas excedentes, o comando imperativo \texttt{row=row[:nb\_\allowbreak field]} amputa silenciosamente o final do texto do usuário (Anomalia 3), enquanto a escassez de delimitadores (\texttt{len(row) < len(dico\_\allowbreak tag\_\allowbreak list)}) aciona a injeção cega de campos vazios via \texttt{row.\allowbreak insert()}, provocando o deslocamento taxonômico de metadados entre colunas (Anomalia 4); adicionalmente, o sistema exige separadores secundários idiossincráticos (como \texttt{|\%|}) para campos multivalorados, fundindo coautores separados por caracteres convencionais em uma única entidade (Anomalia 6), e restringe a inferência de cabeçalhos em arquivos JSON estritamente aos 100 primeiros registros (\texttt{for notice in data[:100]:}), ignorando variáveis que surjam a partir da linha 101 (Anomalia 10);
-c) coerções temporais, semânticas e expressões regulares destrutivas: no tratamento da dimensão cronológica, arquivos jornalísticos do LexisNexis têm suas datas convertidas na quantidade de meses transcorridos desde uma constante base (\texttt{d0 = datetime(1990,1,1)}), gerando valores negativos para publicações anteriores a 1990 que inviabilizam o fatiamento temporal futuro (Anomalia 14); registros sem data válida em bases Excel ou JSON recebem a injeção arbitrária do ano \texttt{"1 d.\allowbreak C."} (\texttt{[['1']]}), deformando os gráficos evolutivos (Anomalia 15), enquanto um simples espaço invisível ao final do ano (\texttt{"1998 "}) falha na verificação reversa \texttt{str(int(x)) != x} e bane o documento da série histórica com a marcação \texttt{outofscope} (Anomalia 16); no plano semântico, a regra condicional \texttt{if y == 'NA': y='0'} em extratores JSON e SMS converte dados ausentes na \textit{string} \texttt{"0"}, criando nós fantasmas em redes de coocorrência (Anomalia 18); ademais, expressões regulares agressivas destroem títulos de colunas redigidos fora do alfabeto latino básico via \texttt{re.\allowbreak sub(r'\textbackslash{}W+', '', field)} (Anomalia 12), erradicam anotações metodológicas entre colchetes em transcrições via \texttt{\textbackslash{}[[\textasciicircum{}]]*\textbackslash{}]} (Anomalia 17) e soldam parágrafos de documentos densos (PDF e DOCX) por meio de um delimitador artificial inalcançável (\texttt{"djkqsjsdlmkq..."}), destruindo a métrica de proximidade textual (Anomalia 21);
-d) gatilhos de amostragem, deduplicação e rigidez de extratores externos: em bases bibliométricas da Web of Science, o mecanismo de deduplicação automática baseado em \texttt{known\_\allowbreak notices} descarta imediatamente qualquer registro cujo identificador \texttt{notice\_\allowbreak unique\_\allowbreak id} já tenha sido lido; se os identificadores vierem em branco por falha de exportação, o sistema assume que todos os milhares de artigos são cópias e apaga o corpus inteiro (Anomalia 11); inversamente, a presença de uma coluna intitulada \texttt{nombre\_\allowbreak de\_\allowbreak personnes\_\allowbreak } em arquivos CSV aciona um laço oculto que clona a mesma linha dezenas de vezes no banco SQLite, inflando artificialmente as frequências estatísticas (Anomalia 20); em arquivos provenientes de raspagem web (como o portal Factiva), resíduos de formatação HTML e CSS (\texttt{"sm-margin-TopNews"}) quebram a extração semântica de nós (Anomalia 7), ao passo que a busca engessada pela marcação exata \texttt{'div class="author">'} esvazia a autoria diante de qualquer microatualização do portal emissor (Anomalia 19); por fim, no processamento de bases médicas PubMed em XML, a exigência rígida de três subcampos de nome provoca erros de índice (\texttt{IndexError}) diante de autores corporativos, enquanto corpora processados em blocos sofrem um corte silencioso ao ultrapassarem o teto estático de 150.000 sentenças (Anomalia 22).
+\par\indent a) anomalias de codificação, nomenclatura e subprocessos de sistema: na camada de leitura de arquivos, a rotina nativa \texttt{utf\_\allowbreak 8\_\allowbreak encoder} silencia falhas de decodificação executando o comando \texttt{yield('{}')}, o que converte linhas inteiras com caracteres não compatíveis com UTF-8 (como alfabetos cirílicos, asiáticos ou codificação Windows-1252) em espaços em branco (Anomalia 1); paralelamente, a presença de acentuação nos nomes de arquivos dentro de lotes compactados (\texttt{.zip}) ou pastas de PDFs provoca a falha de funções estáticas \texttt{.replace()} e aciona comandos deliberadamente quebrados no código (\texttt{dkjslq}) que interrompem o servidor sem explicação clara (Anomalia 8); no processamento de documentos PDF, uma verificação dependente do diretório local do criador da plataforma (\texttt{Users/\allowbreak jpcointet/}) dispara um subprocesso externo com um laço \texttt{while} limitado a 200 tentativas de um segundo (\texttt{time.\allowbreak sleep(1)}), abortando silenciosamente arquivos densos que excedam esse tempo limite (Anomalia 9); de modo análogo, arquivos do repositório acadêmico ISTEX são delegados ao script \texttt{docker\_\allowbreak wrapper.\allowbreak py}, cujo esgotamento de memória encerra o processo via \texttt{sys.\allowbreak exit()} e congela a tela do usuário (Anomalia 13), ao passo que falhas na criação das tabelas SQLite na rotina \texttt{fonctions.\allowbreak insert\_\allowbreak notices} mascaram o rastro real da exceção com impressões internas de terminal (\texttt{shitty1}) e exibem apenas a mensagem opaca \texttt{"No info in Logs"} (Anomalia 2);
+\par\indent b) quebras de simetria matricial e inferência de delimitadores: na manipulação de bases tabulares em formato CSV, o analisador restringe a leitura automática da classe \texttt{csv.\allowbreak Sniffer} aos primeiros 4.094 bytes do arquivo, falhando na detecção do separador quando a primeira célula contém um resumo científico extenso (Anomalia 5); durante a ingestão linha a linha, caso uma vírgula não escapada gere colunas excedentes, o comando imperativo \texttt{row=row[:nb\_\allowbreak field]} amputa silenciosamente o final do texto do usuário (Anomalia 3), enquanto a escassez de delimitadores (\texttt{len(row) < len(dico\_\allowbreak tag\_\allowbreak list)}) aciona a injeção cega de campos vazios via \texttt{row.\allowbreak insert()}, provocando o deslocamento taxonômico de metadados entre colunas (Anomalia 4); adicionalmente, o sistema exige separadores secundários idiossincráticos (como \texttt{\textbar{}\%\textbar{}}) para campos multivalorados, fundindo coautores separados por caracteres convencionais em uma única entidade (Anomalia 6), e restringe a inferência de cabeçalhos em arquivos JSON estritamente aos 100 primeiros registros (\texttt{for notice in data[:100]:}), ignorando variáveis que surjam a partir da linha 101 (Anomalia 10);
+\par\indent c) coerções temporais, semânticas e expressões regulares destrutivas: no tratamento da dimensão cronológica, arquivos jornalísticos do LexisNexis têm suas datas convertidas na quantidade de meses transcorridos desde uma constante base (\texttt{d0 = datetime(1990,1,1)}), gerando valores negativos para publicações anteriores a 1990 que inviabilizam o fatiamento temporal futuro (Anomalia 14); registros sem data válida em bases Excel ou JSON recebem a injeção arbitrária do ano \texttt{"1 d.\allowbreak C."} (\texttt{[['1']]}), deformando os gráficos evolutivos (Anomalia 15), enquanto um simples espaço invisível ao final do ano (\texttt{"1998 "}) falha na verificação reversa \texttt{str(int(x)) != x} e bane o documento da série histórica com a marcação \texttt{outofscope} (Anomalia 16); no plano semântico, a regra condicional \texttt{if y == 'NA': y='0'} em extratores JSON e SMS converte dados ausentes na \textit{string} \texttt{"0"}, criando nós fantasmas em redes de coocorrência (Anomalia 18); ademais, expressões regulares agressivas destroem títulos de colunas redigidos fora do alfabeto latino básico via \texttt{re.\allowbreak sub(r'\textbackslash{}W+', '{}', field)} (Anomalia 12), erradicam anotações metodológicas entre colchetes em transcrições via \texttt{\textbackslash{}[[\textasciicircum{}]]*\textbackslash{}]} (Anomalia 17) e soldam parágrafos de documentos densos (PDF e DOCX) por meio de um delimitador artificial inalcançável (\texttt{"djkqsjsdlmkq..."}), destruindo a métrica de proximidade textual (Anomalia 21);
+\par\indent d) gatilhos de amostragem, deduplicação e rigidez de extratores externos: em bases bibliométricas da Web of Science, o mecanismo de deduplicação automática baseado em \texttt{known\_\allowbreak notices} descarta imediatamente qualquer registro cujo identificador \texttt{notice\_\allowbreak unique\_\allowbreak id} já tenha sido lido; se os identificadores vierem em branco por falha de exportação, o sistema assume que todos os milhares de artigos são cópias e apaga o corpus inteiro (Anomalia 11); inversamente, a presença de uma coluna intitulada \texttt{nombre\_\allowbreak de\_\allowbreak personnes\_\allowbreak } em arquivos CSV aciona um laço oculto que clona a mesma linha dezenas de vezes no banco SQLite, inflando artificialmente as frequências estatísticas (Anomalia 20); em arquivos provenientes de raspagem web (como o portal Factiva), resíduos de formatação HTML e CSS (\texttt{"sm-margin-TopNews"}) quebram a extração semântica de nós (Anomalia 7), ao passo que a busca engessada pela marcação exata \texttt{'div class="author">'} esvazia a autoria diante de qualquer microatualização do portal emissor (Anomalia 19); por fim, no processamento de bases médicas PubMed em XML, a exigência rígida de três subcampos de nome provoca erros de índice (\texttt{IndexError}) diante de autores corporativos, enquanto corpora processados em blocos sofrem um corte silencioso ao ultrapassarem o teto estático de 150.000 sentenças (Anomalia 22).
 
 A partir desse diagnóstico de infraestrutura e das demandas empíricas de \textit{Parsing} Derivado identificadas no fórum oficial, especificaram-se 24 Requisitos Funcionais (RF01 a RF24), divididos entre o módulo preventivo de \textit{Data Profiling}, o módulo pós-ingestão SQLite e o módulo reativo RAG, além de quatro Requisitos Não Funcionais (RNF01 a RNF04) que governam a privacidade, o desacoplamento e a eficiência computacional da solução. A Tabela 8 consolida a Matriz de Requisitos Funcionais do sistema.
 
@@ -747,18 +786,18 @@ A partir desse diagnóstico de infraestrutura e das demandas empíricas de \text
   \endfoot
   \hline
   \endlastfoot
-  RF01 & \textit{Pre-Flight Profiler} & \#01 & Inspecionar a codificação de bytes do arquivo bruto antes do envio, apontando o número exato das linhas com caracteres incompatíveis com UTF-8 para evitar o comando destrutivo \texttt{yield('')}. & Conformidade Sintática \\ \hline
+  RF01 & \textit{Pre-Flight Profiler} & \#01 & Inspecionar a codificação de bytes do arquivo bruto antes do envio, apontando o número exato das linhas com caracteres incompatíveis com UTF-8 para evitar o comando destrutivo \texttt{yield('{}')}. & Conformidade Sintática \\ \hline
   RF02 & \textit{Log Explainer \& RAG} & \#02 & Capturar o rastro técnico (\textit{traceback}) de exceções silenciadas em \texttt{fonctions.\allowbreak insert\_\allowbreak notices} (\texttt{No info in Logs} / \texttt{shitty1}) e traduzi-lo em diagnóstico acionável via RAG local. & Acessibilidade e Observabilidade \\ \hline
   RF03 & \textit{Pre-Flight Profiler} & \#03 & Validar a contagem de delimitadores linha a linha em arquivos CSV e emitir alerta obstativo quando houver colunas excedentes, prevenindo a truncagem \texttt{row=row[:nb\_\allowbreak field]}. & Consistência Estrutural \\ \hline
   RF04 & \textit{Pre-Flight Profiler} & \#04 & Detectar linhas com escassez de delimitadores via motor Pandas (\texttt{ParserError}), prevenindo a injeção cega \texttt{row.\allowbreak insert()} e o deslocamento de colunas. & Completude Estrutural \\ \hline
   RF05 & \textit{Pre-Flight Profiler} & \#05 & Inferir separadores tabulares mediante leitura estatística das primeiras 100 linhas completas, superando o limite de 4.094 bytes do \texttt{csv.\allowbreak Sniffer}. & Acurácia Representacional \\ \hline
-  RF06 & \textit{Pre-Flight Profiler} & \#06 & Mapear separadores secundários em células multivaloradas e orientar a adoção do delimitador exigido pelo CorText Manager (ex.: \texttt{|\%|}). & Consistência Taxonômica \\ \hline
+  RF06 & \textit{Pre-Flight Profiler} & \#06 & Mapear separadores secundários em células multivaloradas e orientar a adoção do delimitador exigido pelo CorText Manager (ex.: \texttt{\textbar{}\%\textbar{}}). & Consistência Taxonômica \\ \hline
   RF07 & \textit{Log Explainer \& RAG} & \#07 & Diagnosticar falhas de extração semântica causadas por resíduos CSS/HTML (como \texttt{"sm-margin-TopNews"}) e instruir a limpeza via substituição textual. & Interpretabilidade \\ \hline
   RF08 & \textit{Pre-Flight Profiler} & \#08 & Varrer lotes compactados (\texttt{.zip}) e pastas de PDFs bloqueando nomes de arquivos com acentuação ou caracteres especiais antes da falha do servidor. & Conformidade Operacional \\ \hline
   RF09 & \textit{Log Explainer \& RAG} & \#09 & Interceptar registros de esgotamento de tempo (\textit{timeout} de 200s em \texttt{pdf2txt.\allowbreak py}) e orientar a conversão local prévia de PDFs pesados para \texttt{.txt}. & Tempestividade e Suporte \\ \hline
   RF10 & \textit{Pre-Flight Profiler} & \#10 & Executar leitura iterativa de 100\% das chaves de arquivos JSON, superando a trava \texttt{data[:100]} para garantir a completude do esquema SQLite. & Completude Amostral \\ \hline
   RF11 & \textit{Pre-Flight Profiler} & \#11 & Contabilizar a integridade de chaves únicas (\texttt{notice\_\allowbreak unique\_\allowbreak id}) em bases WOS/ISI, alertando sobre IDs em branco ou duplicados antes da exclusão em massa. & Unicidade e Rastreabilidade \\ \hline
-  RF12 & \textit{Pre-Flight Profiler} & \#12 & Auditar títulos de colunas e gerar relatório \textit{De-Para} caso existam caracteres não latinos ou especiais que seriam apagados por \texttt{re.\allowbreak sub(r'\textbackslash{}W+', '', field)}. & Representação de Esquema \\ \hline
+  RF12 & \textit{Pre-Flight Profiler} & \#12 & Auditar títulos de colunas e gerar relatório \textit{De-Para} caso existam caracteres não latinos ou especiais que seriam apagados por \texttt{re.\allowbreak sub(r'\textbackslash{}W+', '{}', field)}. & Representação de Esquema \\ \hline
   RF13 & \textit{Log Explainer \& RAG} & \#13 & Reconhecer falhas de memória (\textit{Out-of-Memory} e \texttt{sys.\allowbreak exit()}) no contêiner \texttt{docker\_\allowbreak wrapper.\allowbreak py} ao processar bases ISTEX e recomendar o fracionamento do lote. & Observabilidade de Infraestrutura \\ \hline
   RF14 & \textit{Pre-Flight Profiler} & \#14 & Realizar varredura cronológica mínima e máxima em bases LexisNexis, alertando sobre datas anteriores ao ``Ano Zero'' nativo (1990). & Consistência Temporal \\ \hline
   RF15 & \textit{Pre-Flight Profiler} & \#15 & Identificar registros com campos de data nulos ou vazios em arquivos XLS e JSON, impedindo a atribuição artificial do ano \texttt{"1 d.\allowbreak C."} (\texttt{[['1']]}). & Precisão Temporal \\ \hline
@@ -774,6 +813,8 @@ A partir desse diagnóstico de infraestrutura e das demandas empíricas de \text
 \end{xltabular}
 \vspace{-0.2cm}\noindent{\footnotesize\textit{Fonte: Elaborado pelo autor (2026).}}\par\vspace{0.4cm}
 }
+\FloatBarrier
+
 
 Complementarmente, a Tabela 9 especifica os quatro Requisitos Não Funcionais (RNF01 a RNF04) que asseguram a viabilidade ética, arquitetural e computacional do protótipo no ecossistema acadêmico.
 
@@ -793,9 +834,11 @@ Complementarmente, a Tabela 9 especifica os quatro Requisitos Não Funcionais (R
   \end{tabularx}
   \legend{Fonte: Elaborado pelo autor (2026).}
 \end{table}
+\FloatBarrier
 
 
-\section{Arquitetura da Solução}\label{sec:arquitetura_da_solucao}
+\FloatBarrier
+\section{ARQUITETURA DA SOLUÇÃO}\label{sec:arquitetura_da_solucao}
 
 
 A arquitetura do Assistente de Observabilidade Sociotécnica foi projetada para atuar de forma coordenada antes, durante e imediatamente após a etapa de \textit{Data Parsing}, desonerando a equipe técnica (\textit{Staff as Human Parser}) e conferindo autonomia diagnóstica ao pesquisador social \cite{CorText2026}. Conforme sistematizado na Tabela 10, o sistema estrutura-se em três módulos nucleares acoplados a uma memória de contexto compartilhada.
@@ -815,8 +858,10 @@ A arquitetura do Assistente de Observabilidade Sociotécnica foi projetada para 
   \end{tabularx}
   \legend{Fonte: Elaborado pelo autor (2026).}
 \end{table}
+\FloatBarrier
 
 
+\FloatBarrier
 \subsection{Fluxo de Interação e Orquestração como Aplicação Companheira}\label{sec:fluxo_de_interacao_e_orquestracao_como_a}
 
 
@@ -835,6 +880,7 @@ Para conciliar a validação preventiva (que ocorre antes do envio do arquivo br
   \end{center}
   \legend{Fonte: Elaborado pelo autor (2026).}
 \end{figure}
+\FloatBarrier
 
 
 No primeiro momento, correspondente à tela de auditoria preventiva no ``Tempo Zero'' (\textit{Pre-Flight Data Profiler}), o pesquisador submete seu arquivo bruto (CSV, RIS, WOS, JSON, XML ou ZIP) por meio de uma área de arrastar e soltar (\textit{Drag and Drop}) antes de carregá-lo no CorText Manager. O motor determinístico em Python e Pandas executa a bateria de verificações sintáticas e estruturais, exibindo na interface um sistema de semáforo visual: verde para arquivos integralmente conformes ao esquema esperado; amarelo para avisos de coerção metodológica (como a presença de valores \texttt{"NA"}, colchetes \texttt{[...]} ou datas anteriores a 1990); e vermelho para anomalias obstativas severas (como bytes não-UTF-8, quebra na contagem de delimitadores ou nomes acentuados em arquivos ZIP), indicando a linha e a coluna exatas que requerem correção. Simultaneamente, em segundo plano, a aplicação armazena um dicionário JSON compacto contendo a radiografia estrutural daquele arquivo na memória de estado da sessão (\texttt{st.\allowbreak session\_\allowbreak state}).
@@ -843,15 +889,16 @@ No segundo momento, referente à validação pós-ingestão (\textit{Early-Warni
 
 No terceiro momento, correspondente ao campo de diagnóstico forense (\textit{Log Explainer \& RAG}), caso o processamento no CorText Manager sofra uma interrupção em tempo de execução (como estouro de memória no contêiner Docker do ISTEX, \textit{timeout} de 200 segundos em PDF ou erro de sintaxe SQLite), o usuário cola a mensagem de erro ou o \textit{traceback} capturado diretamente na aplicação companheira. Nesse instante, o orquestrador recupera os tópicos historicamente resolvidos pelo \textit{Staff} no Banco de Dados Vetorial, acopla automaticamente a radiografia do arquivo salva no primeiro momento como um \textit{Prompt Oculto de Contexto} (evitando que o usuário precise descrever manualmente seu arquivo) e aciona o LLM local via Ollama para gerar um diagnóstico pedagógico e acionável.
 
-\section{Implementação}\label{sec:implementacao}
+\FloatBarrier
+\section{IMPLEMENTAÇÃO}\label{sec:implementacao}
 
 
 A implementação do protótipo do Assistente de Observabilidade Sociotécnica foi organizada de forma modular em linguagem Python, seguindo as diretrizes de engenharia de software e as convenções de diretórios do ecossistema CorText Manager para facilitar sua distribuição aberta e eventual integração via \textit{Pull Request}. A estrutura de arquivos do projeto divide-se em quatro componentes principais:
 
-a) módulo de extração e preparação da base de conhecimento (\texttt{extract\_\allowbreak forum.\allowbreak py} e \texttt{build\_\allowbreak vector\_\allowbreak db.\allowbreak py}): o script \texttt{extract\_\allowbreak forum.\allowbreak py}, já integralmente implementado e auditado nesta pesquisa, realiza a coleta assíncrona via \texttt{aiohttp} das 34 páginas do fórum oficial, extraindo os metadados JSON-LD e consolidando os arquivos \texttt{forum\_\allowbreak topics\_\allowbreak full.\allowbreak json}, \texttt{forum\_\allowbreak topics.\allowbreak csv} e \texttt{forum\_\allowbreak corpus.\allowbreak md}; na sequência, o script \texttt{build\_\allowbreak vector\_\allowbreak db.\allowbreak py} processa o corpus em Markdown juntamente com o guia oficial da plataforma (\textit{CorTexT Manager Comprehensive Documentation and User Guide}), aplicando segmentação semântica (\textit{chunking}) estruturada por tópico de discussão e gerando os \textit{embeddings} armazenados localmente no banco vetorial ChromaDB;
-b) motor determinístico de auditoria preventiva (\texttt{data\_\allowbreak quality\_\allowbreak profiler.\allowbreak py} e \texttt{early\_\allowbreak warning\_\allowbreak sqlite.\allowbreak py}): concentra as funções vetorizadas em Pandas, expressões regulares (\texttt{re}) e manipulação de arquivos (\texttt{zipfile}, \texttt{codecs} e \texttt{sqlite3}) que implementam os Requisitos Funcionais RF01, RF03 a RF06, RF08, RF10 a RF12 e RF14 a RF23; note-se que o nome \texttt{data\_\allowbreak quality\_\allowbreak profiler.\allowbreak py} foi adotado deliberadamente para evitar colisão de nomenclatura com a pasta legada \texttt{profiling/} existente no repositório do CorText Manager, a qual se destina a análises demográficas pós-ingestão;
-c) motor de inferência local e orquestração RAG (\texttt{rag\_\allowbreak log\_\allowbreak explainer.\allowbreak py}): gerencia a comunicação local via API REST com o servidor Ollama (executando modelos abertos como Llama 3 8B ou Phi-3 Mini) e implementa o modelo de comando restritivo (\textit{system prompt}); o comando instrui explicitamente o modelo a basear seu diagnóstico exclusivamente nos trechos recuperados do fórum e na radiografia fornecida pelo \textit{Pre-Flight Profiler}, proibindo a invenção de menus ou botões inexistentes na interface do CorText Manager;
-d) interface gráfica da aplicação companheira (\texttt{app\_\allowbreak assistant.\allowbreak py} e \texttt{assistant\_\allowbreak config.\allowbreak yaml}): constrói o painel interativo em Streamlit com suporte a múltiplos idiomas (português, inglês e francês), integrando a área de inspeção prévia de arquivos, o visualizador de integridade SQLite e o console de tradução de \textit{logs}.
+\par\indent a) módulo de extração e preparação da base de conhecimento (\texttt{extract\_\allowbreak forum.\allowbreak py} e \mbox{\texttt{build\_vector\_db.py}}): o script \texttt{extract\_\allowbreak forum.\allowbreak py}, já integralmente implementado e auditado nesta pesquisa, realiza a coleta assíncrona via \texttt{aiohttp} das 34 páginas do fórum oficial, extraindo os metadados JSON-LD e consolidando os arquivos \texttt{forum\_\allowbreak topics\_\allowbreak full.\allowbreak json}, \texttt{forum\_\allowbreak topics.\allowbreak csv} e \texttt{forum\_\allowbreak corpus.\allowbreak md}; na sequência, o script \mbox{\texttt{build\_vector\_db.py}} processa o corpus em Markdown juntamente com o guia oficial da plataforma (\textit{CorTexT Manager Comprehensive Documentation and User Guide}), aplicando segmentação semântica (\textit{chunking}) estruturada por tópico de discussão e gerando os \textit{embeddings} armazenados localmente no banco vetorial ChromaDB;
+\par\indent b) motor determinístico de auditoria preventiva (\texttt{data\_\allowbreak quality\_\allowbreak profiler.\allowbreak py} e \texttt{early\_\allowbreak warning\_\allowbreak sqlite.\allowbreak py}): concentra as funções vetorizadas em Pandas, expressões regulares (\texttt{re}) e manipulação de arquivos (\texttt{zipfile}, \texttt{codecs} e \texttt{sqlite3}) que implementam os Requisitos Funcionais RF01, RF03 a RF06, RF08, RF10 a RF12 e RF14 a RF23; note-se que o nome \texttt{data\_\allowbreak quality\_\allowbreak profiler.\allowbreak py} foi adotado deliberadamente para evitar colisão de nomenclatura com a pasta legada \texttt{profiling/} existente no repositório do CorText Manager, a qual se destina a análises demográficas pós-ingestão;
+\par\indent c) motor de inferência local e orquestração RAG (\texttt{rag\_\allowbreak log\_\allowbreak explainer.\allowbreak py}): gerencia a comunicação local via API REST com o servidor Ollama (executando modelos abertos como Llama 3 8B ou Phi-3 Mini) e implementa o modelo de comando restritivo (\textit{system prompt}); o comando instrui explicitamente o modelo a basear seu diagnóstico exclusivamente nos trechos recuperados do fórum e na radiografia fornecida pelo \textit{Pre-Flight Profiler}, proibindo a invenção de menus ou botões inexistentes na interface do CorText Manager;
+\par\indent d) interface gráfica da aplicação companheira (\texttt{app\_\allowbreak assistant.\allowbreak py} e \texttt{assistant\_\allowbreak config.\allowbreak yaml}): constrói o painel interativo em Streamlit com suporte a múltiplos idiomas (português, inglês e francês), integrando a área de inspeção prévia de arquivos, o visualizador de integridade SQLite e o console de tradução de \textit{logs}.
 
 \begin{citacao}
 \textbf{[ESPAÇO RESERVADO — DETALHAMENTO FINAL DA IMPLEMENTAÇÃO, SNIPPETS DE CÓDIGO E TELAS DO PROTÓTIPO]:} \textit{Inserir aqui, após a finalização da codificação dos módulos \texttt{data\_\allowbreak quality\_\allowbreak profiler.\allowbreak py}, \texttt{rag\_\allowbreak log\_\allowbreak explainer.\allowbreak py} e \texttt{app\_\allowbreak assistant.\allowbreak py}:} \textit{1. O trecho exato do System Prompt utilizado na engenharia de prompt do módulo RAG para blindagem contra alucinações;} \textit{2. As especificações técnicas do modelo de embedding e da janela de contexto configurados no Ollama/ChromaDB;} \textit{3. As capturas de tela (Figuras 4 e 5) da interface da aplicação companheira em Streamlit mostrando o semáforo do Pre-Flight Profiler e a saída do Log Explainer \& RAG.}
@@ -866,6 +913,7 @@ d) interface gráfica da aplicação companheira (\texttt{app\_\allowbreak assis
   \end{center}
   \legend{Fonte: Elaborado pelo autor (2026).}
 \end{figure}
+\FloatBarrier
 
 
 \begin{figure}[htb]
@@ -876,13 +924,16 @@ d) interface gráfica da aplicação companheira (\texttt{app\_\allowbreak assis
   \end{center}
   \legend{Fonte: Elaborado pelo autor (2026).}
 \end{figure}
+\FloatBarrier
 
 
-\section{Testes e Validação}\label{sec:testes_e_validacao}
+\FloatBarrier
+\section{TESTES E VALIDAÇÃO}\label{sec:testes_e_validacao}
 
 
 A homologação e a validação científica do Assistente de Observabilidade Sociotécnica foram estruturadas para verificar empiricamente as duas hipóteses centrais desta pesquisa (H1, referente à eficácia preventiva do \textit{Data Profiling}, e H2, referente à superioridade diagnóstica do modelo RAG local frente a modelos de linguagem genéricos), garantindo total independência operacional em relação aos servidores de produção da plataforma CorText Manager. O protocolo experimental divide-se em três frentes complementares: Engenharia do Caos com injeção controlada de falhas sintéticas, Teste A/B cego de avaliação de diagnósticos gerados por IA e avaliação sociotécnica com usuários locais.
 
+\FloatBarrier
 \subsection{Engenharia do Caos e Construção do Corpus de Caos}\label{sec:engenharia_do_caos_e_construcao_do_corpu}
 
 
@@ -907,18 +958,18 @@ Cada artefato do \textit{Corpus de Caos} foi projetado para acionar exatamente u
   \endfoot
   \hline
   \endlastfoot
-  TC01 & RF01 & \texttt{.txt} / \texttt{.csv} & Inserção de caracteres em codificação Windows-1252 e alfabeto cirílico na linha 15. & Execução de \texttt{yield('')} em \texttt{utf\_\allowbreak 8\_\allowbreak encoder}, apagando silenciosamente toda a linha 15. & \textit{Pre-Flight Profiler} & Bloqueio preventivo apontando erro não-UTF-8 exatamente na linha 15. \\ \hline
+  TC01 & RF01 & \texttt{.txt} / \texttt{.csv} & Inserção de caracteres em codificação Windows-1252 e alfabeto cirílico na linha 15. & Execução de \texttt{yield('{}')} em \texttt{utf\_\allowbreak 8\_\allowbreak encoder}, apagando silenciosamente toda a linha 15. & \textit{Pre-Flight Profiler} & Bloqueio preventivo apontando erro não-UTF-8 exatamente na linha 15. \\ \hline
   TC02 & RF02 & \texttt{.csv} / SQLite & Submissão de tipo incompatível forçando quebra em \texttt{fonctions.\allowbreak insert\_\allowbreak notices} (\texttt{dkjslq} / \texttt{shitty1}). & Travamento opaco com mensagem genérica \texttt{"No info in Logs"} na interface web. & \textit{Log Explainer \& RAG} & Captura do \textit{traceback} oculto e tradução da causa raiz em linguagem natural. \\ \hline
   TC03 & RF03 & \texttt{.csv} & Inserção de vírgula não escapada no meio de um resumo científico na linha 40. & Fatiamento imperativo \texttt{row=row[:nb\_\allowbreak field]}, truncando e deletando o final do texto. & \textit{Pre-Flight Profiler} & Alerta obstativo de excesso de delimitadores na linha 40 antes do corte. \\ \hline
   TC04 & RF04 & \texttt{.csv} & Supressão de dois delimitadores na linha 28 (\texttt{len(row) < len(dico\_\allowbreak tag\_\allowbreak list)}). & Injeção cega de células vazias (\texttt{row.\allowbreak insert()}), deslocando metadados entre colunas. & \textit{Pre-Flight Profiler} & Detecção via \texttt{ParserError} apontando escassez de delimitadores na linha 28. \\ \hline
   TC05 & RF05 & \texttt{.csv} & Primeira célula contendo um \textit{abstract} de 5.000 caracteres (> 4.094 bytes) antes do primeiro separador. & Falha do \texttt{csv.\allowbreak Sniffer} por limite de 4KB, corrompendo o fatiamento de todo o corpus. & \textit{Pre-Flight Profiler} & Leitura estatística de 100 linhas completas e inferência correta do delimitador. \\ \hline
-  TC06 & RF06 & \texttt{.csv} / \texttt{.xls} & Lista de coautores separada por ponto e vírgula convencional em vez de \texttt{|\%|}. & Fusão de múltiplos autores como se fossem uma única entidade ou embaralhamento. & \textit{Pre-Flight Profiler} & Alerta visual orientando a substituição para o separador multivalorado nativo. \\ \hline
+  TC06 & RF06 & \texttt{.csv} / \texttt{.xls} & Lista de coautores separada por ponto e vírgula convencional em vez de \texttt{\textbar{}\%\textbar{}}. & Fusão de múltiplos autores como se fossem uma única entidade ou embaralhamento. & \textit{Pre-Flight Profiler} & Alerta visual orientando a substituição para o separador multivalorado nativo. \\ \hline
   TC07 & RF07 & \texttt{.html} / \texttt{.xlsx} & Injeção de resíduos de formatação CSS/HTML (\texttt{"sm-margin-TopNews"}) no corpo textual do Factiva. & Quebra dos extratores semânticos e aborto na criação dos nós (\textit{nodes}) da rede. & \textit{Log Explainer \& RAG} & Diagnóstico identificando a \textit{string} suja e instruindo uso de \texttt{replace()} externo. \\ \hline
   TC08 & RF08 & \texttt{.zip} / \texttt{.pdf} & Lote compactado contendo arquivo nomeado como \texttt{SISTEMATIZACIÓN-2022.\allowbreak pdf}. & Falha catastrófica no \texttt{.replace()} estático e parada forçada do servidor (\texttt{dkjslq}). & \textit{Pre-Flight Profiler} & Bloqueio pré-envio exigindo renomeação para caracteres alfanuméricos limpos. \\ \hline
   TC09 & RF09 & \texttt{.pdf} & Submissão de PDF denso ou criptografado que excede 200 iterações de 1 segundo (\texttt{time.\allowbreak sleep(1)}). & Esgotamento silencioso do \textit{timeout} de 200s e exclusão do documento sem aviso. & \textit{Log Explainer \& RAG} & Interceptação do \textit{timeout} no registro e recomendação de conversão prévia para \texttt{.txt}. \\ \hline
   TC10 & RF10 & \texttt{.json} & Arquivo de 500 registros onde a chave \texttt{retweet\_\allowbreak status} surge apenas na linha 101. & Laço \texttt{for notice in data[:100]:} ignora a variável, omitindo-a do banco SQLite. & \textit{Pre-Flight Profiler} & Varredura integral de 100\% dos objetos JSON assegurando completude do esquema. \\ \hline
   TC11 & RF11 & \texttt{.isi} (WOS) & Base Web of Science com 100 artigos contendo o campo \texttt{notice\_\allowbreak unique\_\allowbreak id} em branco. & Deduplicação automática (\texttt{known\_\allowbreak notices}) assume que todos são cópias e apaga a base. & \textit{Pre-Flight Profiler} & Alerta crítico de IDs nulos ou duplicados prevenindo a geração de rede vazia. \\ \hline
-  TC12 & RF12 & \texttt{.csv} & Cabeçalhos de colunas redigidos com caracteres não latinos (cirílico e mandarim) e símbolos. & Expressão regular \texttt{re.\allowbreak sub(r'\textbackslash{}W+', '', field)} destrói os títulos, gerando colunas vazias. & \textit{Pre-Flight Profiler} & Geração de relatório \textit{De-Para} orientando renomeação para alfabeto latino básico. \\ \hline
+  TC12 & RF12 & \texttt{.csv} & Cabeçalhos de colunas redigidos com caracteres não latinos (cirílico e mandarim) e símbolos. & Expressão regular \texttt{re.\allowbreak sub(r'\textbackslash{}W+', '{}', field)} destrói os títulos, gerando colunas vazias. & \textit{Pre-Flight Profiler} & Geração de relatório \textit{De-Para} orientando renomeação para alfabeto latino básico. \\ \hline
   TC13 & RF13 & \texttt{.json} (ISTEX) & Simulação de colapso de memória no subprocesso \texttt{docker\_\allowbreak wrapper.\allowbreak py} com saída \texttt{sys.\allowbreak exit()}. & Morte silenciosa do contêiner Docker e congelamento infinito da tela do usuário. & \textit{Log Explainer \& RAG} & Diagnóstico explicando o limite de memória do Docker ISTEX e sugerindo divisão do lote. \\ \hline
   TC14 & RF14 & \texttt{.txt} & Artigos de imprensa LexisNexis com datas publicadas em 1989 (anteriores a \texttt{datetime(1990,1,1)}). & Cálculo de meses negativos (-12), quebrando futuramente o módulo \textit{Period Slicer}. & \textit{Pre-Flight Profiler} & Varredura mínima e máxima alertando sobre conflito com o ``Ano Zero'' (1990) da plataforma. \\ \hline
   TC15 & RF15 & \texttt{.xls} / \texttt{.json} & Matriz contendo 20 registros contemporâneos com o campo cronológico vazio ou nulo. & Injeção arbitrária de \texttt{[['1']]}, atribuindo o ano \texttt{"1 d.\allowbreak C."} e deformando a escala temporal. & \textit{Pre-Flight Profiler} & Detecção de datas nulas questionando se o usuário deseja preencher ou excluir as linhas. \\ \hline
@@ -932,7 +983,10 @@ Cada artefato do \textit{Corpus de Caos} foi projetado para acionar exatamente u
 \end{xltabular}
 \vspace{-0.2cm}\noindent{\footnotesize\textit{Fonte: Elaborado pelo autor (2026).}}\par\vspace{0.4cm}
 }
+\FloatBarrier
 
+
+\FloatBarrier
 \subsection{Protocolo do Teste A/B para Avaliação do Módulo RAG}\label{sec:protocolo_do_teste_a_b_para_avaliacao_do}
 
 
@@ -940,11 +994,12 @@ Para testar empiricamente a Hipótese H2 (segundo a qual o modelo de linguagem a
 
 Para cada chamado da amostra, o erro relatado e o rastro de execução correspondente são submetidos sob as mesmas condições de hardware e temperatura de geração ($T = 0,1$) a duas configurações experimentais executadas localmente via Ollama:
 
-a) Grupo Controle (LLM \textit{Vanilla}): o modelo fundacional local responde diretamente ao erro de \textit{parsing} valendo-se apenas de seu treinamento prévio geral, sem acesso ao Banco de Dados Vetorial nem ao resumo do \textit{Pre-Flight Profiler};
-b) Grupo Experimental (Assistente Sociotécnico com RAG Local): o mesmo modelo fundacional responde ao erro após a injeção dos trechos recuperados do índice vetorial (\texttt{forum\_\allowbreak corpus.\allowbreak md} e Guia Oficial) combinados ao \textit{Prompt Oculto de Contexto} gerado pelo \textit{Data Profiler}.
+\par\indent a) Grupo Controle (LLM \textit{Vanilla}): o modelo fundacional local responde diretamente ao erro de \textit{parsing} valendo-se apenas de seu treinamento prévio geral, sem acesso ao Banco de Dados Vetorial nem ao resumo do \textit{Pre-Flight Profiler};
+\par\indent b) Grupo Experimental (Assistente Sociotécnico com RAG Local): o mesmo modelo fundacional responde ao erro após a injeção dos trechos recuperados do índice vetorial (\texttt{forum\_\allowbreak corpus.\allowbreak md} e Guia Oficial) combinados ao \textit{Prompt Oculto de Contexto} gerado pelo \textit{Data Profiler}.
 
 As respostas produzidas por ambos os grupos são confrontadas diretamente com o gabarito oficial (\textit{Ground Truth}), constituído pela solução real validada pelos desenvolvedores da plataforma no fórum, sendo avaliadas segundo três métricas objetivas (pontuadas em escala de 0 a 2 para cada caso): Corretude Técnica da Causa Raiz, Ausência de Alucinação de Interface (verificar se o modelo inventou menus ou parâmetros inexistentes no CorText Manager) e Acionabilidade Metodológica das instruções para um pesquisador das ciências sociais.
 
+\FloatBarrier
 \subsection{Avaliação Sociotécnica e de Usabilidade com Usuários Locais}\label{sec:avaliacao_sociotecnica_e_de_usabilidade_}
 
 
@@ -954,11 +1009,13 @@ Complementando a validação algorítmica e o Teste A/B, o protocolo experimenta
 \chapter{Resultados e Discussão}\label{sec:resultados_e_discussao}
 
 
-\section{Resultados Obtidos}\label{sec:resultados_obtidos}
+\FloatBarrier
+\section{RESULTADOS OBTIDOS}\label{sec:resultados_obtidos}
 
 
 A apresentação dos resultados desta investigação estrutura-se em duas partes complementares, alinhadas aos objetivos específicos do trabalho. A primeira parte expõe os resultados empíricos e estatísticos consolidados a partir da auditoria censitária do fórum oficial de suporte do CorText Manager (\texttt{https://docs.\allowbreak cortext.\allowbreak net/\allowbreak forum/}), cumprindo o primeiro objetivo específico de caracterizar quantitativa e qualitativamente as fricções de importação de dados \cite{CorText2026}. A segunda parte destina-se aos resultados experimentais da avaliação do protótipo do Assistente de Observabilidade Sociotécnica perante o \textit{Corpus de Caos} e o Teste A/B do módulo de Recuperação Aumentada por Geração (RAG).
 
+\FloatBarrier
 \subsection{Mapeamento da Fricção por Formato de Entrada e Sobrecarga do Suporte Humano}\label{sec:mapeamento_da_friccao_por_formato_de_ent}
 
 
@@ -972,6 +1029,7 @@ Conforme demonstrado na caracterização inicial do problema, a auditoria dos 29
   \end{center}
   \legend{Fonte: Elaborado pelo autor a partir dos dados auditados do fórum oficial (2026).}
 \end{figure}
+\FloatBarrier
 
 
 A ausência de explicabilidade técnica nas mensagens de erro geradas durante a falha de ingestão desses formatos produz uma dependência direta e contínua do suporte humano prestado pelos mantenedores e desenvolvedores da plataforma \cite{CorText2026}. O cruzamento das variáveis de autoria de resposta (\texttt{has\_\allowbreak staff\_\allowbreak answer}) revelou que as dúvidas de \textit{Data processing} demandam uma taxa de intervenção manual da equipe técnica (\textit{Staff as Human Parser}) de 81,0\% (68 de 84 tópicos), superando a taxa de atendimento manual observada nas demais categorias metodológicas da plataforma (77,1\%, ou 165 de 214 tópicos), conforme demonstrado na Figura 7.
@@ -984,6 +1042,7 @@ A ausência de explicabilidade técnica nas mensagens de erro geradas durante a 
   \end{center}
   \legend{Fonte: Elaborado pelo autor a partir dos dados auditados do fórum oficial (2026).}
 \end{figure}
+\FloatBarrier
 
 
 Paralelamente, a inspeção dos estados formais de conclusão dos tópicos na categoria \textit{Data processing} (gerenciados pelo sistema \textit{DW Question \& Answer} do WordPress) evidencia que exatamente metade do acervo permanece formalmente em aberto, refletindo a dificuldade operacional do usuário comum em confirmar o fechamento de suas dúvidas ou validar se a correção manual sugerida restaurou a integridade do seu banco SQLite. A Figura 8 e a Tabela 12 apresentam a distribuição detalhada dos chamados por status operacional.
@@ -996,6 +1055,7 @@ Paralelamente, a inspeção dos estados formais de conclusão dos tópicos na ca
   \end{center}
   \legend{Fonte: Elaborado pelo autor a partir dos dados auditados do fórum oficial (2026).}
 \end{figure}
+\FloatBarrier
 
 
 \begin{table}[htb]
@@ -1015,8 +1075,10 @@ Paralelamente, a inspeção dos estados formais de conclusão dos tópicos na ca
   \end{tabularx}
   \legend{Fonte: Elaborado pelo autor a partir dos dados auditados do fórum oficial (2026).}
 \end{table}
+\FloatBarrier
 
 
+\FloatBarrier
 \subsection{O Custo Cognitivo da Opacidade: Evidências Estatísticas Textuais}\label{sec:o_custo_cognitivo_da_opacidade_evidencia}
 
 
@@ -1030,6 +1092,7 @@ Para mensurar quantitativamente o esforço cognitivo despendido pelos pesquisado
   \end{center}
   \legend{Fonte: Elaborado pelo autor a partir dos dados auditados do fórum oficial (2026).}
 \end{figure}
+\FloatBarrier
 
 
 \begin{table}[htb]
@@ -1047,10 +1110,12 @@ Para mensurar quantitativamente o esforço cognitivo despendido pelos pesquisado
   \end{tabularx}
   \legend{Fonte: Elaborado pelo autor a partir dos dados auditados do fórum oficial (2026).}
 \end{table}
+\FloatBarrier
 
 
 Considerando a assimetria positiva das distribuições de contagem de palavras, aplicaram-se testes de hipótese não paramétricos sobre as amostras \cite{Kruskal1952,Mann1947}. No Teste de Kruskal-Wallis para comparação simultânea dos três grupos, obteve-se a estatística $H = 15,923$, com valor de probabilidade $p = 0,00035$ ($p < 0,001$), rejeitando-se categoricamente a hipótese nula com 99,9\% de confiança e comprovando a existência de diferença estatisticamente altamente significante entre as extensões textuais dos três escopos \cite{Kruskal1952}. Complementarmente, na aplicação do Teste de Mann-Whitney contrastando o conjunto total de problemas de \textit{Data Parsing} (Direto somado ao Indireto, $N = 198$) contra os demais temas metodológicos ($N = 100$), obteve-se $Z = 3,380$ ($p = 0,0007 < 0,001$), confirmando que chamados envolvendo falhas de ingestão e formatação exigem significativamente mais palavras e esforço descritivo por parte do pesquisador \cite{Mann1947}.
 
+\FloatBarrier
 \subsection{Resultados da Engenharia do Caos, do Teste A/B e da Avaliação de Usabilidade}\label{sec:resultados_da_engenharia_do_caos_do_test}
 
 
@@ -1059,7 +1124,8 @@ Considerando a assimetria positiva das distribuições de contagem de palavras, 
 \end{citacao}
 
 
-\section{Análise e Discussão}\label{sec:analise_e_discussao}
+\FloatBarrier
+\section{ANÁLISE E DISCUSSÃO}\label{sec:analise_e_discussao}
 
 
 Os resultados empíricos auferidos na auditoria do fórum validam integralmente os pressupostos teóricos mobilizados a partir dos Estudos de Ciência e Tecnologia (STS) e da Engenharia de Qualidade de Dados. A constatação estatística de que o grupo de \textit{Parsing} Indireto apresenta a maior mediana (95,0 palavras), a maior média (129,6 palavras) e o maior terceiro quartil (163,0 palavras) de todo o ecossistema ($p < 0,001$) \cite{Kruskal1952} materializa empiricamente o conceito de fricção de dados de \citeonline{Edwards2010} e o princípio da ruptura infraestrutural de \citeonline{Bowker1999}. Quando o analisador sintático nativo silencia exceções ou aplica truncamentos defensivos sem notificar o usuário, o erro não desaparece: ele contamina o banco relacional SQLite e eclode tardiamente na forma de artefatos vazios.
@@ -1071,14 +1137,15 @@ O caso mais emblemático desse fenômeno em todo o acervo histórico é o Tópic
 \end{citacao}
 
 
-\section{Limitações Encontradas}\label{sec:limitacoes_encontradas}
+\FloatBarrier
+\section{LIMITAÇÕES ENCONTRADAS}\label{sec:limitacoes_encontradas}
 
 
 A condução desta pesquisa e o desenvolvimento do protótipo apresentaram limitações de natureza arquitetural, computacional e metodológica que devem ser registradas com transparência científica:
 
-a) operação desacoplada da interface nativa de produção: em virtude da delimitação de escopo e do requisito de não intrusão no código-fonte de produção em PHP e JavaScript do servidor oficial do CorText Manager (RNF02), o assistente opera como uma aplicação companheira (\textit{companion app}) externa em Streamlit; embora a memória de sessão unifique o estágio de \textit{Data Profiling} e o estágio de RAG, o usuário ainda precisa realizar a transição manual de tela e colar a mensagem de erro ou \textit{traceback} quando ocorre uma falha remota no servidor oficial;
-b) restrições de hardware local e janela de contexto em modelos compactos: a adoção estrita de Modelos de Linguagem de Grande Escala executados localmente via Ollama (RNF01), utilizando modelos compactos de pesos abertos (de 3,8 bilhões a 8 bilhões de parâmetros) para viabilizar a execução em computadores pessoais sem unidades de processamento gráfico dedicadas de alto custo, impõe limites de janela de contexto e maior latência de geração em comparação a modelos proprietários massivos em nuvem;
-c) cobertura circunscrita às heurísticas de entrada (\textit{Data Parsing}): conforme definido no escopo do projeto, a base de regras determinísticas do \textit{Pre-Flight Data Profiler} limita-se às 22 anomalias mapeadas no script de ingestão e à verificação básica de matrizes vazias no banco SQLite recém-criado, não auditando distorções matemáticas ou escolhas inadequadas de hiperparâmetros cometidas pelo pesquisador em módulos analíticos avançados posteriores (como métricas de modularidade de Louvain ou algoritmos de modelagem de tópicos).
+\par\indent a) operação desacoplada da interface nativa de produção: em virtude da delimitação de escopo e do requisito de não intrusão no código-fonte de produção em PHP e JavaScript do servidor oficial do CorText Manager (RNF02), o assistente opera como uma aplicação companheira (\textit{companion app}) externa em Streamlit; embora a memória de sessão unifique o estágio de \textit{Data Profiling} e o estágio de RAG, o usuário ainda precisa realizar a transição manual de tela e colar a mensagem de erro ou \textit{traceback} quando ocorre uma falha remota no servidor oficial;
+\par\indent b) restrições de hardware local e janela de contexto em modelos compactos: a adoção estrita de Modelos de Linguagem de Grande Escala executados localmente via Ollama (RNF01), utilizando modelos compactos de pesos abertos (de 3,8 bilhões a 8 bilhões de parâmetros) para viabilizar a execução em computadores pessoais sem unidades de processamento gráfico dedicadas de alto custo, impõe limites de janela de contexto e maior latência de geração em comparação a modelos proprietários massivos em nuvem;
+\par\indent c) cobertura circunscrita às heurísticas de entrada (\textit{Data Parsing}): conforme definido no escopo do projeto, a base de regras determinísticas do \textit{Pre-Flight Data Profiler} limita-se às 22 anomalias mapeadas no script de ingestão e à verificação básica de matrizes vazias no banco SQLite recém-criado, não auditando distorções matemáticas ou escolhas inadequadas de hiperparâmetros cometidas pelo pesquisador em módulos analíticos avançados posteriores (como métricas de modularidade de Louvain ou algoritmos de modelagem de tópicos).
 
 \begin{citacao}
 \textbf{[ESPAÇO RESERVADO OPCIONAL — LIMITAÇÕES ADICIONAIS DOS TESTES]:} \textit{Caso surjam limitações específicas durante a bateria final de testes ou durante a oficina prática com usuários na UFBA (ex.: falsos positivos em dialetos CSV raros ou tamanho amostral de participantes), acrescentar um parágrafo final nesta subseção.}
@@ -1089,7 +1156,8 @@ c) cobertura circunscrita às heurísticas de entrada (\textit{Data Parsing}): c
 \chapter{Conclusão}\label{sec:conclusao}
 
 
-\section{Considerações Finais}\label{sec:consideracoes_finais}
+\FloatBarrier
+\section{CONSIDERAÇÕES FINAIS}\label{sec:consideracoes_finais}
 
 
 Este Trabalho de Conclusão de Curso abordou o desafio sociotécnico representado pela etapa de importação, validação e estruturação de corpora (\textit{Data Parsing}) na plataforma científica CorText Manager \cite{CorText2026}. Partindo da constatação empírica de que a heterogeneidade das bases de dados brutas colide frequentemente com as heurísticas de programação defensiva necessárias para manter a estabilidade do servidor compartilhado, investigou-se como a articulação entre técnicas determinísticas de Qualidade de Dados (\textit{Data Profiling}) \cite{Wang1996,Naumann2014} e um sistema de Recuperação Aumentada por Geração (RAG) \cite{Lewis2020,Gao2023} executado localmente poderia mitigar a opacidade técnica dos erros e devolver a autonomia diagnóstica aos pesquisadores das ciências sociais e humanidades.
@@ -1103,25 +1171,27 @@ A trajetória investigativa cumpriu integralmente os objetivos propostos. Em um 
 
 Conclui-se, portanto, que a promoção da observabilidade em infraestruturas de software científico não exige o desmantelamento das abstrações arquiteturais que protegem o usuário leigo da complexidade bruta do código \cite{Parnas1972,Norman2013}. Ao operar como um mediador pedagógico que abre seletivamente a caixa preta \cite{Latour1987} apenas no momento de ruptura infraestrutural \cite{Bowker1999}, o assistente proposto converte a etapa de \textit{Data Parsing} de uma barreira opaca em uma experiência de aprendizado guiado, preservando a integridade das inscrições concretas \cite{Abdo2021} que fundamentam a produção do conhecimento nas ciências sociais.
 
-\section{Contribuições do Trabalho}\label{sec:contribuicoes_do_trabalho}
+\FloatBarrier
+\section{CONTRIBUIÇÕES DO TRABALHO}\label{sec:contribuicoes_do_trabalho}
 
 
 Os resultados e artefatos produzidos ao longo desta pesquisa consolidam quatro contribuições principais para a área de Sistemas de Informação, para os Estudos de Ciência e Tecnologia e para o ecossistema aberto do CorText Manager:
 
-a) contribuição empírica e documental aberta: a entrega do primeiro mapeamento quantitativo e estatístico completo das fricções de suporte do CorText Manager (2014 a 2026), acompanhado da publicação aberta do conjunto de dados auditado (\texttt{forum\_\allowbreak topics.\allowbreak csv} com 25 atributos métricos, \texttt{forum\_\allowbreak topics\_\allowbreak full.\allowbreak json} e \texttt{forum\_\allowbreak corpus.\allowbreak md}) e de um painel interativo em Streamlit para livre exploração pela comunidade científica;
-b) contribuição de engenharia de software e qualidade de dados: a catalogação sistemática das 22 anomalias de programação defensiva do script legado de \textit{Data Parsing} e sua tradução direta nos algoritmos determinísticos do módulo \textit{Pre-Flight Data Profiler} e do \textit{Early-Warning Parser}, prevenindo a corrupção silenciosa de bancos relacionais SQLite antes do envio ao servidor;
-c) contribuição arquitetural em Inteligência Artificial aplicada a suporte: a demonstração prática de uma arquitetura híbrida de dois estágios que acopla metadados de \textit{Data Profiling} (via \textit{Prompt Oculto de Contexto}) a um sistema RAG 100\% local orquestrado no Ollama, superando as alucinações de modelos genéricos \cite{Bender2021,Ji2023} e garantindo soberania computacional e sigilo absoluto para dados acadêmicos sensíveis;
-d) contribuição epistemológica e sociotécnica: a materialização de uma ferramenta de Inteligência Artificial que respeita rigorosamente a fronteira metodológica das ciências sociais, atuando na transparência da camada de infraestrutura e no alívio do trabalho invisível de limpeza de dados \cite{DIgnazio2020,Edwards2010} sem jamás interferir ou substituir a agência interpretativa do pesquisador sobre o conteúdo de seu corpus.
+\par\indent a) contribuição empírica e documental aberta: a entrega do primeiro mapeamento quantitativo e estatístico completo das fricções de suporte do CorText Manager (2014 a 2026), acompanhado da publicação aberta do conjunto de dados auditado (\texttt{forum\_\allowbreak topics.\allowbreak csv} com 25 atributos métricos, \texttt{forum\_\allowbreak topics\_\allowbreak full.\allowbreak json} e \texttt{forum\_\allowbreak corpus.\allowbreak md}) e de um painel interativo em Streamlit para livre exploração pela comunidade científica;
+\par\indent b) contribuição de engenharia de software e qualidade de dados: a catalogação sistemática das 22 anomalias de programação defensiva do script legado de \textit{Data Parsing} e sua tradução direta nos algoritmos determinísticos do módulo \textit{Pre-Flight Data Profiler} e do \textit{Early-Warning Parser}, prevenindo a corrupção silenciosa de bancos relacionais SQLite antes do envio ao servidor;
+\par\indent c) contribuição arquitetural em Inteligência Artificial aplicada a suporte: a demonstração prática de uma arquitetura híbrida de dois estágios que acopla metadados de \textit{Data Profiling} (via \textit{Prompt Oculto de Contexto}) a um sistema RAG 100\% local orquestrado no Ollama, superando as alucinações de modelos genéricos \cite{Bender2021,Ji2023} e garantindo soberania computacional e sigilo absoluto para dados acadêmicos sensíveis;
+\par\indent d) contribuição epistemológica e sociotécnica: a materialização de uma ferramenta de Inteligência Artificial que respeita rigorosamente a fronteira metodológica das ciências sociais, atuando na transparência da camada de infraestrutura e no alívio do trabalho invisível de limpeza de dados \cite{DIgnazio2020,Edwards2010} sem jamais interferir ou substituir a agência interpretativa do pesquisador sobre o conteúdo de seu corpus.
 
-\section{Trabalhos Futuros}\label{sec:trabalhos_futuros}
+\FloatBarrier
+\section{TRABALHOS FUTUROS}\label{sec:trabalhos_futuros}
 
 
 O desenvolvimento deste projeto abre caminho para diversas extensões técnicas e investigações futuras na interseção entre Observabilidade de Sistemas, Engenharia de Dados e Humanidades Digitais:
 
-a) acoplamento nativo ao \textit{front-end} de produção do CorText Manager: a evolução natural da aplicação companheira consiste na sua incorporação direta à interface web oficial da plataforma (via submissão e homologação de \textit{Pull Request} junto à equipe mantenedora na França), permitindo que o \textit{Pre-Flight Data Profiler} execute automaticamente no navegador no ato de seleção do arquivo e que o \textit{Log Explainer \& RAG} seja acionado por um botão nativo na própria janela de execução de scripts;
-b) expansão da observabilidade para módulos analíticos subsequentes: propõe-se ampliar a base de conhecimento vetorial e as regras de auditoria para além da porta de entrada (\textit{Data Parsing}), abrangendo o diagnóstico de falhas e inconsistências metodológicas em scripts avançados de leitura distante (\textit{Distant Reading}), modelagem hierárquica de tópicos (\textit{Sashimi}) \cite{Abdo2021} e análises longitudinais de redes e épocas (\textit{Epic Epoch});
-c) implementação de agentes locais de autocorreção assistida (\textit{Data Cleaning Agents}): evolução do módulo \textit{Pre-Flight Data Profiler} de um sistema puramente diagnóstico para um assistente semiautomatizado de higienização, capaz de gerar e exportar, mediante aprovação explícita do pesquisador na interface, uma versão corrigida do arquivo bruto (com codificação UTF-8 normalizada, delimitadores escapados e cabeçalhos padronizados);
-d) generalização do \textit{framework} de Observabilidade Sociotécnica para outras plataformas científicas: adaptação da arquitetura modular de \textit{Profiling} + RAG Local desenvolvida neste TCC para outras ferramentas de código aberto amplamente utilizadas por pesquisadores sem formação em computação, tais como softwares de análise bibliométrica (VOSviewer, Bibliometrix) e sistemas de análise qualitativa e mineração de texto (IRaMuTeQ, Gephi).
+\par\indent a) acoplamento nativo ao \textit{front-end} de produção do CorText Manager: a evolução natural da aplicação companheira consiste na sua incorporação direta à interface web oficial da plataforma (via submissão e homologação de \textit{Pull Request} junto à equipe mantenedora na França), permitindo que o \textit{Pre-Flight Data Profiler} execute automaticamente no navegador no ato de seleção do arquivo e que o \textit{Log Explainer \& RAG} seja acionado por um botão nativo na própria janela de execução de scripts;
+\par\indent b) expansão da observabilidade para módulos analíticos subsequentes: propõe-se ampliar a base de conhecimento vetorial e as regras de auditoria para além da porta de entrada (\textit{Data Parsing}), abrangendo o diagnóstico de falhas e inconsistências metodológicas em scripts avançados de leitura distante (\textit{Distant Reading}), modelagem hierárquica de tópicos (\textit{Sashimi}) \cite{Abdo2021} e análises longitudinais de redes e épocas (\textit{Epic Epoch});
+\par\indent c) implementação de agentes locais de autocorreção assistida (\textit{Data Cleaning Agents}): evolução do módulo \textit{Pre-Flight Data Profiler} de um sistema puramente diagnóstico para um assistente semiautomatizado de higienização, capaz de gerar e exportar, mediante aprovação explícita do pesquisador na interface, uma versão corrigida do arquivo bruto (com codificação UTF-8 normalizada, delimitadores escapados e cabeçalhos padronizados);
+\par\indent d) generalização do \textit{framework} de Observabilidade Sociotécnica para outras plataformas científicas: adaptação da arquitetura modular de \textit{Profiling} + RAG Local desenvolvida neste TCC para outras ferramentas de código aberto amplamente utilizadas por pesquisadores sem formação em computação, tais como softwares de análise bibliométrica (VOSviewer, Bibliometrix) e sistemas de análise qualitativa e mineração de texto (IRaMuTeQ, Gephi).
 
 % ==============================================================================
 % ELEMENTOS PÓS-TEXTUAIS
@@ -1140,245 +1210,248 @@ d) generalização do \textit{framework} de Observabilidade Sociotécnica para o
 
 Este apêndice consolida o mapeamento técnico exaustivo das vulnerabilidades e heurísticas de programação defensiva identificadas na auditoria estática do código-fonte legado em linguagem Python responsável pelo módulo de \textit{Data Parsing} do CorText Manager (\texttt{parser\_\allowbreak science\_\allowbreak se.\allowbreak py}), bem como a taxonomia completa de formatos de arquivos aceitos pelo analisador sintático nativo. Sob a ótica dos Estudos de Ciência e Tecnologia (STS) \cite{Latour1987,Bowker1999}, cada item documentado a seguir explicita o mecanismo pelo qual decisões internas de infraestrutura, tomadas originalmente para evitar travamentos visíveis do servidor compartilhado, atuam como uma caixa preta que pode introduzir vieses metodológicos ou suprimir inscrições concretas \cite{Abdo2021}, justificando as diretrizes de intervenção do módulo preventivo (\textit{Pre-Flight Data Profiler}) e do módulo reativo (\textit{Log Explainer \& RAG}).
 
-\section{Catálogo das 22 Anomalias Arquiteturais Mapeadas no Código Legado}\label{sec:catalogo_das_22_anomalias_arquiteturais_}
+\FloatBarrier
+\section{CATÁLOGO DAS 22 ANOMALIAS ARQUITETURAIS MAPEADAS NO CÓDIGO LEGADO}\label{sec:catalogo_das_22_anomalias_arquiteturais_}
 
 
+\FloatBarrier
 \subsection{Codificação e Caracteres Especiais (A Perda Silenciosa UTF-8)}\label{sec:codificacao_e_caracteres_especiais_a_per}
 
 
-\begin{itemize}
-  \item \textbf{O Problema:} A rotina legada \texttt{utf\_\allowbreak 8\_\allowbreak encoder} utiliza um bloco \texttt{try/\allowbreak except} de contenção ao tentar converter a codificação dos caracteres do arquivo bruto para o padrão UTF-8. Ao deparar-se com uma falha de leitura de bytes, em vez de interromper o processo ou notificar a interface, o script executa o comando \texttt{yield('')} e emite apenas um registro de depuração (\textit{debug}) que permanece oculto na interface web.
-  \item \textbf{O Impacto:} Uma linha inteira de dados que contenha um caractere de idioma não suportado naquela codificação (como alfabetos asiáticos, cirílico ou acentuação em Windows-1252) é compulsoriamente convertida em um espaço em branco. O pesquisador submete um arquivo denso e recebe uma tabela incompleta ou oca ao final da importação, sem ser notificado sobre a perda sistemática de suas evidências empíricas.
-  \item \textbf{A Solução via \textit{Profiling}:} O módulo utiliza a biblioteca Pandas e verificadores de cadeias de bytes para detectar previamente a codificação estrutural de todo o arquivo bruto antes da ingestão, emitindo um alerta ativo ao usuário: \textit{``O arquivo possui caracteres inválidos ou não-UTF-8 na linha X. Corrija a codificação original para evitar a deleção automática deste dado''}.
-\end{itemize}
+\textbf{O Problema:} A rotina legada \texttt{utf\_\allowbreak 8\_\allowbreak encoder} utiliza um bloco \texttt{try/\allowbreak except} de contenção ao tentar converter a codificação dos caracteres do arquivo bruto para o padrão UTF-8. Ao deparar-se com uma falha de leitura de bytes, em vez de interromper o processo ou notificar a interface, o script executa o comando \texttt{yield('{}')} e emite apenas um registro de depuração (\textit{debug}) que permanece oculto na interface web.
 
+\textbf{O Impacto:} Uma linha inteira de dados que contenha um caractere de idioma não suportado naquela codificação (como alfabetos asiáticos, cirílico ou acentuação em Windows-1252) é compulsoriamente convertida em um espaço em branco. O pesquisador submete um arquivo denso e recebe uma tabela incompleta ou oca ao final da importação, sem ser notificado sobre a perda sistemática de suas evidências empíricas.
 
+\textbf{A Solução via \textit{Profiling}:} O módulo utiliza a biblioteca Pandas e verificadores de cadeias de bytes para detectar previamente a codificação estrutural de todo o arquivo bruto antes da ingestão, emitindo um alerta ativo ao usuário: \textit{``O arquivo possui caracteres inválidos ou não-UTF-8 na linha X. Corrija a codificação original para evitar a deleção automática deste dado''}.
+
+\FloatBarrier
 \subsection{Tratamento de Exceções Silenciosas e Registros Vazios}\label{sec:tratamento_de_excecoes_silenciosas_e_reg}
 
 
-\begin{itemize}
-  \item \textbf{O Problema:} Durante a execução do script primário e a criação das tabelas no banco de dados relacional SQLite (especificamente na chamada \texttt{fonctions.\allowbreak insert\_\allowbreak notices}), exceções geradas por incompatibilidade de tipos de dados mascaram o rastro técnico real (\textit{stack trace}). Para forçar a parada ou continuidade nos blocos \texttt{except}, o código legado contém comandos deliberadamente inexistentes (como a \textit{string} \texttt{dkjslq}), mensagens informais impressas apenas no terminal do servidor (como \texttt{shitty1}) e registros que não são repassados à interface gráfica do usuário.
-  \item \textbf{O Impacto:} O pesquisador depara-se frequentemente com a mensagem genérica e opaca \texttt{"No info in Logs"} (sem informação nos registros), o que inviabiliza qualquer diagnóstico autônomo ou ação corretiva imediata em sua pesquisa.
-  \item \textbf{A Solução via RAG:} A execução é monitorada por uma camada de observabilidade que captura o \textit{traceback} técnico real da exceção e o submete ao modelo de linguagem local via Ollama. O modelo atua cruzando o código do erro com o manual da plataforma e com o histórico do fórum para traduzir a falha de infraestrutura em instruções claras para o pesquisador.
-\end{itemize}
+\textbf{O Problema:} Durante a execução do script primário e a criação das tabelas no banco de dados relacional SQLite (especificamente na chamada \texttt{fonctions.\allowbreak insert\_\allowbreak notices}), exceções geradas por incompatibilidade de tipos de dados mascaram o rastro técnico real (\textit{stack trace}). Para forçar a parada ou continuidade nos blocos \texttt{except}, o código legado contém comandos deliberadamente inexistentes (como a \textit{string} \texttt{dkjslq}), mensagens informais impressas apenas no terminal do servidor (como \texttt{shitty1}) e registros que não são repassados à interface gráfica do usuário.
 
+\textbf{O Impacto:} O pesquisador depara-se frequentemente com a mensagem genérica e opaca \texttt{"No info in Logs"} (sem informação nos registros), o que inviabiliza qualquer diagnóstico autônomo ou ação corretiva imediata em sua pesquisa.
 
+\textbf{A Solução via RAG:} A execução é monitorada por uma camada de observabilidade que captura o \textit{traceback} técnico real da exceção e o submete ao modelo de linguagem local via Ollama. O modelo atua cruzando o código do erro com o manual da plataforma e com o histórico do fórum para traduzir a falha de infraestrutura em instruções claras para o pesquisador.
+
+\FloatBarrier
 \subsection{A Truncagem Silenciosa de Colunas em Arquivos CSV}\label{sec:a_truncagem_silenciosa_de_colunas_em_arq}
 
 
-\begin{itemize}
-  \item \textbf{O Problema:} O analisador tabular utiliza o comando de fatiamento imperativo \texttt{row=row[:nb\_\allowbreak field]} para cortar abruptamente qualquer linha cujas células ultrapassem o número de colunas originalmente previsto no cabeçalho.
-  \item \textbf{O Impacto:} Caso exista uma vírgula não escapada dentro de um campo de texto longo (como a transcrição de uma entrevista ou um resumo científico), o interpretador do Python entende que há uma coluna excedente. Em vez de acusar um erro de formatação estrutural, o sistema deleta silenciosa e permanentemente todo o final do texto do usuário para forçar o encaixe no banco SQLite.
-  \item \textbf{A Solução via \textit{Profiling}:} O sistema valida preventivamente a consistência quantitativa dos separadores de cada linha em relação ao cabeçalho; ao detectar incompatibilidades, dispara um alerta obstativo sobre o risco iminente de truncamento antes que o analisador atue de forma destrutiva.
-\end{itemize}
+\textbf{O Problema:} O analisador tabular utiliza o comando de fatiamento imperativo \texttt{row=row[:nb\_\allowbreak field]} para cortar abruptamente qualquer linha cujas células ultrapassem o número de colunas originalmente previsto no cabeçalho.
 
+\textbf{O Impacto:} Caso exista uma vírgula não escapada dentro de um campo de texto longo (como a transcrição de uma entrevista ou um resumo científico), o interpretador do Python entende que há uma coluna excedente. Em vez de acusar um erro de formatação estrutural, o sistema deleta silenciosa e permanentemente todo o final do texto do usuário para forçar o encaixe no banco SQLite.
 
+\textbf{A Solução via \textit{Profiling}:} O sistema valida preventivamente a consistência quantitativa dos separadores de cada linha em relação ao cabeçalho; ao detectar incompatibilidades, dispara um alerta obstativo sobre o risco iminente de truncamento antes que o analisador atue de forma destrutiva.
+
+\FloatBarrier
 \subsection{O Preenchimento Cego de Campos em Arquivos CSV}\label{sec:o_preenchimento_cego_de_campos_em_arquiv}
 
 
-\begin{itemize}
-  \item \textbf{O Problema:} Em oposição direta à truncagem, caso uma linha possua menos colunas do que o cabeçalho exige (\texttt{len(row) < len(dico\_\allowbreak tag\_\allowbreak list)}), o script compensa a falha injetando campos vazios de maneira cega por meio de um laço \texttt{row.\allowbreak insert()}.
-  \item \textbf{O Impacto:} Os dados subsequentes da linha sofrem um deslocamento posicional em cascata. Variáveis textuais e metadados essenciais desaparecem sob colunas de outra natureza taxonômica, corrompendo as consultas SQL e os cruzamentos futuros que o pesquisador realizar.
-  \item \textbf{A Solução via \textit{Profiling}:} Intervenção prévia por meio do motor da biblioteca Pandas (\texttt{ParserError}), gerando um relatório estrutural que aponta exatamente quais linhas apresentam escassez de delimitadores e evitando o desalinhamento do banco de dados.
-\end{itemize}
+\textbf{O Problema:} Em oposição direta à truncagem, caso uma linha possua menos colunas do que o cabeçalho exige (\texttt{len(row) < len(dico\_\allowbreak tag\_\allowbreak list)}), o script compensa a falha injetando campos vazios de maneira cega por meio de um laço \texttt{row.\allowbreak insert()}.
 
+\textbf{O Impacto:} Os dados subsequentes da linha sofrem um deslocamento posicional em cascata. Variáveis textuais e metadados essenciais desaparecem sob colunas de outra natureza taxonômica, corrompendo as consultas SQL e os cruzamentos futuros que o pesquisador realizar.
 
+\textbf{A Solução via \textit{Profiling}:} Intervenção prévia por meio do motor da biblioteca Pandas (\texttt{ParserError}), gerando um relatório estrutural que aponta exatamente quais linhas apresentam escassez de delimitadores e evitando o desalinhamento do banco de dados.
+
+\FloatBarrier
 \subsection{O Falso Positivo do Detector CSV Sniffer (O Limite de 4 KB)}\label{sec:o_falso_positivo_do_detector_csv_sniffer}
 
 
-\begin{itemize}
-  \item \textbf{O Problema:} Para automatizar a detecção de separadores tabulares (vírgula, tabulação ou ponto e vírgula), o código utiliza a classe \texttt{csv.\allowbreak Sniffer}, mas restringe a leitura de amostragem do arquivo estritamente aos primeiros 4.094 bytes.
-  \item \textbf{O Impacto:} O volume de 4.094 bytes equivale a cerca de 4.000 caracteres. Se a primeira célula do arquivo CSV do usuário contiver um resumo científico extenso, o detector lê apenas essa célula, esgota seu limite de memória antes de encontrar o primeiro separador, infere a formatação erroneamente e compromete o fatiamento lógico de todo o corpus.
-  \item \textbf{A Solução via \textit{Profiling}:} O módulo abandona a limitação estática por bytes e realiza uma leitura estatística robusta das primeiras 100 linhas completas do arquivo; em caso de textos excessivamente longos que prejudiquem a inferência automática, orienta o usuário a declarar o separador manualmente na interface.
-\end{itemize}
+\textbf{O Problema:} Para automatizar a detecção de separadores tabulares (vírgula, tabulação ou ponto e vírgula), o código utiliza a classe \texttt{csv.\allowbreak Sniffer}, mas restringe a leitura de amostragem do arquivo estritamente aos primeiros 4.094 bytes.
 
+\textbf{O Impacto:} O volume de 4.094 bytes equivale a cerca de 4.000 caracteres. Se a primeira célula do arquivo CSV do usuário contiver um resumo científico extenso, o detector lê apenas essa célula, esgota seu limite de memória antes de encontrar o primeiro separador, infere a formatação erroneamente e compromete o fatiamento lógico de todo o corpus.
 
+\textbf{A Solução via \textit{Profiling}:} O módulo abandona a limitação estática por bytes e realiza uma leitura estatística robusta das primeiras 100 linhas completas do arquivo; em caso de textos excessivamente longos que prejudiquem a inferência automática, orienta o usuário a declarar o separador manualmente na interface.
+
+\FloatBarrier
 \subsection{Caracteres Especiais Invisíveis (Separadores Secundários Multivalorados)}\label{sec:caracteres_especiais_invisiveis_separado}
 
 
-\begin{itemize}
-  \item \textbf{O Problema:} A arquitetura do CorText Manager exige que células contendo múltiplos valores (como uma lista de vários coautores ou instituições em um único artigo) sejam separadas por cadeias de caracteres idiossincráticas e rígidas, tais como \texttt{|\%|} ou \texttt{***}.
-  \item \textbf{O Impacto:} O uso de separadores convencionais nos arquivos originais do pesquisador (como vírgulas ou pontos e vírgulas) confunde o script de ingestão. O sistema passa a tratar cinco autores distintos como se fossem uma única entidade aglutinada, ou embaralha as hierarquias de coautoria na rede.
-  \item \textbf{A Solução via \textit{Profiling}:} O assistente realiza uma varredura nos campos textuais repetitivos para mapear os caracteres de separação mais frequentes na base bruta e fornece orientações visuais preventivas sobre como o sistema dividirá os valores internos das células.
-\end{itemize}
+\textbf{O Problema:} A arquitetura do CorText Manager exige que células contendo múltiplos valores (como uma lista de vários coautores ou instituições em um único artigo) sejam separadas por cadeias de caracteres idiossincráticas e rígidas, tais como \texttt{\textbar{}\%\textbar{}} ou \texttt{***}.
 
+\textbf{O Impacto:} O uso de separadores convencionais nos arquivos originais do pesquisador (como vírgulas ou pontos e vírgulas) confunde o script de ingestão. O sistema passa a tratar cinco autores distintos como se fossem uma única entidade aglutinada, ou embaralha as hierarquias de coautoria na rede.
 
+\textbf{A Solução via \textit{Profiling}:} O assistente realiza uma varredura nos campos textuais repetitivos para mapear os caracteres de separação mais frequentes na base bruta e fornece orientações visuais preventivas sobre como o sistema dividirá os valores internos das células.
+
+\FloatBarrier
 \subsection{Limpeza de Cadeias Textuais e Formatações Sujas (Factiva e XLSX)}\label{sec:limpeza_de_cadeias_textuais_e_formatacoe}
 
 
-\begin{itemize}
-  \item \textbf{O Problema:} Textos brutos provenientes de extrações web (\textit{web scraping}), tais como exportações de notícias do portal Factiva convertidas em planilhas, frequentemente contêm resíduos de formatação CSS ou HTML infiltrados no texto (como a \textit{string} \texttt{"sm-margin-TopNews"}).
-  \item \textbf{O Impacto:} A presença de marcações algorítmicas residuais no meio do texto interrompe os extratores semânticos do CorText Manager, impedindo o reconhecimento de entidades e resultando em falhas de processamento nas quais a criação dos nós (\textit{nodes}) da rede metodológica é abortada.
-  \item \textbf{A Solução via RAG:} Ao interceptar a quebra do processo, o modelo de linguagem diagnostica o travamento reconhecendo especificamente o padrão de código residual capturado no registro de erro e orienta o pesquisador a utilizar a função de localização e substituição (\texttt{replace()}) em um editor externo, traduzindo o problema técnico em uma tarefa operacional simples.
-\end{itemize}
+\textbf{O Problema:} Textos brutos provenientes de extrações web (\textit{web scraping}), tais como exportações de notícias do portal Factiva convertidas em planilhas, frequentemente contêm resíduos de formatação CSS ou HTML infiltrados no texto (como a \textit{string} \texttt{"sm-margin-TopNews"}).
 
+\textbf{O Impacto:} A presença de marcações algorítmicas residuais no meio do texto interrompe os extratores semânticos do CorText Manager, impedindo o reconhecimento de entidades e resultando em falhas de processamento nas quais a criação dos nós (\textit{nodes}) da rede metodológica é abortada.
 
+\textbf{A Solução via RAG:} Ao interceptar a quebra do processo, o modelo de linguagem diagnostica o travamento reconhecendo especificamente o padrão de código residual capturado no registro de erro e orienta o pesquisador a utilizar a função de localização e substituição (\texttt{replace()}) em um editor externo, traduzindo o problema técnico em uma tarefa operacional simples.
+
+\FloatBarrier
 \subsection{Intolerância a Nomes de Arquivos Acentuados (Lotes ZIP e PDFs)}\label{sec:intolerancia_a_nomes_de_arquivos_acentua}
 
 
-\begin{itemize}
-  \item \textbf{O Problema:} No processamento de arquivos compactados (\texttt{.zip}) ou diretórios de PDFs iterados, caso exista acentuação ou caracteres não padronizados no nome original do documento (por exemplo, \texttt{SISTEMATIZACIÓN.\allowbreak pdf}), as funções estáticas de substituição de caminho (\texttt{.replace()}) nativas falham.
-  \item \textbf{O Impacto:} O mapeamento do diretório do corpus é integralmente corrompido. Como válvula de escape no bloco \texttt{except}, o desenvolvedor inseriu comandos propositalmente inválidos no script (invocando a variável inexistente \texttt{dkjslq}) para induzir a parada do servidor, mascarando para o usuário final o fato de que a plataforma não suporta nomes de arquivos acentuados.
-  \item \textbf{A Solução via \textit{Profiling}:} O módulo varre a taxonomia de todos os arquivos contidos no lote de envio antes do processamento e emite o aviso: \textit{``Detectamos caracteres acentuados ou especiais nos nomes dos arquivos. A plataforma exige nomes limpos alfanuméricos. Renomeie em lote antes de prosseguir para evitar falha do servidor''}.
-\end{itemize}
+\textbf{O Problema:} No processamento de arquivos compactados (\texttt{.zip}) ou diretórios de PDFs iterados, caso exista acentuação ou caracteres não padronizados no nome original do documento (por exemplo, \texttt{SISTEMATIZACIÓN.\allowbreak pdf}), as funções estáticas de substituição de caminho (\texttt{.replace()}) nativas falham.
 
+\textbf{O Impacto:} O mapeamento do diretório do corpus é integralmente corrompido. Como válvula de escape no bloco \texttt{except}, o desenvolvedor inseriu comandos propositalmente inválidos no script (invocando a variável inexistente \texttt{dkjslq}) para induzir a parada do servidor, mascarando para o usuário final o fato de que a plataforma não suporta nomes de arquivos acentuados.
 
+\textbf{A Solução via \textit{Profiling}:} O módulo varre a taxonomia de todos os arquivos contidos no lote de envio antes do processamento e emite o aviso: \textit{``Detectamos caracteres acentuados ou especiais nos nomes dos arquivos. A plataforma exige nomes limpos alfanuméricos. Renomeie em lote antes de prosseguir para evitar falha do servidor''}.
+
+\FloatBarrier
 \subsection{O Processamento de Arquivos PDF e o Esgotamento Silencioso de Tempo}\label{sec:o_processamento_de_arquivos_pdf_e_o_esgo}
 
 
-\begin{itemize}
-  \item \textbf{O Problema:} A rotina de extração textual de arquivos PDF baseia-se em uma verificação de diretório local (\texttt{if 'Users/\allowbreak jpcointet/' in os.\allowbreak getcwd():}). Nos demais ambientes, o script dispara um subprocesso externo (\texttt{pdf2txt.\allowbreak py}) acompanhado de um laço \texttt{while} que tenta abrir o arquivo convertido 200 vezes com apenas um segundo de intervalo entre cada tentativa (\texttt{time.\allowbreak sleep(1)}).
-  \item \textbf{O Impacto:} Arquivos PDF extensos, com alta densidade gráfica ou protegidos por criptografia demandam naturalmente mais de 200 segundos para serem convertidos. Ao esgotar esse contador (\texttt{if h > 200}), o script encerra o laço de espera por esgotamento de tempo (\textit{timeout}) e descarta o documento silenciosamente sem gerar avisos na tela, privando a análise daquele material.
-  \item \textbf{A Solução via RAG:} O assistente intercepta o registro de estafa do limite temporal diretamente nos \textit{logs} de execução e intervém proativamente, sugerindo que o pesquisador utilize utilitários locais para converter seus PDFs pesados para o formato \texttt{.txt} antes do envio.
-\end{itemize}
+\textbf{O Problema:} A rotina de extração textual de arquivos PDF baseia-se em uma verificação de diretório local (\texttt{if 'Users/\allowbreak jpcointet/' in os.\allowbreak getcwd():}). Nos demais ambientes, o script dispara um subprocesso externo (\texttt{pdf2txt.\allowbreak py}) acompanhado de um laço \texttt{while} que tenta abrir o arquivo convertido 200 vezes com apenas um segundo de intervalo entre cada tentativa (\texttt{time.\allowbreak sleep(1)}).
 
+\textbf{O Impacto:} Arquivos PDF extensos, com alta densidade gráfica ou protegidos por criptografia demandam naturalmente mais de 200 segundos para serem convertidos. Ao esgotar esse contador (\texttt{if h > 200}), o script encerra o laço de espera por esgotamento de tempo (\textit{timeout}) e descarta o documento silenciosamente sem gerar avisos na tela, privando a análise daquele material.
 
+\textbf{A Solução via RAG:} O assistente intercepta o registro de estafa do limite temporal diretamente nos \textit{logs} de execução e intervém proativamente, sugerindo que o pesquisador utilize utilitários locais para converter seus PDFs pesados para o formato \texttt{.txt} antes do envio.
+
+\FloatBarrier
 \subsection{Amostragem Arbitrária de Esquemas JSON (O Limite de 100 Linhas)}\label{sec:amostragem_arbitraria_de_esquemas_json_o}
 
 
-\begin{itemize}
-  \item \textbf{O Problema:} Ao ingerir bases de dados semiestruturadas como arquivos JSON extraídos de redes sociais ou APIs web, o sistema precisa construir um mapa relacional de colunas. Para inferir o cabeçalho, o código emprega um laço restritivo (\texttt{for notice in data[:100]:}), obrigando o analisador a inspecionar estritamente os primeiros 100 registros.
-  \item \textbf{O Impacto:} Em extrações dinâmicas da web, a variabilidade de metadados entre documentos é elevada. Se um cientista político submeter 50 mil registros de mídias sociais e, a partir do registro de número 101, surgir uma nova variável fundamental (como localização geográfica ou \texttt{retweet\_\allowbreak status}), o sistema a ignorará até o final do processo e a métrica jamais existirá no banco SQLite.
-  \item \textbf{A Solução via \textit{Profiling}:} O módulo em Pandas elimina a trava numérica de 100 registros e executa a leitura integral e iterativa das chaves de toda a extensão do arquivo JSON, garantindo a completude e a integridade do esquema metodológico.
-\end{itemize}
+\textbf{O Problema:} Ao ingerir bases de dados semiestruturadas como arquivos JSON extraídos de redes sociais ou APIs web, o sistema precisa construir um mapa relacional de colunas. Para inferir o cabeçalho, o código emprega um laço restritivo (\texttt{for notice in data[:100]:}), obrigando o analisador a inspecionar estritamente os primeiros 100 registros.
 
+\textbf{O Impacto:} Em extrações dinâmicas da web, a variabilidade de metadados entre documentos é elevada. Se um cientista político submeter 50 mil registros de mídias sociais e, a partir do registro de número 101, surgir uma nova variável fundamental (como localização geográfica ou \texttt{retweet\_\allowbreak status}), o sistema a ignorará até o final do processo e a métrica jamais existirá no banco SQLite.
 
+\textbf{A Solução via \textit{Profiling}:} O módulo em Pandas elimina a trava numérica de 100 registros e executa a leitura integral e iterativa das chaves de toda a extensão do arquivo JSON, garantindo a completude e a integridade do esquema metodológico.
+
+\FloatBarrier
 \subsection{Exclusão Silenciosa de Duplicatas (O Caso Web of Science)}\label{sec:exclusao_silenciosa_de_duplicatas_o_caso}
 
 
-\begin{itemize}
-  \item \textbf{O Problema:} O analisador possui um mecanismo de deduplicação automático, forçado e irreversível: se a variável identificadora \texttt{notice\_\allowbreak unique\_\allowbreak id} do registro atual já tiver sido armazenada na lista em memória (\texttt{known\_\allowbreak notices}), o documento presente é imediatamente descartado do fluxo de ingestão.
-  \item \textbf{O Impacto:} Embora útil em condições normais, essa regra impõe um dano severo em bases da Web of Science (WOS/ISI) levemente corrompidas ou editadas manualmente. Caso os identificadores únicos dos artigos venham em branco por falha de exportação, o CorText Manager assume erroneamente que todos os milhares de artigos subsequentes são cópias idênticas do primeiro registro vazio, deletando a base acadêmica inteira de forma silenciosa e entregando uma rede vazia.
-  \item \textbf{A Solução via \textit{Profiling}:} Contagem preventiva de integridade de chaves únicas, exibindo o alerta: \textit{``Foram detectados X registros com identificadores duplicados ou em branco. O analisador os considerará cópias e os excluirá. Deseja revisar sua base para preservar a amostragem?''}.
-\end{itemize}
+\textbf{O Problema:} O analisador possui um mecanismo de deduplicação automático, forçado e irreversível: se a variável identificadora \texttt{notice\_\allowbreak unique\_\allowbreak id} do registro atual já tiver sido armazenada na lista em memória (\texttt{known\_\allowbreak notices}), o documento presente é imediatamente descartado do fluxo de ingestão.
 
+\textbf{O Impacto:} Embora útil em condições normais, essa regra impõe um dano severo em bases da Web of Science (WOS/ISI) levemente corrompidas ou editadas manualmente. Caso os identificadores únicos dos artigos venham em branco por falha de exportação, o CorText Manager assume erroneamente que todos os milhares de artigos subsequentes são cópias idênticas do primeiro registro vazio, deletando a base acadêmica inteira de forma silenciosa e entregando uma rede vazia.
 
+\textbf{A Solução via \textit{Profiling}:} Contagem preventiva de integridade de chaves únicas, exibindo o alerta: \textit{``Foram detectados X registros com identificadores duplicados ou em branco. O analisador os considerará cópias e os excluirá. Deseja revisar sua base para preservar a amostragem?''}.
+
+\FloatBarrier
 \subsection{Destruição de Cabeçalhos por Expressão Regular}\label{sec:destruicao_de_cabecalhos_por_expressao_r}
 
 
-\begin{itemize}
-  \item \textbf{O Problema:} Visando higienizar os nomes de tabelas e colunas para o banco SQLite, o código aplica uma expressão regular agressiva (\texttt{re.\allowbreak sub(r'\textbackslash{}W+', '', field)}) que varre e remove qualquer caractere do título de uma coluna que não pertença estritamente ao alfabeto latino básico (ASCII) ou a algarismos numéricos.
-  \item \textbf{O Impacto:} Essa restrição linguística penaliza pesquisas internacionais ou bases com metadados específicos. Colunas redigidas em alfabeto cirílico, árabe, mandarim, ou contendo caracteres especiais e acentuações necessárias metodologicamente, são reduzidas a cadeias de caracteres vazias (\texttt{""}), desaparecendo da arquitetura de dados final.
-  \item \textbf{A Solução via \textit{Profiling}:} O módulo fornece um relatório prévio de mapeamento (\textit{De-Para}), sinalizando quais colunas possuem caracteres incompatíveis e precisarão ser renomeadas pelo pesquisador para termos em alfabeto latino básico antes da submissão.
-\end{itemize}
+\textbf{O Problema:} Visando higienizar os nomes de tabelas e colunas para o banco SQLite, o código aplica uma expressão regular agressiva (\texttt{re.\allowbreak sub(r'\textbackslash{}W+', '{}', field)}) que varre e remove qualquer caractere do título de uma coluna que não pertença estritamente ao alfabeto latino básico (ASCII) ou a algarismos numéricos.
 
+\textbf{O Impacto:} Essa restrição linguística penaliza pesquisas internacionais ou bases com metadados específicos. Colunas redigidas em alfabeto cirílico, árabe, mandarim, ou contendo caracteres especiais e acentuações necessárias metodologicamente, são reduzidas a cadeias de caracteres vazias (\texttt{""}), desaparecendo da arquitetura de dados final.
 
+\textbf{A Solução via \textit{Profiling}:} O módulo fornece um relatório prévio de mapeamento (\textit{De-Para}), sinalizando quais colunas possuem caracteres incompatíveis e precisarão ser renomeadas pelo pesquisador para termos em alfabeto latino básico antes da submissão.
+
+\FloatBarrier
 \subsection{O Subprocesso Externo do Formato ISTEX via Contêiner Docker}\label{sec:o_subprocesso_externo_do_formato_istex_v}
 
 
-\begin{itemize}
-  \item \textbf{O Problema:} A plataforma lista suporte nativo a arquivos do repositório acadêmico francês ISTEX, mas o script principal não possui um analisador interno para ele. Em vez disso, o código Python delega o processamento a um contêiner virtualizado externo por meio do script \texttt{docker\_\allowbreak wrapper.\allowbreak py}.
-  \item \textbf{O Impacto:} Caso a base submetida seja volumosa, o ambiente virtual (Docker) frequentemente esgota a memória principal disponível no servidor e encerra a execução abruptamente. A instrução \texttt{sys.\allowbreak exit()} finaliza a tarefa sem reportar a causa da falha à interface web do CorText Manager, mantendo a tela do pesquisador paralisada indefinidamente.
-  \item \textbf{A Solução via RAG:} O modelo de linguagem é instruído sobre essa topologia de subprocessos; ao reconhecer nos registros o colapso de memória atrelado ao contêiner, fornece o diagnóstico: \textit{``O ambiente isolado (Docker) responsável por processar o formato ISTEX esgotou sua memória. Divida sua base em partes menores para viabilizar a conclusão''}.
-\end{itemize}
+\textbf{O Problema:} A plataforma lista suporte nativo a arquivos do repositório acadêmico francês ISTEX, mas o script principal não possui um analisador interno para ele. Em vez disso, o código Python delega o processamento a um contêiner virtualizado externo por meio do script \texttt{docker\_\allowbreak wrapper.\allowbreak py}.
 
+\textbf{O Impacto:} Caso a base submetida seja volumosa, o ambiente virtual (Docker) frequentemente esgota a memória principal disponível no servidor e encerra a execução abruptamente. A instrução \texttt{sys.\allowbreak exit()} finaliza a tarefa sem reportar a causa da falha à interface web do CorText Manager, mantendo a tela do pesquisador paralisada indefinidamente.
 
+\textbf{A Solução via RAG:} O modelo de linguagem é instruído sobre essa topologia de subprocessos; ao reconhecer nos registros o colapso de memória atrelado ao contêiner, fornece o diagnóstico: \textit{``O ambiente isolado (Docker) responsável por processar o formato ISTEX esgotou sua memória. Divida sua base em partes menores para viabilizar a conclusão''}.
+
+\FloatBarrier
 \subsection{O ``Ano Zero'' Destrutivo na Conversão de Datas (LexisNexis)}\label{sec:o_ano_zero_destrutivo_na_conversao_de_da}
 
 
-\begin{itemize}
-  \item \textbf{O Problema:} O tratamento de datas oriundas de arquivos jornalísticos do formato LexisNexis altera a representação cronológica padrão. O script não armazena apenas o ano civil da matéria, mas instaura uma constante matemática base (\texttt{d0 = datetime(1990,1,1)}) e converte as datas na quantidade de meses transcorridos desde esse ``Ano Zero''.
-  \item \textbf{O Impacto:} Matérias de imprensa publicadas até 1989 (anteriores a janeiro de 1990) resultam em cálculos de tempo com valores inteiros negativos. Embora a tabela do banco SQLite aceite o número negativo na coluna, essa abstração provoca falhas matemáticas em algoritmos posteriores de fatiamento longitudinal, como o módulo \textit{Period Slicer}.
-  \item \textbf{A Solução via \textit{Profiling}:} Uma varredura estatística de valores mínimos e máximos nas colunas temporais alerta o pesquisador sobre o conflito estrutural: \textit{``As datas do seu corpus antecedem a configuração nativa de referência (1990) para este formato. O sistema gerará variáveis negativas que afetarão análises temporais futuras''}.
-\end{itemize}
+\textbf{O Problema:} O tratamento de datas oriundas de arquivos jornalísticos do formato LexisNexis altera a representação cronológica padrão. O script não armazena apenas o ano civil da matéria, mas instaura uma constante matemática base (\texttt{d0 = datetime(1990,1,1)}) e converte as datas na quantidade de meses transcorridos desde esse ``Ano Zero''.
 
+\textbf{O Impacto:} Matérias de imprensa publicadas até 1989 (anteriores a janeiro de 1990) resultam em cálculos de tempo com valores inteiros negativos. Embora a tabela do banco SQLite aceite o número negativo na coluna, essa abstração provoca falhas matemáticas em algoritmos posteriores de fatiamento longitudinal, como o módulo \textit{Period Slicer}.
 
+\textbf{A Solução via \textit{Profiling}:} Uma varredura estatística de valores mínimos e máximos nas colunas temporais alerta o pesquisador sobre o conflito estrutural: \textit{``As datas do seu corpus antecedem a configuração nativa de referência (1990) para este formato. O sistema gerará variáveis negativas que afetarão análises temporais futuras''}.
+
+\FloatBarrier
 \subsection{A Coerção Arbitrária do ``Ano 1'' em Registros Sem Data}\label{sec:a_coercao_arbitraria_do_ano_1_em_registr}
 
 
-\begin{itemize}
-  \item \textbf{O Problema:} Diante de bases nos formatos Excel (\texttt{.xls}) ou JSON que possuam falhas de preenchimento, caso o script não consiga identificar o campo de tempo cronológico de um registro, ele executa uma injeção de preenchimento artificial e arbitrário atribuindo a matriz \texttt{[['1']]}.
-  \item \textbf{O Impacto:} Registros contemporâneos com data ausente recebem compulsoriamente o ano \texttt{"1 d.\allowbreak C."} como data de publicação. Como consequência, o gráfico demográfico de evolução do campo científico estudado torna-se severamente distorcido (abrangendo dois milênios no eixo horizontal), inviabilizando o isolamento visual de períodos históricos na pesquisa.
-  \item \textbf{A Solução via \textit{Profiling}:} Detecção estrutural de datas nulas ou vazias, emitindo o aviso: \textit{``Detectamos N registros sem datas válidas preenchidas. O analisador nativo atribuirá arbitrariamente o Ano 1. Deseja realizar o preenchimento prévio ou excluí-los?''}.
-\end{itemize}
+\textbf{O Problema:} Diante de bases nos formatos Excel (\texttt{.xls}) ou JSON que possuam falhas de preenchimento, caso o script não consiga identificar o campo de tempo cronológico de um registro, ele executa uma injeção de preenchimento artificial e arbitrário atribuindo a matriz \texttt{[['1']]}.
 
+\textbf{O Impacto:} Registros contemporâneos com data ausente recebem compulsoriamente o ano \texttt{"1 d.\allowbreak C."} como data de publicação. Como consequência, o gráfico demográfico de evolução do campo científico estudado torna-se severamente distorcido (abrangendo dois milênios no eixo horizontal), inviabilizando o isolamento visual de períodos históricos na pesquisa.
 
+\textbf{A Solução via \textit{Profiling}:} Detecção estrutural de datas nulas ou vazias, emitindo o aviso: \textit{``Detectamos N registros sem datas válidas preenchidas. O analisador nativo atribuirá arbitrariamente o Ano 1. Deseja realizar o preenchimento prévio ou excluí-los?''}.
+
+\FloatBarrier
 \subsection{Tipagem Estrita e Espaços Marginais em Datas (Descarte por Outofscope)}\label{sec:tipagem_estrita_e_espacos_marginais_em_d}
 
 
-\begin{itemize}
-  \item \textbf{O Problema:} A validação final de datas aplica uma coerção reversa estrita, verificando a condição \texttt{str(int(x)) != x}. O código converte a \textit{string} lida para um número inteiro e novamente para \textit{string}, exigindo igualdade literal absoluta entre ambas.
-  \item \textbf{O Impacto:} Um ano que contenha um simples espaço em branco invisível ao final na digitação da planilha original (por exemplo, \texttt{"1998 "}) converte-se com sucesso no inteiro \texttt{1998}, mas falha na comparação textual de retorno (\texttt{"1998" != "1998 "}). O código penaliza o registro atribuindo-lhe a marcação \texttt{outofscope} e descartando o documento da série histórica (\texttt{ignoring this record}).
-  \item \textbf{A Solução via \textit{Profiling}:} Aplicação automatizada de rotinas preventivas de higienização de cadeias de caracteres (\texttt{.strip()}), erradicando espaços marginais invisíveis nas variáveis cronológicas antes da submissão e prevenindo exclusões injustificadas.
-\end{itemize}
+\textbf{O Problema:} A validação final de datas aplica uma coerção reversa estrita, verificando a condição \texttt{str(int(x)) != x}. O código converte a \textit{string} lida para um número inteiro e novamente para \textit{string}, exigindo igualdade literal absoluta entre ambas.
 
+\textbf{O Impacto:} Um ano que contenha um simples espaço em branco invisível ao final na digitação da planilha original (por exemplo, \texttt{"1998 "}) converte-se com sucesso no inteiro \texttt{1998}, mas falha na comparação textual de retorno (\texttt{"1998" != "1998 "}). O código penaliza o registro atribuindo-lhe a marcação \texttt{outofscope} e descartando o documento da série histórica (\texttt{ignoring this record}).
 
+\textbf{A Solução via \textit{Profiling}:} Aplicação automatizada de rotinas preventivas de higienização de cadeias de caracteres (\texttt{.strip()}), erradicando espaços marginais invisíveis nas variáveis cronológicas antes da submissão e prevenindo exclusões injustificadas.
+
+\FloatBarrier
 \subsection{Destruição de Citações e Notas entre Colchetes}\label{sec:destruicao_de_citacoes_e_notas_entre_col}
 
 
-\begin{itemize}
-  \item \textbf{O Problema:} A função interna denominada limpeza de marcações wiki apoia-se em uma expressão regular abrangente (\texttt{\textbackslash{}[[\textasciicircum{}]]*\textbackslash{}]}), cujo objetivo original era remover hiperlinks residuais.
-  \item \textbf{O Impacto:} A aplicação indiscriminada dessa expressão regular resulta em perda qualitativa de metadados textuais. Qualquer observação contextual redigida entre colchetes em transcrições de entrevistas qualitativas (como \texttt{[o entrevistado hesita]}), variáveis metodológicas (\texttt{[Grupo Controle]}) ou marcações numéricas de citações bibliográficas (\texttt{[14]}) são integralmente apagadas do corpus final.
-  \item \textbf{A Solução via \textit{Profiling}:} Verificação preventiva de padrões (\textit{Regex Matching}) que exibe a recomendação: \textit{``Detectamos o uso de colchetes [...] no corpo do texto. Sugerimos substituí-los por parênteses (...) nas suas transcrições originais para evitar a deleção permanente de notas durante o processamento''}.
-\end{itemize}
+\textbf{O Problema:} A função interna denominada limpeza de marcações wiki apoia-se em uma expressão regular abrangente (\texttt{\textbackslash{}[[\textasciicircum{}]]*\textbackslash{}]}), cujo objetivo original era remover hiperlinks residuais.
 
+\textbf{O Impacto:} A aplicação indiscriminada dessa expressão regular resulta em perda qualitativa de metadados textuais. Qualquer observação contextual redigida entre colchetes em transcrições de entrevistas qualitativas (como \texttt{[o entrevistado hesita]}), variáveis metodológicas (\texttt{[Grupo Controle]}) ou marcações numéricas de citações bibliográficas (\texttt{[14]}) são integralmente apagadas do corpus final.
 
+\textbf{A Solução via \textit{Profiling}:} Verificação preventiva de padrões (\textit{Regex Matching}) que exibe a recomendação: \textit{``Detectamos o uso de colchetes [...] no corpo do texto. Sugerimos substituí-los por parênteses (...) nas suas transcrições originais para evitar a deleção permanente de notas durante o processamento''}.
+
+\FloatBarrier
 \subsection{A Conversão Semântica de Valores ``NA'' em ``0''}\label{sec:a_conversao_semantica_de_valores_na_em_0}
 
 
-\begin{itemize}
-  \item \textbf{O Problema:} Os processos iterativos destinados à extração de arquivos JSON e mensagens SMS possuem uma regra condicional estrita: \texttt{if y == 'NA': y='0'}.
-  \item \textbf{O Impacto:} Células, atributos institucionais e colunas rotuladas originalmente como \texttt{"NA"} (\textit{Not Available} ou Não Disponível) recebem compulsoriamente a \textit{string} numérica \texttt{"0"}. Nas fases posteriores de mapeamento visual de redes do CorText Manager, isso gera um nó artificial (\textit{nó fantasma} de rótulo \texttt{"0"}) que conecta falsamente documentos, autores e instituições que partilham apenas a ausência daquela informação.
-  \item \textbf{A Solução via \textit{Profiling}:} Mapeamento exato das ocorrências da \textit{string} \texttt{"NA"} nas matrizes, orientando o usuário: \textit{``O sistema converterá campos 'NA' na categoria de código zero. Recomendamos deixá-los integralmente em branco na planilha base para não enviesar a topologia da rede''}.
-\end{itemize}
+\textbf{O Problema:} Os processos iterativos destinados à extração de arquivos JSON e mensagens SMS possuem uma regra condicional estrita: \texttt{if y == 'NA': y='0'}.
 
+\textbf{O Impacto:} Células, atributos institucionais e colunas rotuladas originalmente como \texttt{"NA"} (\textit{Not Available} ou Não Disponível) recebem compulsoriamente a \textit{string} numérica \texttt{"0"}. Nas fases posteriores de mapeamento visual de redes do CorText Manager, isso gera um nó artificial (\textit{nó fantasma} de rótulo \texttt{"0"}) que conecta falsamente documentos, autores e instituições que partilham apenas a ausência daquela informação.
 
+\textbf{A Solução via \textit{Profiling}:} Mapeamento exato das ocorrências da \textit{string} \texttt{"NA"} nas matrizes, orientando o usuário: \textit{``O sistema converterá campos 'NA' na categoria de código zero. Recomendamos deixá-los integralmente em branco na planilha base para não enviesar a topologia da rede''}.
+
+\FloatBarrier
 \subsection{Raspagem Web Engessada e Frágil em Arquivos HTML (Factiva)}\label{sec:raspagem_web_engessada_e_fragil_em_arqui}
 
 
-\begin{itemize}
-  \item \textbf{O Problema:} Para capturar metadados de autoria oriundos da plataforma de notícias Factiva em formato HTML, o analisador percorre a árvore do documento buscando a presença literal e estrita da cadeia \texttt{'div class="author">'}.
-  \item \textbf{O Impacto:} Esse desenho pressupõe um leiaute externo inalterável. Diante de qualquer atualização efetuada pela plataforma emissora (como a mudança para letra maiúscula, adição de classes CSS extras ou exportação com interface em outro idioma, conforme documentado no fórum oficial), o extrator falha silenciosamente e gera uma base de dados esvaziada de metadados de autoria.
-  \item \textbf{A Solução via \textit{Profiling}:} Checagem sintática exploratória sobre a presença e sobrevivência das marcações HTML esperadas pelo extrator nativo, informando antecipadamente ao pesquisador o risco de geração de tabelas de autoria em branco.
-\end{itemize}
+\textbf{O Problema:} Para capturar metadados de autoria oriundos da plataforma de notícias Factiva em formato HTML, o analisador percorre a árvore do documento buscando a presença literal e estrita da cadeia \texttt{'div class="author">'}.
 
+\textbf{O Impacto:} Esse desenho pressupõe um leiaute externo inalterável. Diante de qualquer atualização efetuada pela plataforma emissora (como a mudança para letra maiúscula, adição de classes CSS extras ou exportação com interface em outro idioma, conforme documentado no fórum oficial), o extrator falha silenciosamente e gera uma base de dados esvaziada de metadados de autoria.
 
+\textbf{A Solução via \textit{Profiling}:} Checagem sintática exploratória sobre a presença e sobrevivência das marcações HTML esperadas pelo extrator nativo, informando antecipadamente ao pesquisador o risco de geração de tabelas de autoria em branco.
+
+\FloatBarrier
 \subsection{Inchaço Artificial da Amostra (Clonagem Silenciosa de Linhas)}\label{sec:inchaco_artificial_da_amostra_clonagem_s}
 
 
-\begin{itemize}
-  \item \textbf{O Problema:} Infiltrada no laço condicional destinado à recepção de arquivos CSV encontra-se a verificação de um termo específico em língua francesa: \texttt{nombre\_\allowbreak de\_\allowbreak personnes\_\allowbreak }. Caso essa nomenclatura seja utilizada como título de uma coluna numérica (contendo, por exemplo, o valor \texttt{"50"}), ela aciona um laço \texttt{for} interno que reinscreve a mesma linha cinquenta vezes no banco de dados SQLite.
-  \item \textbf{O Impacto:} Sem emitir notificações na interface alertando sobre tal multiplicação, esse gatilho legado clona artificialmente a ocorrência das palavras e metadados daquela linha, distorcendo as frequências estatísticas e os pesos das arestas submetidas pelo cientista.
-  \item \textbf{A Solução via \textit{Profiling}:} Inspeção e saneamento dos títulos de colunas no ato da verificação prévia, bloqueando gatilhos operacionais ocultos que alterem a proporção estatística da amostragem original sem confirmação explícita.
-\end{itemize}
+\textbf{O Problema:} Infiltrada no laço condicional destinado à recepção de arquivos CSV encontra-se a verificação de um termo específico em língua francesa: \texttt{nombre\_\allowbreak de\_\allowbreak personnes\_\allowbreak }. Caso essa nomenclatura seja utilizada como título de uma coluna numérica (contendo, por exemplo, o valor \texttt{"50"}), ela aciona um laço \texttt{for} interno que reinscreve a mesma linha cinquenta vezes no banco de dados SQLite.
 
+\textbf{O Impacto:} Sem emitir notificações na interface alertando sobre tal multiplicação, esse gatilho legado clona artificialmente a ocorrência das palavras e metadados daquela linha, distorcendo as frequências estatísticas e os pesos das arestas submetidas pelo cientista.
 
+\textbf{A Solução via \textit{Profiling}:} Inspeção e saneamento dos títulos de colunas no ato da verificação prévia, bloqueando gatilhos operacionais ocultos que alterem a proporção estatística da amostragem original sem confirmação explícita.
+
+\FloatBarrier
 \subsection{Planificação Estrutural de Documentos Densos (O Separador Artificial)}\label{sec:planificacao_estrutural_de_documentos_de}
 
 
-\begin{itemize}
-  \item \textbf{O Problema:} A conversão automatizada do conteúdo textual de documentos densos (\texttt{.pdf}, \texttt{.docx} ou \texttt{.txt}) subverte a segmentação orgânica de parágrafos quando o parâmetro específico não é acionado: o desenvolvedor instruiu a variável de divisão do Python a buscar um delimitador artificial inalcançável (a sequência \texttt{"djkqsjsdlmkq s dsq:kmmkdsq dklmqj klsq "}), inserida para impedir a quebra automática em subníveis.
-  \item \textbf{O Impacto:} Ignorando a estrutura de capítulos e parágrafos de uma tese acadêmica ou livro, todo o documento é soldado em um único bloco monolítico de texto. A riqueza relacional baseada na premissa de coocorrência de termos no mesmo parágrafo é perdida.
-  \item \textbf{A Solução via \textit{Profiling}:} O módulo de triagem detecta arquivos textuais extensos e adverte preventivamente sobre a limitação semântica: \textit{``Aviso: As quebras metodológicas de parágrafos sofrerão achatamento estrutural. Considere subdividir o material ou ativar a opção de fatiamento por parágrafo antes da submissão''}.
-\end{itemize}
+\textbf{O Problema:} A conversão automatizada do conteúdo textual de documentos densos (\texttt{.pdf}, \texttt{.docx} ou \texttt{.txt}) subverte a segmentação orgânica de parágrafos quando o parâmetro específico não é acionado: o desenvolvedor instruiu a variável de divisão do Python a buscar um delimitador artificial inalcançável (a sequência \texttt{"djkqsjsdlmkq s dsq:kmmkdsq dklmqj klsq "}), inserida para impedir a quebra automática em subníveis.
 
+\textbf{O Impacto:} Ignorando a estrutura de capítulos e parágrafos de uma tese acadêmica ou livro, todo o documento é soldado em um único bloco monolítico de texto. A riqueza relacional baseada na premissa de coocorrência de termos no mesmo parágrafo é perdida.
 
+\textbf{A Solução via \textit{Profiling}:} O módulo de triagem detecta arquivos textuais extensos e adverte preventivamente sobre a limitação semântica: \textit{``Aviso: As quebras metodológicas de parágrafos sofrerão achatamento estrutural. Considere subdividir o material ou ativar a opção de fatiamento por parágrafo antes da submissão''}.
+
+\FloatBarrier
 \subsection{Rigidez Hierárquica em Esquemas XML (PubMed) e Teto Volumétrico de 150 Mil Sentenças}\label{sec:rigidez_hierarquica_em_esquemas_xml_pubm}
 
 
-\begin{itemize}
-  \item \textbf{O Problema:} Em bases médicas provenientes da PubMed em formato XML, o analisador engessa o desmembramento da matriz de autoria exigindo estritamente três subdivisões fixas de nomes (Nome, Sobrenome e Iniciais). Paralelamente, em corpora textuais processados por fragmentos, o código fixa um escopo estático de leitura de \texttt{10.\allowbreak 000} laços englobando blocos fechados de \texttt{15} linhas (totalizando 150.000 sentenças).
-  \item \textbf{O Impacto:} A imposição dessas diretrizes apaga dados que divirjam da modelagem estrita: a presença de autores corporativos ou sem iniciais em arquivos XML provoca uma exceção de índice (\texttt{IndexError}) não exibida na tela que deleta a autoria em massa. No aspecto volumétrico, arquivos extensos que ultrapassem 150.000 sentenças (como transcrições legislativas ou acervos históricos) têm o excedente de suas amostras cortado silenciosamente do montante submetido a estudo.
-  \item \textbf{A Solução via \textit{Profiling}:} Auditoria volumétrica antecipada para mitigar o truncamento dimensional (disparando alertas perante o teto arquitetural de 150.000 sentenças) combinada à validação prévia de completude das ramificações de autoria em esquemas XML.
-\end{itemize}
+\textbf{O Problema:} Em bases médicas provenientes da PubMed em formato XML, o analisador engessa o desmembramento da matriz de autoria exigindo estritamente três subdivisões fixas de nomes (Nome, Sobrenome e Iniciais). Paralelamente, em corpora textuais processados por fragmentos, o código fixa um escopo estático de leitura de \texttt{10.\allowbreak 000} laços englobando blocos fechados de \texttt{15} linhas (totalizando 150.000 sentenças).
 
+\textbf{O Impacto:} A imposição dessas diretrizes apaga dados que divirjam da modelagem estrita: a presença de autores corporativos ou sem iniciais em arquivos XML provoca uma exceção de índice (\texttt{IndexError}) não exibida na tela que deleta a autoria em massa. No aspecto volumétrico, arquivos extensos que ultrapassem 150.000 sentenças (como transcrições legislativas ou acervos históricos) têm o excedente de suas amostras cortado silenciosamente do montante submetido a estudo.
 
-\section{Taxonomia de Formatos de Dados Suportados pelo Analisador Nativo}\label{sec:taxonomia_de_formatos_de_dados_suportado}
+\textbf{A Solução via \textit{Profiling}:} Auditoria volumétrica antecipada para mitigar o truncamento dimensional (disparando alertas perante o teto arquitetural de 150.000 sentenças) combinada à validação prévia de completude das ramificações de autoria em esquemas XML.
+
+\FloatBarrier
+\section{TAXONOMIA DE FORMATOS DE DADOS SUPORTADOS PELO ANALISADOR NATIVO}\label{sec:taxonomia_de_formatos_de_dados_suportado}
 
 
 Segundo a dissecação algorítmica do módulo de \textit{Data Parsing} e a documentação oficial da plataforma \cite{CorText2026}, o sistema CorText Manager prevê o recebimento via interface web e a atribuição de rotinas específicas de importação para cinco famílias estruturais de formatos científicos:
 
-a) formatos bibliométricos e acadêmicos: compreendem o formato \texttt{isi} (arquivo padrão de exportação em texto plano e matrizes do portal Web of Science); a família \texttt{ris (scopus)}, \texttt{ris (ebsco)} e \texttt{ris (standard)} (arquitetura de metadados bibliográficos padronizados por marcadores de duas letras mantidos por grandes consórcios editoriais, destacando-se as regras da Elsevier); e os esquemas \texttt{xmlpubmed}, \texttt{medline} e \texttt{xml (clinical trials)} (linguagens parametrizadas direcionadas especificamente às classificações sistêmicas de artigos e registros clínicos das ciências da saúde e biológicas);
-b) formatos de imprensa e raspagem web (\textit{scraping}): englobam as variações \texttt{factiva}, \texttt{factiva with tags}, \texttt{factiva2} e \texttt{factivaxml} (estruturas originadas das frentes de indexação corporativa e jornalística controladas pela agência Dow Jones); o formato \texttt{europresse} (extração semântica exportável da base global de jornais integrados ao serviço Europresse); o padrão \texttt{reuters} (agrupamentos informativos da agência jornalística Reuters); e o formato \texttt{guardian} (mapeado pelas chaves abertas oriundas da API JSON do portal midiático \textit{The Guardian});
-c) formatos estruturados padrões: abrangem os dialetos \texttt{csv} e \texttt{robust csv} (conjuntos tabulares generalistas validados pelas classes de delimitadores e pelo \texttt{csv.\allowbreak Sniffer} nativo); o formato \texttt{xls} (planilhas extraídas do Microsoft Excel vinculadas diretamente à indexação pela biblioteca \texttt{xlrd}); a família \texttt{json}, \texttt{json (multiline)} e \texttt{jsons} (extrações semânticas aninhadas direcionadas a redes sociais e utilitários web como Spinn3r e Pytheas); o formato \texttt{tips} (campos e separadores voltados ao mapeamento analítico de patentes e propriedade industrial); e o padrão \texttt{SMS} (modelagem voltada ao processamento em cadeia de redes comunicativas móveis);
-d) formatos textuais livres e documentos: incluem as opções \texttt{txt} e \texttt{txt-paragraph} (leitura direta baseada em fatiamentos por sentenças ou pontuações orgânicas) e os formatos \texttt{pdf} e \texttt{docx} (submetidos a conversão forçada para texto plano via subprocessos externos encapsulados nas execuções do servidor);
-e) formatos tratados via serviços e contêineres externos: compreendem os padrões \texttt{istex} e \texttt{nbib} (cujo processamento é delegado a instâncias acessórias virtualizadas em contêineres Docker acionados pelo script principal).
+\par\indent a) formatos bibliométricos e acadêmicos: compreendem o formato \texttt{isi} (arquivo padrão de exportação em texto plano e matrizes do portal Web of Science); a família \texttt{ris (scopus)}, \texttt{ris (ebsco)} e \texttt{ris (standard)} (arquitetura de metadados bibliográficos padronizados por marcadores de duas letras mantidos por grandes consórcios editoriais, destacando-se as regras da Elsevier); e os esquemas \texttt{xmlpubmed}, \texttt{medline} e \texttt{xml (clinical trials)} (linguagens parametrizadas direcionadas especificamente às classificações sistêmicas de artigos e registros clínicos das ciências da saúde e biológicas);
+\par\indent b) formatos de imprensa e raspagem web (\textit{scraping}): englobam as variações \texttt{factiva}, \texttt{factiva with tags}, \texttt{factiva2} e \texttt{factivaxml} (estruturas originadas das frentes de indexação corporativa e jornalística controladas pela agência Dow Jones); o formato \texttt{europresse} (extração semântica exportável da base global de jornais integrados ao serviço Europresse); o padrão \texttt{reuters} (agrupamentos informativos da agência jornalística Reuters); e o formato \texttt{guardian} (mapeado pelas chaves abertas oriundas da API JSON do portal midiático \textit{The Guardian});
+\par\indent c) formatos estruturados padrões: abrangem os dialetos \texttt{csv} e \texttt{robust csv} (conjuntos tabulares generalistas validados pelas classes de delimitadores e pelo \texttt{csv.\allowbreak Sniffer} nativo); o formato \texttt{xls} (planilhas extraídas do Microsoft Excel vinculadas diretamente à indexação pela biblioteca \texttt{xlrd}); a família \texttt{json}, \texttt{json (multiline)} e \texttt{jsons} (extrações semânticas aninhadas direcionadas a redes sociais e utilitários web como Spinn3r e Pytheas); o formato \texttt{tips} (campos e separadores voltados ao mapeamento analítico de patentes e propriedade industrial); e o padrão \texttt{SMS} (modelagem voltada ao processamento em cadeia de redes comunicativas móveis);
+\par\indent d) formatos textuais livres e documentos: incluem as opções \texttt{txt} e \texttt{txt-paragraph} (leitura direta baseada em fatiamentos por sentenças ou pontuações orgânicas) e os formatos \texttt{pdf} e \texttt{docx} (submetidos a conversão forçada para texto plano via subprocessos externos encapsulados nas execuções do servidor);
+\par\indent e) formatos tratados via serviços e contêineres externos: compreendem os padrões \texttt{istex} e \texttt{nbib} (cujo processamento é delegado a instâncias acessórias virtualizadas em contêineres Docker acionados pelo script principal).
 \chapter{Dicionário de Variáveis do Dataset Auditado do Fórum, Repositório Aberto e Dashboard Interativo}\label{sec:dicionario_de_variaveis_do_dataset_audit}
 
 
 Com o objetivo de assegurar total transparência científica, auditabilidade estatística e reprodutibilidade dos resultados empíricos apresentados neste Trabalho de Conclusão de Curso (RNF04), todos os conjuntos de dados gerados pelo extrator determinístico \texttt{extract\_\allowbreak forum.\allowbreak py}, bem como os códigos-fonte e o painel interativo de visualização, foram disponibilizados publicamente em repositórios abertos.
 
-\section{Dicionário de Atributos do Conjunto de Dados (\texttt{forum\_\allowbreak topics.\allowbreak csv})}\label{sec:dicionario_de_atributos_do_conjunto_de_d}
+\FloatBarrier
+\section{DICIONÁRIO DE ATRIBUTOS DO CONJUNTO DE DADOS (\texttt{FORUM\_\allowbreak TOPICS.\allowbreak CSV})}\label{sec:dicionario_de_atributos_do_conjunto_de_d}
 
 
 O conjunto de dados tabular consolidado a partir da varredura integral das 34 páginas do fórum oficial de suporte do CorText Manager ($N = 298$ tópicos únicos, com paridade de 100\% em relação aos arquivos \texttt{forum\_\allowbreak topics\_\allowbreak full.\allowbreak json} e \texttt{forum\_\allowbreak corpus.\allowbreak md}) estrutura-se em 25 atributos métricos, temporais, textuais e taxonômicos, detalhados na Tabela 14.
@@ -1428,13 +1501,16 @@ O conjunto de dados tabular consolidado a partir da varredura integral das 34 p�
 \end{xltabular}
 \vspace{-0.2cm}\noindent{\footnotesize\textit{Fonte: Elaborado pelo autor a partir do dataset auditado \texttt{forum\_\allowbreak topics.\allowbreak csv} (2026).}}\par\vspace{0.4cm}
 }
+\FloatBarrier
 
-\section{Recursos Complementares, Código-Fonte e Painel Interativo}\label{sec:recursos_complementares_codigo_fonte_e_p}
+
+\FloatBarrier
+\section{RECURSOS COMPLEMENTARES, CÓDIGO-FONTE E PAINEL INTERATIVO}\label{sec:recursos_complementares_codigo_fonte_e_p}
 
 
 Os artefatos computacionais, bases de dados brutas e enriquecidas, scripts de extração e visualização interativa desenvolvidos nesta pesquisa encontram-se permanentemente acessíveis por meio dos seguintes endereços eletrônicos oficiais:
 
-a) Painel Interativo de Auditoria Estatística do Fórum (implantado em nuvem via \textit{Streamlit Community Cloud}): disponível em \texttt{https://cortext-forum-analysis.\allowbreak streamlit.\allowbreak app/};
-b) Repositório Oficial do Código-Fonte, Extrator (\texttt{extract\_\allowbreak forum.\allowbreak py}) e Conjuntos de Dados Auditados (\texttt{forum\_\allowbreak topics.\allowbreak csv}, \texttt{forum\_\allowbreak topics\_\allowbreak full.\allowbreak json} e \texttt{forum\_\allowbreak corpus.\allowbreak md}): disponível em \texttt{https://github.\allowbreak com/\allowbreak Wellington-Miguel/\allowbreak cortext-forum-analysis}.
+\par\indent a) Painel Interativo de Auditoria Estatística do Fórum (implantado em nuvem via \textit{Streamlit Community Cloud}): disponível em \texttt{https://cortext-forum-analysis.\allowbreak streamlit.\allowbreak app/};
+\par\indent b) Repositório Oficial do Código-Fonte, Extrator (\texttt{extract\_\allowbreak forum.\allowbreak py}) e Conjuntos de Dados Auditados (\texttt{forum\_\allowbreak topics.\allowbreak csv}, \texttt{forum\_\allowbreak topics\_\allowbreak full.\allowbreak json} e \texttt{forum\_\allowbreak corpus.\allowbreak md}): disponível em \texttt{https://github.\allowbreak com/\allowbreak Wellington-Miguel/\allowbreak cortext-forum-analysis}.
 \end{apendicesenv}
 \end{document}

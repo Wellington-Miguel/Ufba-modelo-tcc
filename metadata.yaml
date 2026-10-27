@@ -7,6 +7,9 @@
 titulo: "Assistente de Observabilidade Sociotécnica"
 subtitulo: "Apoio ao diagnóstico da importação de corpora no CorText Manager com RAG e Análise de Logs" 
 autor: "Wellington Miguel de Jesus Silva"
+autor_referencia: "SILVA, W. M. de J."
+titulo_en: "Sociotechnical Observability Assistant"
+subtitulo_en: "support for diagnosing corpora import in CorText Manager with RAG and Log Analysis"
 ano: 2026
 data: "Outubro de 2026"
 local: "Salvador"

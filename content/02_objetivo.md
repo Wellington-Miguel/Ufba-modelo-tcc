@@ -46,7 +46,7 @@ Paralelamente, a análise do engajamento público reforça a criticidade do prob
 | ID | Título da Discussão no Fórum Oficial | Visualizações | Categoria Oficial | Relação com *Parsing* | Causa Raiz / Síntese do Atrito Reportado |
 | :---: | :--- | :---: | :--- | :--- | :--- |
 | #292 | *Cortext seems to be down. Dashboard is not loading.* | 4.208 | *Something else* | Não Relacionado | Instabilidade temporária no servidor e falha de carregamento da interface do painel. |
-| #280 | *Web of Science (WOS) Corpus \| Expert query \| SQL* | 3.033 | *Data processing* | *Parsing* Direto | Consultas complexas e erros de sintaxe SQL e filtros na importação de corpora WOS. |
+| #280 | *Web of Science (WOS) Corpus \textbar{} Expert query \textbar{} SQL* | 3.033 | *Data processing* | *Parsing* Direto | Consultas complexas e erros de sintaxe SQL e filtros na importação de corpora WOS. |
 | #269 | *troubles parsing json files from ISTEX* | 2.984 | *Data processing* | *Parsing* Direto | Incompatibilidade na estrutura JSON aninhada exportada da plataforma ISTEX. |
 | #267 | *How to avoid error message when parsing a zip folder...* | 2.958 | *Data processing* | *Parsing* Direto | Estruturas de arquivos ZIP aninhadas ou com subpastas internas incompatíveis. |
 | #247 | *Problem with log files* | 2.625 | *Something else* | *Parsing* Indireto | Dificuldade de interpretação de erros em scripts e registros (*logs*) de processamento. |
