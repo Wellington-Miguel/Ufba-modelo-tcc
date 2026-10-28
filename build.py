@@ -169,7 +169,7 @@ def formatar_nome_referencia(nome_completo):
     if not nome_completo:
         return "AUTOR, A."
     if "Wellington Miguel de Jesus Silva" in nome_completo:
-        return "SILVA, W. M. de J."
+        return "SILVA, W. M. de J. S."
     partes = nome_completo.strip().split()
     if len(partes) == 1:
         return partes[0].upper()
@@ -875,8 +875,8 @@ def gerar_latex_mestre(metadata, capitulos_tex, apendices_tex, anexos_tex):
     ref_autor_custom = metadata.get("autor_referencia") or metadata.get("autor_citacao")
     if ref_autor_custom:
         ref_autor = esc_meta(str(ref_autor_custom).strip())
-        if "SILVA, W. M. de J. S." in ref_autor:
-            ref_autor = "SILVA, W. M. de J."
+        if ref_autor == "SILVA, W. M. de J.":
+            ref_autor = "SILVA, W. M. de J. S."
     else:
         ref_autor = formatar_nome_referencia(autor)
     ref_autor_ponto = ref_autor if ref_autor.endswith('.') else f"{ref_autor}."
